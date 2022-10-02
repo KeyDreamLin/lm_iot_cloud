@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lm.admin.mapper.mysql.DeviceModelDataMapper">
+    <select id="queryDeviceModelBySn" resultType="com.lm.admin.entity.pojo.devicemodel.DeviceModelData">
+        SELECT * FROM lm_device_model_data where device_sn= 'sdg345tbdfbg3yg3q';
+    </select>
+</mapper>

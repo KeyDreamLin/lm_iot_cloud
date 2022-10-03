@@ -4,7 +4,7 @@ package com.lm.admin.common.r;
  * 可以理解为子模块的异常枚举
  * 用户异常处理枚举
  */
-public enum UserResultEnum implements GlobalResultEnumInterface{
+public enum AdminUserResultEnum implements GlobalResultEnumInterface{
 
     USER_INPUT_NULL_ERROR(100100,"用户输入有误！"),
     USER_NO_LOGIN(100101,"NO_LOGIN"),
@@ -24,7 +24,7 @@ public enum UserResultEnum implements GlobalResultEnumInterface{
 
     private String msg; //错误信息
 
-    UserResultEnum(Integer code, String msg) {
+    AdminUserResultEnum(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
     }

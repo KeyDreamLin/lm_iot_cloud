@@ -1,7 +1,7 @@
 package com.lm;
 
 import com.lm.admin.entity.pojo.devicemodel.DeviceModelData;
-import com.lm.admin.mapper.mysql.DeviceModelDataMapper;
+import com.lm.admin.mapper.mysql.device.DeviceModelDataMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +24,7 @@ class LmCloudApplicationTests {
     private DeviceModelDataMapper deviceModelDataMapper;
     @Test
     public void contextLoads() {
-        List<DeviceModelData> deviceModelList = deviceModelDataMapper.queryDeviceModelBySn("sdg345tbdfbg3yg3q");
+        List<DeviceModelData> deviceModelList = deviceModelDataMapper.findDeviceModelBySn("sdg345tbdfbg3yg3q");
         List<String> bsf = new ArrayList<>();
         deviceModelList.forEach(item->{
             bsf.add(item.getIdentifier());

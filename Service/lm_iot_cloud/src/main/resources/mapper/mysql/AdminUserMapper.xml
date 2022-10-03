@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lm.admin.mapper.mysql.adminuser.AdminUserMapper">
+    <!--根据用户账号查询用户信息-->
+    <select id="findAdminUserByAccount" resultType="com.lm.admin.entity.pojo.adminuser.AdminUser">
+        select
+               `id`,`username`,`account`,`password`,`status`,`create_time`,`update_time`
+        from
+             lm_admin_user
+        where
+              account = #{account} ;
+    </select>
+
+</mapper>

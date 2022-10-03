@@ -7,7 +7,7 @@ import com.lm.admin.tool.LmAssert;
 import com.lm.admin.entity.dto.device.DeviceDataDto;
 import com.lm.cloud.common.r.CloudDeviceConnRespEnum;
 import com.lm.cloud.common.r.CloudR;
-import com.lm.cloud.common.r.CloudRedisKey;
+import com.lm.common.redis.devicekey.CloudRedisKey;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

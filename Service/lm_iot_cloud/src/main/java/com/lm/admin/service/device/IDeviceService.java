@@ -2,7 +2,7 @@ package com.lm.admin.service.device;
 
 
 import com.lm.admin.entity.dto.device.DeviceDto;
-import com.lm.admin.mapper.mysql.DeviceMapper;
+import com.lm.admin.mapper.mysql.device.DeviceMapper;
 import com.lm.admin.mapper.tdengine.DeviceDataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +40,7 @@ public class IDeviceService implements DeviceServiceImpl {
      */
     @Override
     public DeviceDto getDeviceBySn(String sn) {
-        return deviceMapper.queryDeviceBySn(sn);
+        return deviceMapper.findDeviceBySn(sn);
     }
 
     /**

@@ -2,16 +2,18 @@ package com.lm.admin.entity.pojo.device;
 
 import java.io.Serializable;
 import java.sql.Date;
-import lombok.Getter;
-import lombok.Setter;
+
+import lombok.*;
 
 /**
  * 设备信息
  * @author Lm
  * @since 2022-09-23
  */
-@Getter
-@Setter
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Device implements Serializable {
 
     // 主键

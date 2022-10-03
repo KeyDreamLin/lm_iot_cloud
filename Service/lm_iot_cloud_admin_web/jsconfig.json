@@ -1,0 +1,16 @@
+// jsconfig.json
+{
+        // 路径别名提示 添加后输入@/xxx 就会出现提示 对应的输入import导入也会出现对应的方法 
+        "compilerOptions": {
+            "baseUrl": "./",
+            "paths": {
+                "@/*": [
+                    "src/*"
+                ],
+            }
+        },
+        "exclude": [
+            "node_modules",
+            "dist",
+        ]
+    }

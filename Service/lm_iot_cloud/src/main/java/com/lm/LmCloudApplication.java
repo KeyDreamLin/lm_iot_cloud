@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @RequiredArgsConstructor
-@MapperScan(basePackages = "com.lm.admin.mapper")
+//@MapperScan(basePackages = "com.lm.admin.mapper")
 //public class LmCloudApplication {
 public class LmCloudApplication implements ApplicationRunner {
     private final TcpServer tcpServer;

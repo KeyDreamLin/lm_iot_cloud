@@ -1,4 +1,4 @@
-package com.lm.cloud.common.r;
+package com.lm.common.redis.devicekey;
 
 public class CloudRedisKey {
 

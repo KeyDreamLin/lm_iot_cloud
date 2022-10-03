@@ -17,7 +17,7 @@ public class DeviceModelData implements Serializable {
     private Long id;
 
     // 对应的设备sn
-    private String deviceSn;
+    private String sn;
 
     // 图标
     private String icon;
@@ -38,6 +38,7 @@ public class DeviceModelData implements Serializable {
     private Integer modelType;
 
     // 创建时间
+
     private Date createTime;
     // 更新时间
     private Date updateTime;

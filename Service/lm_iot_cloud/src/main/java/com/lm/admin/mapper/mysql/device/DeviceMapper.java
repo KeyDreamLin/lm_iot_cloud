@@ -1,4 +1,4 @@
-package com.lm.admin.mapper.mysql;
+package com.lm.admin.mapper.mysql.device;
 
 import com.lm.admin.entity.dto.device.DeviceDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,6 +17,6 @@ public interface DeviceMapper {
      * @param sn
      * @return
      */
-    DeviceDto queryDeviceBySn(@Param("sn") String sn);
+    DeviceDto findDeviceBySn(@Param("sn") String sn);
 
 }

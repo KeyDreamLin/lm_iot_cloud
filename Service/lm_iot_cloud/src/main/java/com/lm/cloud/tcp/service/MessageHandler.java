@@ -9,7 +9,7 @@ import com.lm.admin.entity.dto.device.DeviceDataDto;
 import com.lm.cloud.common.r.CloudDeviceConnRespEnum;
 import com.lm.cloud.common.r.CloudDevicePushAckEnum;
 import com.lm.cloud.common.r.CloudR;
-import com.lm.cloud.common.r.CloudRedisKey;
+import com.lm.common.redis.devicekey.CloudRedisKey;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

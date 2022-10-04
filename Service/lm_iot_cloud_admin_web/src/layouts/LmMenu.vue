@@ -36,76 +36,17 @@ const handleNodeClick = (data) => {
 }
 const data  = [
   {
-    label: 'Level one 1',
+    label: '仪表盘',
     icon:"House",
-    children: [
-      {
-    icon:"House",
-        label: 'Level two 1-1',
-        children: [
-          {
-    icon:"House",
-            label: 'Level three 1-1-1',
-          },
-          {
-    icon:"House",
-            label: 'Level three 1-1-2',
-          },
-        ],
-      },
-    ],
+    path:"/"
   },
   {
     icon:"House",
     label: 'Level one 2',
-    children: [
-      {
-    icon:"House",
-        label: 'Level two 2-1',
-        children: [
-          {
-    icon:"House",
-            label: 'Level three 2-1-1',
-          },
-        ],
-      },
-      {
-    icon:"House",
-        label: 'Level two 2-2',
-        children: [
-          {
-    icon:"House",
-            label: 'Level three 2-2-1',
-          },
-        ],
-      },
-    ],
   },
   {
     icon:"House",
     label: 'Level one 3',
-    children: [
-      {
-    icon:"House",
-        label: 'Level two 3-1',
-        children: [
-          {
-    icon:"House",
-            label: 'Level three 3-1-1',
-          },
-        ],
-      },
-      {
-    icon:"House",
-        label: 'Level two 3-2',
-        children: [
-          {
-    icon:"House",
-            label: 'Level three 3-2-1',
-          },
-        ],
-      },
-    ],
   },
 ]
 </script>

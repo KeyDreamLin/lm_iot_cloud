@@ -25,7 +25,8 @@ public class AdminUser implements Serializable {
     private String account;
     //密码
     private String password;
-
+    // 头像
+    private String avatar;
     // 发布状态 0 禁用 1未禁用
     private Integer status;
     // 创建时间

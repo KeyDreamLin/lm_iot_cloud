@@ -11,9 +11,11 @@
                     style="background: #e7e9ff; border-radius: 10px;"
                     src="https://img.js.design/assets/img/6249a8eae5886b18e2a60a87.png" 
                 />
-                <span class="userNanme_box">
-                    AR Jakir
-                </span>
+                <div class="userNanme_box">
+                    <span class="userName_vla">
+                        {{stroe.getters["user/getUserName"]}}
+                    </span>
+                </div>
                 <el-dropdown class="userIcon_box">
                     <span class="el-dropdown-link">
                         <el-icon class="el-icon--right">
@@ -34,6 +36,8 @@
     </div>
 </template>
 <script setup>
+// 状态管理
+import stroe from '@/stroe';
 
 </script>
 <style scoped>
@@ -77,13 +81,21 @@
     margin: 5px 0 5px 5px;
 }
 .userNanme_box{
+    margin: 0 15px;
     display: flex;
     justify-content: center;
     flex-grow: 1;
 }
+.userName_vla{
+    width: 80px;
+    text-align: center;
+    white-space: nowrap;
+    /* 溢出的文字会变成被截断 */
+    text-overflow: clip;
+    overflow: hidden;
+}
 .userIcon_box{
     color: #000;
-    margin-left: auto;
-    margin-right: 15px;
+    margin-right: 10px;
 }
 </style>

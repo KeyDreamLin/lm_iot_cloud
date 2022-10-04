@@ -1,0 +1,82 @@
+<template>
+    <div class="lm-hello_box">
+        <div class="lm-hello-left_box">
+            <div class="lm-hello-title">
+                <span class="lm-title_1">晚上好，XiaoMa</span>
+                <!--  -->
+                <div class="lm-title-line"></div>
+                <span class="lm-title_2">人生最精彩的不是成功的那一瞬间，而是回头看，那段漆黑看似没有尽头、苦苦摸索的过程。</span>
+            </div>
+          
+        </div>
+        <div class="lm-hello-right_box">
+            <el-image class="lm-hello-right-img"  src="src/assets/helloimg/img_1.png" fit="cover" />
+        </div>
+    </div>
+</template>
+
+
+<script setup>
+// 状态管理
+import stroe from '@/stroe';
+</script>
+
+<style scoped>
+
+.lm-hello_box{
+    height: 200px;
+    background: #fff;
+    border-radius: 15px;
+    display: flex;
+    position: relative;
+}
+/* 左边盒子 */
+.lm-hello-left_box{
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.lm-hello-left-bg_box{
+    overflow: hidden;
+    border-radius: 0 0 0 15px;
+}
+/* 文案等 */
+.lm-hello-title{
+    padding: 15px 0 0 15px;
+}
+/* 问候1 时段+名字 */
+.lm-title_1{
+    display: block;
+}
+/* 小小分割线 */
+.lm-title-line{
+    width: 200px;
+    margin: 8px 0 15px;
+    flex-grow: 1;
+    height: 1px;
+    opacity: 1;
+    background: #a162f7;
+}
+/* 文案 */
+.lm-title_2{
+    display: block;
+    text-indent: 1em;
+}
+/* 左边盒子 */
+
+/* 右边盒子 */
+.lm-hello-right_box{
+    margin-left: auto;
+}
+
+/* 右边盒子 */
+
+/* 右边的图片 */
+.lm-hello-right-img{
+    width: 600px;
+    height: 200px;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+</style>

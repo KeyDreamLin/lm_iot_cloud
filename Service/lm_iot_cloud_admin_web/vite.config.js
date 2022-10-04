@@ -13,7 +13,7 @@ export default defineConfig({
   server: {
     // 请求代理
     proxy: {
-      '/admin': {
+      '/api': {
         // 这里的地址是后端数据接口的地址
         target: 'http://localhost:8055/',
         //rewrite: (path) => path.replace(/^\/admin/, ''),

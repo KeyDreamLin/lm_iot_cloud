@@ -19,6 +19,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import static com.lm.common.redis.adminkey.RedisAndHeaderKey.HEADER_TOKEN_UUID;
+import static com.lm.common.redis.adminkey.RedisAndHeaderKey.REDIS_CODE_UUID_KEY;
+
 /**
  * /api/
  * @author: Lm
@@ -73,7 +76,7 @@ public class CodeController {
         // 把生成的验证码放入到session中 spring-session
         //session.setAttribute("code", text);// 自动放入到redis
         // 这里为什么要设置时间，因为如果不设置时间，验证生成很频繁，其实一直放在内存中其实没必要的事情，所有设置一个有效期，自动从redis内存中删除
-        redisTemplate.opsForValue().set(db_code_uuid, text,5, TimeUnit.MINUTES);//5分钟
+        redisTemplate.opsForValue().set(REDIS_CODE_UUID_KEY + db_code_uuid, text,5, TimeUnit.MINUTES);//5分钟
         return map;
     }
 }

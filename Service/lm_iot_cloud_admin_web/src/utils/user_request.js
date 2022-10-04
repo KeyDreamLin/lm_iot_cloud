@@ -1,12 +1,12 @@
 // 请求工具类
 import axios from 'axios'
-// 状态管理
-import store from '@/store';
+// // 状态管理
+// import store from '@/store';
 // 路由管理 
 import router from '@/router';
-import errorCode from '@/utils/errorCode';
-// 导入弹窗工具类
-import { LmMessageError } from "@/utils/index.js";
+// import errorCode from '@/utils/errorCode';
+// // 导入弹窗工具类
+// import { LmMessageError } from "@/utils/index.js";
 
 // create an axios instance
 const lm_request_user = axios.create({

@@ -34,7 +34,7 @@ const routes = [
     },
     {
         // 后续可以动态生成这个地址 跟根据数据库 再说啦
-        path: "/U2FsdGVkX1+CQFbiY0CtwjKt2X94ZiCQdrtBFBRqTlA=",
+        path: "/asdasdasd",
         meta: { title: "后台登录" },
         name: "AdminLogin",
         component: () =>

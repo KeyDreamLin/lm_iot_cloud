@@ -43,10 +43,13 @@ import LmMenu from '@/layouts/LmMenu.vue';
 }
 /* 右边盒子 上下 上标题、信息等 下暂时内容 */
 .lm-right_box{
-    /* 填充满右边 */
-    flex-grow: 1;
+    position: absolute;
+    left: 250px;
+    right: 0;
+    top: 0;
+    bottom: 0;
     height: 100%;
-    background: #fbfbfe;
+    background: #f9f9f9;
     /* background: rgb(143, 75, 75); */
     display: flex;
     flex-direction: column;

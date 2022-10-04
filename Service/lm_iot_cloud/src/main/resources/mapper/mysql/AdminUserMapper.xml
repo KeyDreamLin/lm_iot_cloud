@@ -4,7 +4,7 @@
     <!--根据用户账号查询用户信息-->
     <select id="findAdminUserByAccount" resultType="com.lm.admin.entity.pojo.adminuser.AdminUser">
         select
-               `id`,`username`,`account`,`password`,`status`,`create_time`,`update_time`
+               `id`,`username`,`account`,`password`,`avatar`,`status`,`create_time`,`update_time`
         from
              lm_admin_user
         where

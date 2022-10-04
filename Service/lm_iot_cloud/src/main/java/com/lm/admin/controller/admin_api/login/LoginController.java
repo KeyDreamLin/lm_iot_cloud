@@ -1,6 +1,7 @@
 package com.lm.admin.controller.admin_api.login;
 
 import com.lm.admin.common.r.AdminUserResultEnum;
+import com.lm.admin.common.r.ServerErrorResultEnum;
 import com.lm.admin.config.jwt.JwtConfig;
 import com.lm.admin.config.redis.JwtBlackSetService;
 import com.lm.admin.controller.admin_api.AdminBaseController;
@@ -46,7 +47,7 @@ public class LoginController extends AdminBaseController implements RedisAndHead
      **/
     @PostMapping("/login")
     @ResponseBody
-    public AdminUserLoginBo login(@RequestBody AdminUserLoginVo adminUserLoginVo){
+        public AdminUserLoginBo login(@RequestBody AdminUserLoginVo adminUserLoginVo){
         log.info("UserController_Login--->用户登录-->账号：{}--密码：{}  验证码：{} 验证码UUID：{}"
                 , adminUserLoginVo.getAccount()
                 , adminUserLoginVo.getPassword()
@@ -59,10 +60,21 @@ public class LoginController extends AdminBaseController implements RedisAndHead
         // 校验回传过来数据是否为空，抛出异常
         LmAssert.isEmptyEx(adminUserLoginVo.getAccount(), AdminUserResultEnum.USER_INPUT_NULL_ERROR);
         LmAssert.isEmptyEx(adminUserLoginVo.getPassword(), AdminUserResultEnum.USER_INPUT_NULL_ERROR);
-//        LmAssert.isEmptyEx(adminUserLoginVo.getCode(), AdminUserResultEnum.USER_INPUT_NULL_ERROR);
-//        LmAssert.isEmptyEx(adminUserLoginVo.getCodeuuid(), AdminUserResultEnum.USER_INPUT_NULL_ERROR);
+        LmAssert.isEmptyEx(adminUserLoginVo.getCode(), AdminUserResultEnum.USER_INPUT_NULL_ERROR);
+        LmAssert.isEmptyEx(adminUserLoginVo.getCodeuuid(), AdminUserResultEnum.USER_INPUT_NULL_ERROR);
 
-        // TODO 1、明天接入前端 后 加入验证码判断
+        // 1、明天接入前端 后 加入验证码判断
+        // 先通过codeUuid取出对应的验证码
+        String db_codeByUuid =  redisTemplate.opsForValue().get(REDIS_CODE_UUID_KEY+adminUserLoginVo.getCodeuuid());
+        // 如果UUID查不到对应的验证码 那就 抛出 服务器异常
+        LmAssert.isNotNull(db_codeByUuid, ServerErrorResultEnum.SERVER_ERROR);
+
+        // 取出验证码后将数据库的删除掉 不然前端不刷新验证码 拿同一个UUID和验证码过来还是会判断成功
+        redisTemplate.delete(REDIS_CODE_UUID_KEY+adminUserLoginVo.getCodeuuid());
+        // 判断vo传过来的 验证码 是否和 数据库 查出来的一致
+        boolean flagCheckCode = db_codeByUuid.equals(adminUserLoginVo.getCode());
+        // 如果输入的 验证码 和 数据库 验证码不一致，抛出异常 验证码错误
+        LmAssert.isFalseEx(flagCheckCode, AdminUserResultEnum.USER_INPUT_CODE_ERROR);
 
 
         // 先通过账号查询到对应用户的信息

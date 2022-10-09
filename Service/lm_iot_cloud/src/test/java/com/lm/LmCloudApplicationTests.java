@@ -1,5 +1,8 @@
 package com.lm;
 
+import com.alibaba.fastjson2.JSON;
+import com.lm.admin.entity.bo.device.DeviceCmdBo;
+import com.lm.admin.entity.dto.device.DeviceDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -19,25 +22,11 @@ import java.util.concurrent.atomic.AtomicReference;
 class LmCloudApplicationTests {
     @Test
     public void contextLoads() {
-        // 模拟标识符
-        Map<String, String> identifierMap = new HashMap<>();
-        identifierMap.put("tag1",null);
-        identifierMap.put("tag2",null);
-        identifierMap.put("tag3",null);
-        List<String> identifierList = new ArrayList<>();
-        identifierList.add("tag1");
-        identifierList.add("tag2");
-        identifierList.add("tag3");
-        // 标识符 字符串
-        String identifierStr= "";
-        for (int i = 0; i <identifierList.size() ; i++) {
-            if(i<identifierList.size()-1){
-                identifierStr += "'" + identifierList.get(i) + "'," ;
-            }else{
-                identifierStr += "'" + identifierList.get(i) + "'" ;
-            }
-        }
-        log.info(identifierStr);
+        DeviceCmdBo deviceDto = new DeviceCmdBo();
+        Map<String,Object> a = new HashMap<>();
+        a.put("deng",1);
+        deviceDto.setData(a);
+        log.info("{}", JSON.toJSON(deviceDto));
     }
 
 }

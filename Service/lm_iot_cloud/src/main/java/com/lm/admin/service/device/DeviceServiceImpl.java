@@ -1,8 +1,11 @@
 package com.lm.admin.service.device;
 
+import com.lm.admin.entity.bo.device.DeviceBo;
 import com.lm.admin.entity.bo.device.DeviceIdentifierAndNameDataBo;
 import com.lm.admin.entity.dto.device.DeviceDto;
 import com.lm.admin.entity.pojo.device.Device;
+import com.lm.admin.entity.vo.device.DevicePageVo;
+import com.lm.admin.tool.mybiats.Pager;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -32,4 +35,11 @@ public interface DeviceServiceImpl {
 
     // 获取设备最新数据
     List<DeviceIdentifierAndNameDataBo> getDeviceNewData(String sn);
+
+    /**
+     * 分页查询
+     * @param devicePageVo 分页对象
+     * @return
+     */
+    Pager<DeviceBo> getDevicePager(DevicePageVo devicePageVo);
 }

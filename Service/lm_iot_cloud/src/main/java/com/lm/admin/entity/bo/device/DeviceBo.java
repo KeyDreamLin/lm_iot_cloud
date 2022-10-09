@@ -1,13 +1,20 @@
 package com.lm.admin.entity.bo.device;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.sql.Date;
 
 /**
- * 设备列表
+ * 设备信息
  * @author Lm
  * @date 2022/10/8 21:17
  */
-public class DeviceListBo  implements java.io.Serializable  {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class DeviceBo implements java.io.Serializable  {
     // 主键
     private Long id;
     // 设备名称

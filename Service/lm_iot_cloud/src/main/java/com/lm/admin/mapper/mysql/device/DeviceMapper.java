@@ -1,8 +1,12 @@
 package com.lm.admin.mapper.mysql.device;
 
 import com.lm.admin.entity.dto.device.DeviceDto;
+import com.lm.admin.entity.pojo.device.Device;
+import com.lm.admin.tool.mybiats.Pager;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 设备信息Mapper
@@ -19,4 +23,21 @@ public interface DeviceMapper {
      */
     DeviceDto findDeviceBySn(@Param("sn") String sn);
 
+    /**
+     * 查询全部的设备数量
+     * @return
+     */
+    Integer findDeviceCount();
+
+    /**
+     * 分页查询
+     * @param pageIndex 当前页数
+     * @param pageSize  当前页数有多少条
+     * @return
+     */
+    List<Device> findDeicePage(
+            @Param("pageIndex") Integer pageIndex ,
+            @Param("pageSize") Integer pageSize,
+            @Param("keyword") String keyword
+    );
 }

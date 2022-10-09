@@ -58,11 +58,11 @@ const data  = [
             name: '用户列表',
         },
         {
-            path:"/user/permission",
+            path:"/user/roles",
             name: '角色列表',
         },
         {
-            path:"/user/list",
+            path:"/user/permission",
             name: '权限列表',
         },
     ]

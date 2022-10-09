@@ -25,6 +25,9 @@ public class DeviceModel implements Serializable {
     // 数据名称
     private String name;
 
+    // 数据单位 值后面的参数 例->50℃
+    private String unit;
+
     // 标识符 用于设备数据上报后查询对应的属性名称
     private String identifier;
 

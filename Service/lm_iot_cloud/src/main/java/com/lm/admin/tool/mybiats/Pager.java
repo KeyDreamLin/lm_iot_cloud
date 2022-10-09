@@ -1,8 +1,10 @@
 package com.lm.admin.tool.mybiats;
 
+import com.alibaba.fastjson2.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Bean;
 
 import java.util.List;
 
@@ -14,26 +16,16 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Pager<T> {
-    /**
-     * 当前页
-     */
-    private int pageIndex;
-    /**
-     * 每页大小
-     */
-    private int pageSize;
-    /**
-     * 总记录数
-     */
-    private int totalCount;
 
-    /**
-     * 总页数，可以通过每页大小和总记录数运算得来
-     */
-    private int totalPageNum;
-    /**
-     * 当前页的数据
-     */
-    private List<T> list;
+public class Pager<T> {
+    // 当前页 从一开始所以要减一 (pageIndex - 1) * pageSize
+    private Integer pageIndex = 1;
+    // 每页大小 一页有多少条数据
+    private Integer pageSize = 10;
+    // 总记录数  * count
+    private Integer totalCount;
+    // 总页数，可以通过每页大小和总记录数运算得来
+    private Integer totalPageNum;
+    // 当前页的数据
+    private List<T> records;
 }

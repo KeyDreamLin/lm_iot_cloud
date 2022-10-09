@@ -21,6 +21,8 @@ public class DeviceIdentifierAndNameDataBo {
     private String identifier;
     // 名称
     private String name;
+    // 数据单位
+    private String unit;
     // 数值
     private String val;
 }

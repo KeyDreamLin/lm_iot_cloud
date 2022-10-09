@@ -14,7 +14,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Device implements Serializable {
+public class Device  implements java.io.Serializable  {
 
     // 主键
     private Long id;

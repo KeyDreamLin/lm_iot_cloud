@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lm.admin.mapper.mysql.device.DeviceMapper">
+    <!-- 根据设备sn码查询到设备信息 -->
     <select id="findDeviceBySn" resultType="com.lm.admin.entity.dto.device.DeviceDto">
         select * from lm_device WHERE sn = #{sn}
+    </select>
+
+    <!-- 查询所有设备数量 -->
+    <select id="findDeviceCount" resultType="java.lang.Integer">
+        SELECT count(1) FROM lm_device
+    </select>
+    <!-- 分页查询 -->
+    <select id="findDeicePage" resultType="com.lm.admin.entity.pojo.device.Device">
+        select * from lm_device
+        <where>
+            <if test="keyword != null">
+                `sn` = #{keyword}
+                OR
+                `name` LIKE "%"#{keyword}"%"
+            </if>
+        </where>
+            limit #{pageIndex},#{pageSize}
     </select>
 </mapper>

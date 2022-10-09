@@ -1,13 +1,17 @@
 package com.lm.admin.service.device;
 
 
+import com.lm.admin.entity.bo.device.DeviceBo;
 import com.lm.admin.entity.bo.device.DeviceDataBo;
 import com.lm.admin.entity.bo.device.DeviceIdentifierAndNameDataBo;
 import com.lm.admin.entity.dto.device.DeviceDto;
+import com.lm.admin.entity.pojo.device.Device;
 import com.lm.admin.entity.pojo.devicemodel.DeviceModel;
+import com.lm.admin.entity.vo.device.DevicePageVo;
 import com.lm.admin.mapper.mysql.device.DeviceMapper;
 import com.lm.admin.mapper.tdengine.DeviceDataMapper;
 import com.lm.admin.service.devicemodel.DeviceModelServiceImp;
+import com.lm.admin.tool.mybiats.Pager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +23,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -90,6 +93,12 @@ public class IDeviceService implements DeviceServiceImpl {
         // 1、先查询设备对应的物模型
         List<DeviceModel> deiceModelBySn = deviceModelService.getDeiceModelBySn(sn);
 
+        // 如果该设备没有创建物模型
+        if(deiceModelBySn.size() <= 0 ){
+            // TODO 统一处理一下抛出异常
+            return null;
+        }
+
         // 2、将标识符转换为字符串 'tag1','tag2'.... 用于查询时序数据库的数据 这样做的话如果tag3没有的话就会查询出来多的一条数据
         String identifierStr= "";
         for (int i = 0; i <deiceModelBySn.size() ; i++) {
@@ -131,12 +140,56 @@ public class IDeviceService implements DeviceServiceImpl {
             deviceIdentifierAndNameData.setIdentifier(item.getIdentifier());
             deviceIdentifierAndNameData.setName(item.getName());
             deviceIdentifierAndNameData.setVal(identifierToValMap.get(item.getIdentifier()));
+            deviceIdentifierAndNameData.setUnit(item.getUnit());
             deviceIdentifierAndNameDataList.add(deviceIdentifierAndNameData);
         });
 
 
 //        log.info("--->{}",deviceIdentifierAndNameDataList);
         return deviceIdentifierAndNameDataList;
+    }
+
+    /**
+     * 分页查询
+     * @param devicePageVo  vo
+     * @return
+     */
+    @Override
+    public Pager<DeviceBo> getDevicePager(DevicePageVo devicePageVo) {
+        Pager<DeviceBo> pager = new Pager<>();
+        // 先查询总条数
+        pager.setTotalCount(deviceMapper.findDeviceCount());
+        // 然后运算出总页数
+        // 运算出总页数 总条数除以当前页条数 算出总页数
+        if(pager.getTotalCount() % devicePageVo.getPageSize() ==0)
+            //如果总数据量刚好被当前页面大小整除，那就可以直接相除算出页数
+            pager.setTotalPageNum(pager.getTotalCount() / devicePageVo.getPageSize());
+        else {
+            //如果总数据量不能被当前页面大小整除，那就相除后再加上1，这样能保证
+            //多余的数据页面会显示出来
+            pager.setTotalPageNum(pager.getTotalCount() / devicePageVo.getPageSize()+1);
+        }
+
+        pager.setPageIndex(devicePageVo.getPageIndex());
+        pager.setPageSize(devicePageVo.getPageSize());
+
+        // 查询
+        List<Device> db_deicePage = deviceMapper.findDeicePage(
+                ((pager.getPageIndex() - 1) * pager.getPageSize()),
+                pager.getPageSize(),
+                devicePageVo.getKeyword()
+        );
+
+        // 返回Bo
+        List<DeviceBo> deviceBoList = new ArrayList<>();
+
+        db_deicePage.forEach(item->{
+            DeviceBo deviceBo = new DeviceBo();
+            BeanUtils.copyProperties(item,deviceBo);
+            deviceBoList.add(deviceBo);
+        });
+        pager.setRecords(deviceBoList);
+        return pager;
     }
 
     /**

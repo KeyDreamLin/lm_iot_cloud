@@ -64,6 +64,10 @@ export default {
         getUserName(state){
             return state.username;
         },
+         // 获取用户头像
+         getUserAvatar(state){
+            return state.avatar;
+        },
         // 获取token
         getTokenJj(state) {
             return state.tokenJj;

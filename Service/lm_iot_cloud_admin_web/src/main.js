@@ -6,6 +6,7 @@ import App from './App.vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+
 // 导入windicss库
 import 'virtual:windi.css'
 // 注册路由
@@ -13,6 +14,8 @@ import router from '@/router'
 // 导入状态管理
 import stroe from '@/stroe/index' //默认使用Session
 
+// 自定义组件导入
+import LmUi from '@/components/install.js'
 
 const app = createApp(App);
 
@@ -29,5 +32,7 @@ app.use(router)
 // 注册状态管理
 app.use(stroe)
 
+// 注册自定义组件
+app.use(LmUi)
 
 app.mount('#app')

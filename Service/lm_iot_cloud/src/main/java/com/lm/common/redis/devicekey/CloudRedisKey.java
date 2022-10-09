@@ -8,6 +8,7 @@ public class CloudRedisKey {
     public static String ChannelIdToDeviceSnKey = "lmCloud:cloud:tcp:channelId:";
     // 通过 设备的sn码 保存channelId
     public static String DeviceSnToChannelIdKey = "lmCloud:cloud:tcp:deviceSn:";
-
+    // 设备在线计数器
+    public static String DeviceOnLineCount = "lmCloud:cloud:count";
 
 }

@@ -21,6 +21,12 @@
 
 -	IoTgo https://github.com/itead/IoTgo
 
+-	iThings https://ithings.pages.dev/
+
+-	大屏 https://www.daidaibg.com/bigscreen/#/index
+
+-	物美智能开源物联网平台 https://gitee.com/kerwincui/wumei-smart
+
 - 😝 https://emojipedia.org/ 
 
 

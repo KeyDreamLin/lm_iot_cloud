@@ -9,7 +9,7 @@
                 class="userImg_box"
                     shape="square" size="default" 
                     style="background: #e7e9ff; border-radius: 10px;"
-                    src="https://img.js.design/assets/img/6249a8eae5886b18e2a60a87.png" 
+                    :src="stroe.getters['user/getUserAvatar']" 
                 />
                 <div class="userNanme_box">
                     <span class="userName_vla">
@@ -44,7 +44,7 @@ import stroe from '@/stroe';
     
 .lm-header_box{
     width: 100%;
-    height: 100%;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -11,7 +11,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeviceModelData implements Serializable {
+public class DeviceModel implements Serializable {
 
     // 主键 雪花
     private Long id;

@@ -1,5 +1,6 @@
 package com.lm.admin.controller.admin_api.adminuser;
 
+import com.lm.admin.controller.admin_api.AdminBaseController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-public class AdminUserController {
+public class AdminUserController extends AdminBaseController {
 
 }

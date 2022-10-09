@@ -47,7 +47,7 @@ public class LoginController extends AdminBaseController implements RedisAndHead
      **/
     @PostMapping("/login")
     @ResponseBody
-        public AdminUserLoginBo login(@RequestBody AdminUserLoginVo adminUserLoginVo){
+    public AdminUserLoginBo login(@RequestBody AdminUserLoginVo adminUserLoginVo){
         log.info("UserController_Login--->用户登录-->账号：{}--密码：{}  验证码：{} 验证码UUID：{}"
                 , adminUserLoginVo.getAccount()
                 , adminUserLoginVo.getPassword()

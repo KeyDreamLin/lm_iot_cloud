@@ -63,6 +63,8 @@ public class DeviceAuth {
             // sn码用于 一个sn只能上线一次
             redisTemplate.opsForValue().set(CloudRedisKey.DeviceSnToChannelIdKey + tcp_ret_deviceSn, ctx.channel().id().asLongText());
             redisTemplate.opsForValue().set(CloudRedisKey.ChannelIdToDeviceSnKey + ctx.channel().id().asLongText(), tcp_ret_deviceSn);
+            // 设备在线计数器
+            redisTemplate.opsForValue().increment(CloudRedisKey.DeviceOnLineCount, 1); // 设置递增因子
         }
         else{
             log.info("设备鉴权失败！");

@@ -1,9 +1,11 @@
 package com.lm.admin.config.mybatis;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import org.apache.ibatis.logging.stdout.StdOutImpl;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -54,14 +56,18 @@ public class MybatisTDengineConfig {
         // mapper xml扫描
         sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver()
                 .getResources(MybatisTDengineConfig.MAPPER_LOCATION));
-        try {
-            // https://blog.csdn.net/yangshengwei230612/article/details/122583057
-            //开启驼峰命名转换 abc_efg-->abcEfg
-            sessionFactory.getObject().getConfiguration().setMapUnderscoreToCamelCase(true);
-            return sessionFactory.getObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+
+        //此处创建一个Configuration 注意包不要引错了
+        org.apache.ibatis.session.Configuration configuration=new org.apache.ibatis.session.Configuration();
+        //配置日志实现
+        configuration.setLogImpl(StdOutImpl.class);
+        //此处可以添加其他mybatis配置 例如转驼峰命名
+        configuration.setMapUnderscoreToCamelCase(true);
+
+        // sessionFactory工厂装载上面配置的Configuration
+        sessionFactory.setConfiguration(configuration);
+        return sessionFactory.getObject();
     }
+
+
 }

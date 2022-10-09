@@ -13,14 +13,10 @@
             <el-tree 
                 :data="data" accordion
                 @node-click="handleNodeClick" 
+                :props="{label:'name'}"
             >
               <template #default="{ node, data }">
                   <div class="flex items-center">
-                      <div class="pr-2 flex items-center">
-                          <el-icon >
-                              <component :is="data.icon" />
-                          </el-icon>
-                      </div>
                       <span>{{ node.label }}</span>
                   </div>
               </template>
@@ -36,17 +32,40 @@ const handleNodeClick = (data) => {
 }
 const data  = [
   {
-    label: '仪表盘',
-    icon:"House",
-    path:"/"
+    path:"/",
+    name: '仪表盘'
   },
   {
-    icon:"House",
-    label: 'Level one 2',
+    path:"/device",
+    name: '设备管理',
+    children:[
+        {
+            path:"/device/model",
+            name: '物模型管理',
+        },
+        {
+            path:"/device/list",
+            name: '设备列表',
+        },
+    ]
   },
   {
-    icon:"House",
-    label: 'Level one 3',
+    path:"/user",
+    name: '用户管理',
+    children:[
+        {
+            path:"/user/list",
+            name: '用户列表',
+        },
+        {
+            path:"/user/permission",
+            name: '角色列表',
+        },
+        {
+            path:"/user/list",
+            name: '权限列表',
+        },
+    ]
   },
 ]
 </script>
@@ -126,6 +145,9 @@ const data  = [
 .lm-menu-main_box :deep(.el-tree-node__label){
     width: 100%;
 }
-
+/* tree的标签子节点 */
+.lm-menu-main_box :deep(.el-tree-node__children){
+    padding-left: 15px;
+}
 
 </style>

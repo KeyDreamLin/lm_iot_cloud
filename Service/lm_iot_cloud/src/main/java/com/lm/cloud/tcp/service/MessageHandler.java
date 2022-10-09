@@ -118,6 +118,8 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
             // 删除key
             redisTemplate.delete(db_channelId_key);
             redisTemplate.delete(db_deviceSn_key);
+            // 设备在线计数器减一
+            redisTemplate.opsForValue().increment(CloudRedisKey.DeviceOnLineCount, -1); // 设置递增减因子
         }
 
 

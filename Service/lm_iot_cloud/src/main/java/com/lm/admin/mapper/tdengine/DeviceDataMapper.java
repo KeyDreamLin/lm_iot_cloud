@@ -16,7 +16,14 @@ import java.util.List;
 @Mapper
 public interface DeviceDataMapper {
 
-    List<DeviceDataBo> fineDeviceDatas(@Param("sn") String sn);
+    /**
+     * 查询用户最新的数据
+     * @param sn 设备sn码
+     * @param identifierStr 标识符字符串 'tag1','tag2','tag3'
+     * @param identifierCount 多少个标识符
+     * @return List<DeviceDataBo>
+     */
+    List<DeviceDataBo> fineDeviceDatas(@Param("sn") String sn , @Param("identifierStr") String identifierStr,@Param("identifierCount") Integer identifierCount);
 
     /**
      * 保存设备发过来的数据

@@ -39,7 +39,7 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
            // 1、如果返回的结果是一个异常的结果，就把异常返回的结构数据倒腾到R.error里面即可
            ErrorHandler errorHandler = (ErrorHandler)body;
 
-           return R.error(errorHandler.getStatus(),errorHandler.getMessage(),errorHandler.getException());
+           return R.error(errorHandler.getStatus(),"", errorHandler.getMessage());
        }
        else if (body instanceof String){
            // 2、因为springmvc数据转换器对String是有特殊处理 StringHttpMessageConverter

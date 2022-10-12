@@ -17,6 +17,7 @@ public class CloudR<T> implements java.io.Serializable  {
     @JSONField(ordinal = 3)
     private T data; // 一般用于命令请求
 
+    private String cmdId;
     private CloudR() {
     }
 
@@ -28,6 +29,11 @@ public class CloudR<T> implements java.io.Serializable  {
     private CloudR(Integer t, Integer status, T data) {
         this.t = t;
         this.status = status;
+        this.data = data;
+    }
+    // 用于发送cmd
+    private CloudR(String cmdId ,T data) {
+        this.cmdId = cmdId;
         this.data = data;
     }
 
@@ -44,15 +50,13 @@ public class CloudR<T> implements java.io.Serializable  {
     }
 
     /**
-     * 服务器操作客户端 发送命令等
-     * @param t
-     * @param status
+     * 服务端操作客户端 发送命令
      * @param data
      * @param <T>
      * @return
      */
-    public static <T> CloudR<T> CMD(Integer t, Integer status, T data) {
-        return new CloudR<T>(t,status,data);
+    public static <T> CloudR<T> Cmd (String cmdId ,T data) {
+        return new CloudR<T>(cmdId,data);
     }
 
 }

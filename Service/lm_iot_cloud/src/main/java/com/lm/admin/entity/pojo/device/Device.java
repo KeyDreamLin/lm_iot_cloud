@@ -6,7 +6,7 @@ import java.sql.Date;
 import lombok.*;
 
 /**
- * 设备信息
+ * 设备信息 - mysql
  * @author Lm
  * @since 2022-09-23
  */
@@ -14,7 +14,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Device  implements java.io.Serializable  {
+public class Device implements java.io.Serializable  {
 
     // 主键
     private Long id;

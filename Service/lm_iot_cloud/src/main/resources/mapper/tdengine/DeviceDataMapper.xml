@@ -7,4 +7,24 @@
     <insert id="saveDeviceData">
         INSERT INTO #{tableName} USING lm_device_data TAGS (#{sn}) VALUES (now, #{val}, #{identifier});
     </insert>
+    <insert id="saveDeiceCmd">
+        INSERT INTO
+            #{tableName}
+        USING
+            lm_device_cmd_data TAGS (#{sn})
+        VALUES(
+                #{dcd.nts},
+                #{dcd.cmdID},
+                #{dcd.data},
+                #{dcd.status},
+                #{dcd.rts}
+              );
+    </insert>
+    <select id="getDeviceCmdDataByCmdId" resultType="com.lm.admin.entity.pojo.devicecmddata.DeviceCmdData">
+        SELECT * FROM lm_device_cmd_data where cmdID= #{cmdID};
+    </select>
+
+    <delete id="delDeiceCmd">
+        delete FROM lm_device_cmd_data where nts= #{dcd.nts};
+    </delete>
 </mapper>

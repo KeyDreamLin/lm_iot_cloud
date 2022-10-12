@@ -18,7 +18,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeviceDto implements Serializable {
+public class DeviceAuthDto implements Serializable {
     // 设备唯一号 可以自动生成 也可以手写
     private String sn;
     // 设备传输秘钥

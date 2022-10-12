@@ -1,7 +1,7 @@
 package com.lm.admin.controller.code;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
-import com.lm.admin.tool.pwd.Base64;
+import com.lm.admin.utils.pwd.Base64;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static com.lm.common.redis.adminkey.RedisAndHeaderKey.HEADER_TOKEN_UUID;
 import static com.lm.common.redis.adminkey.RedisAndHeaderKey.REDIS_CODE_UUID_KEY;
 
 /**

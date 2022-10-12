@@ -1,4 +1,4 @@
-package com.lm.admin.tool;
+package com.lm.admin.utils;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONException;

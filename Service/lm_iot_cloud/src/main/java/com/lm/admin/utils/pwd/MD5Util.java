@@ -1,4 +1,4 @@
-package com.lm.admin.tool.pwd;
+package com.lm.admin.utils.pwd;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

@@ -2,13 +2,15 @@ package com.lm.cloud.tcp.service;
 
 import com.alibaba.fastjson2.JSON;
 import com.lm.admin.service.device.IDeviceService;
-import com.lm.admin.tool.JSONUtils;
-import com.lm.admin.tool.LmAssert;
+import com.lm.admin.utils.JSONUtils;
+import com.lm.admin.utils.LmAssert;
 import com.lm.cloud.common.auth.DeviceAuth;
 import com.lm.admin.entity.dto.device.DeviceDataDto;
 import com.lm.cloud.common.r.CloudDeviceConnRespEnum;
 import com.lm.cloud.common.r.CloudDevicePushAckEnum;
 import com.lm.cloud.common.r.CloudR;
+import com.lm.cloud.tcp.service.utils.DeviceCmdUtils;
+import com.lm.cloud.tcp.service.utils.RedisDeviceUtils;
 import com.lm.common.redis.devicekey.CloudRedisKey;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -51,9 +53,8 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
     // channelRead 中调用了 channelRead0，其会先做消息类型检查，判断当前message 是否需要传递到下一个handler。
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, String message) throws Exception {
-        // 用于查询对应的sn码 如果id存在sn密码 就代表鉴权过了
-        String dbr_SnByChannelId = redisTemplate.opsForValue().get(CloudRedisKey.ChannelIdToDeviceSnKey + ctx.channel().id().asLongText());
-        log.info("--->>>>{}",dbr_SnByChannelId);
+        // 用于查询对应的sn码 如果id存在sn码 就代表鉴权过了
+        String dbr_SnByChannelId = RedisDeviceUtils.getSnByCid(ctx.channel().id().asLongText());
         if (JSONUtils.isJSONValidate(message)) {
             Integer t = JSON.parseObject(message).getInteger("t");
             // 查询是否授权 如果根据id查不到sn码就表示未鉴权
@@ -71,6 +72,7 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
 //                ctx.writeAndFlush("测试用途:未授权 请发起授权信息");
                 return;
             } else {
+
                 if(t == 3 ){
                     // 接收到设备的数据
                     DeviceDataDto deviceDataUpRo = JSON.parseObject(message, DeviceDataDto.class);
@@ -88,6 +90,10 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
                 }
                 else if(t == 6){
                     // 客户端响应服务器的CMD命令执行状态
+                    // 序列化设备的数据
+                    DeviceDataDto deviceDataUpRo = JSON.parseObject(message, DeviceDataDto.class);
+                    log.info("序列化后--->>>>{}", deviceDataUpRo);
+                    DeviceCmdUtils.responseCmd(deviceDataUpRo,dbr_SnByChannelId);
                 }
             }
         } else {
@@ -97,7 +103,7 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        log.info("10秒内未读到信息--->{}", ctx.channel().id().asLongText());
+        log.info("100秒内未读到信息--->{}", ctx.channel().id().asLongText());
         ctx.channel().close(); //关闭连接
     }
 
@@ -110,16 +116,22 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
         // 后面只处理正常连接成功的设备，进行断开连接
         // 通过channelId查询到设备的sn码，找到sn删除key channelId删除key
 //        String findSnBycId = redisTemplate.opsForValue().get("lmCloud:cloud:tcp:channelId:"+ctx.channel().id().toString());
-        String db_channelId_value = redisTemplate.opsForValue().get(CloudRedisKey.ChannelIdToDeviceSnKey + ctx.channel().id().asLongText());
-        if(LmAssert.isNotEmpty(db_channelId_value)){
+        // 根据id查询sn码
+        String db_SnBycId = RedisDeviceUtils.getSnByCid(ctx.channel().id().asLongText());
+        if(LmAssert.isNotEmpty(db_SnBycId)){
 
-            String db_channelId_key = CloudRedisKey.ChannelIdToDeviceSnKey + ctx.channel().id().asLongText();
-            String db_deviceSn_key = CloudRedisKey.DeviceSnToChannelIdKey + db_channelId_value;
+            String db_channelIdKey = CloudRedisKey.ChannelIdToDeviceSnKey + ctx.channel().id().asLongText();
+            String db_deviceSnKey = CloudRedisKey.DeviceSnToChannelIdKey + db_SnBycId;
             // 删除key
-            redisTemplate.delete(db_channelId_key);
-            redisTemplate.delete(db_deviceSn_key);
+            redisTemplate.delete(db_channelIdKey);
+            redisTemplate.delete(db_deviceSnKey);
+
             // 设备在线计数器减一
-            redisTemplate.opsForValue().increment(CloudRedisKey.DeviceOnLineCount, -1); // 设置递增减因子
+            RedisDeviceUtils.setDeviceOnLineCount(false);
+//            redisTemplate.opsForValue().increment(CloudRedisKey.DeviceOnLineCount, -1); // 设置递增减因子
+            // 通过id移除对应的值
+            RedisDeviceUtils.deviceMap.remove(ctx.channel().id().asLongText());
+
         }
 
 

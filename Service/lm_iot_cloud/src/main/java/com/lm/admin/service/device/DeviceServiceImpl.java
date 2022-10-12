@@ -2,11 +2,9 @@ package com.lm.admin.service.device;
 
 import com.lm.admin.entity.bo.device.DeviceBo;
 import com.lm.admin.entity.bo.device.DeviceIdentifierAndNameDataBo;
-import com.lm.admin.entity.dto.device.DeviceDto;
-import com.lm.admin.entity.pojo.device.Device;
+import com.lm.admin.entity.dto.device.DeviceAuthDto;
 import com.lm.admin.entity.vo.device.DevicePageVo;
-import com.lm.admin.tool.mybiats.Pager;
-import org.apache.ibatis.annotations.Param;
+import com.lm.admin.utils.mybiats.Pager;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +20,7 @@ public interface DeviceServiceImpl {
      * @param sn
      * @return
      */
-    DeviceDto getDeviceBySn(String sn);
+    DeviceAuthDto getDeviceBySn(String sn);
 
 
     /**

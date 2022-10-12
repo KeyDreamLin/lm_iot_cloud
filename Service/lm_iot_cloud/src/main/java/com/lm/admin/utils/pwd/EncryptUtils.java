@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lm.admin.tool.pwd;
+package com.lm.admin.utils.pwd;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

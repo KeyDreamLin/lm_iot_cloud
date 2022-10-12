@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.Map;
 
 /**
- * 网关实体 client传过来的数据 读取
+ * 网关实体 client传过来的设备鉴权、设备数据上报  读取
  */
 @Data
 @AllArgsConstructor
@@ -23,4 +23,6 @@ public class DeviceDataDto implements java.io.Serializable {
     private Map<String, String> data;
     // 客户端响应的状态
     private Integer status;
+    // 客户端原样带回的cmdId
+    private String cmdId;
 }

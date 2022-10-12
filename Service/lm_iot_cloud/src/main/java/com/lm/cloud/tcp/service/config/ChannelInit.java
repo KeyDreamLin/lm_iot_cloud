@@ -20,9 +20,11 @@ import java.util.concurrent.TimeUnit;
 public class ChannelInit extends ChannelInitializer<NioSocketChannel> {
 
     private final MessageHandler messageHandler;
+
     // 把解码器变成单例 不然每个连接都新建一个对象
     private StringDecoder stringDecoder = new StringDecoder();
     private StringEncoder stringEncoder = new StringEncoder();
+
     @Override
     protected void initChannel(NioSocketChannel channel) {
 //        System.out.println(this);

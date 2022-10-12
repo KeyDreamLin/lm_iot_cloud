@@ -1,4 +1,4 @@
-package com.lm.admin.tool.pwd;
+package com.lm.admin.utils.pwd;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;

@@ -1,4 +1,4 @@
-package com.lm.admin.tool.pwd;
+package com.lm.admin.utils.pwd;
 
 /**
  * Base64工具类

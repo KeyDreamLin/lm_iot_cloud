@@ -8,7 +8,7 @@ public enum CloudDeviceConnRespEnum implements CloudRespEnumInterface {
     CONNECT_ERROR_NOT_ADD_DEVICE(2 , 1),    // 设备连接失败 未添加设备
     CONNECT_ERROR_AUTH(2,2),                // 设备连接失败 设备鉴权失败
     CONNECT_ERROR_UPS(2,3),                 // 设备连接失败 设备重复上线
-    CONNECT_ERROR_NO_AUTH(2,4),                // 设备连接失败 设备鉴权失败
+    CONNECT_ERROR_NO_AUTH(2,4),             // 设备连接失败 未授权 请发起授权信息
     ;
     private Integer t;// 请求响应状态
     private Integer status; // 响应状态

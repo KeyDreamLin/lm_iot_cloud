@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lm.admin.mapper.mysql.device.DeviceMapper">
     <!-- 根据设备sn码查询到设备信息 -->
-    <select id="findDeviceBySn" resultType="com.lm.admin.entity.dto.device.DeviceDto">
+    <select id="findDeviceBySn" resultType="com.lm.admin.entity.dto.device.DeviceAuthDto">
         select * from lm_device WHERE sn = #{sn}
     </select>
 

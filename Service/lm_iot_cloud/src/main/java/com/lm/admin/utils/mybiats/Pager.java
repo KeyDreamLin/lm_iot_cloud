@@ -1,10 +1,8 @@
-package com.lm.admin.tool.mybiats;
+package com.lm.admin.utils.mybiats;
 
-import com.alibaba.fastjson2.annotation.JSONField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Bean;
 
 import java.util.List;
 

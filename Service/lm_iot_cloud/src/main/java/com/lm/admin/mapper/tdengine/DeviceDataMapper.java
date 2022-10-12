@@ -1,5 +1,6 @@
 package com.lm.admin.mapper.tdengine;
 
+import com.lm.admin.entity.pojo.devicecmddata.DeviceCmdData;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.lm.admin.entity.bo.device.DeviceDataBo;
@@ -38,4 +39,24 @@ public interface DeviceDataMapper {
                        @Param("identifier")String identifier,
                        @Param("val")String val
                        );
+
+    /**
+     * 保存设备命令信息
+     * @param tableName 表名
+     * @param sn 设备sn
+     * @param deviceCmdData 设备命令数据
+     * @param deviceCmdData 设备命令数据
+     * @return
+     */
+    int saveDeiceCmd(@Param("tableName")String tableName,
+                     @Param("sn")String sn,
+                     @Param("dcd") DeviceCmdData deviceCmdData);
+
+    int delDeiceCmd(@Param("dcd") DeviceCmdData deviceCmdData);
+    /**
+     * 查询设备cmd日记 根据cmdID 查询一条
+     * @param cmdID
+     * @return
+     */
+    DeviceCmdData getDeviceCmdDataByCmdId(@Param("cmdID") String cmdID);
 }

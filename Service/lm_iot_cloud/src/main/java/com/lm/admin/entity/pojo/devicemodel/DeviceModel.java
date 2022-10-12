@@ -6,7 +6,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 设备物模型数据
+ * 设备物模型数据 - mysql
+ * @author Lm
+ * @date 2022/10/12 9:40
  */
 @Data
 @AllArgsConstructor

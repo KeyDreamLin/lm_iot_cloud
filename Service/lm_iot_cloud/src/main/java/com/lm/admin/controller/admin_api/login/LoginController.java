@@ -9,7 +9,7 @@ import com.lm.admin.entity.bo.adminuser.AdminUserLoginBo;
 import com.lm.admin.entity.pojo.adminuser.AdminUser;
 import com.lm.admin.entity.vo.adminuser.AdminUserLoginVo;
 import com.lm.admin.service.adminuser.AdminUserServiceImpl;
-import com.lm.admin.tool.LmAssert;
+import com.lm.admin.utils.LmAssert;
 import com.lm.common.redis.adminkey.RedisAndHeaderKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

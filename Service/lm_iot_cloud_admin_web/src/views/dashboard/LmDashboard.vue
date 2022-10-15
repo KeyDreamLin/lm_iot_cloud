@@ -1,18 +1,19 @@
 <template>
-    <el-row :gutter="30">
-        <el-col :span="24">
-            <div class="grid-content ep-bg-purple" >
-                <lm-hello></lm-hello>
-            </div>
-        </el-col>
-    </el-row>
+    <div>
+        <el-row :gutter="30">
+            <el-col :span="24">
+                <div class="grid-content ep-bg-purple" >
+                    <lm-hello></lm-hello>
+                </div>
+            </el-col>
+        </el-row>
 
-    <el-row :gutter="30" class="mt-[30px]">
-        <el-col :span="24">
-            <lm-order></lm-order>
-        </el-col>
-    </el-row>
-  
+        <el-row :gutter="30" class="mt-[30px]">
+            <el-col :span="24">
+                <lm-order></lm-order>
+            </el-col>
+        </el-row>
+    </div>
 </template>
 
 <script setup>

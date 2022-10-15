@@ -1,5 +1,6 @@
 package com.lm.cloud.tcp.service.utils;
 
+import com.lm.admin.utils.LmAssert;
 import com.lm.common.redis.devicekey.CloudRedisKey;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.netty.channel.ChannelHandlerContext;
@@ -100,4 +101,19 @@ public class RedisDeviceUtils {
         Object count = staticStringRedisTemplate.opsForValue().get(CloudRedisKey.DeviceOnLineCount);
         return Long.valueOf((count == null ? 0 : count).toString());
     }
+
+    /**
+     * 通过设备sn码查询设备是否在线
+     * @param sn
+     * @return
+     */
+    public static Boolean getDeviceIsOnLienBySn(String sn){
+        // 如果传入空字符串就返回false
+        if(LmAssert.isEmpty(sn)){
+            return false;
+        }
+        // 如果id不为空就返回true 代表设备在线的状态
+        return  LmAssert.isNotEmpty(getCidBySn(sn));
+    }
+
 }

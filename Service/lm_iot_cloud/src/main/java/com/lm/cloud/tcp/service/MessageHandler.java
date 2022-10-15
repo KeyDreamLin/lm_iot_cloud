@@ -15,6 +15,8 @@ import com.lm.common.redis.devicekey.CloudRedisKey;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.util.concurrent.DefaultEventExecutorGroup;
+import io.netty.util.concurrent.EventExecutorGroup;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,9 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
     @Autowired
     private StringRedisTemplate redisTemplate;  // 操作Redis
 
+    //group充当业务线程池，可以将任务提交到该线程池
+    private static final EventExecutorGroup group = new DefaultEventExecutorGroup(16);
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         log.info("\n");
@@ -61,6 +66,7 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
             if (LmAssert.isEmpty(dbr_SnByChannelId)) {
                 // 只有t才能发起鉴权
                 if (t == 1) {
+                    // 设备鉴权 不建议放异步线程
                     ctx.writeAndFlush(JSON.toJSONString(deviceAuth.TcpAuth(ctx, message)));
                     log.info("测试用途:开始授权");
                     return;
@@ -74,19 +80,23 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
             } else {
 
                 if(t == 3 ){
-                    // 接收到设备的数据
-                    DeviceDataDto deviceDataUpRo = JSON.parseObject(message, DeviceDataDto.class);
-                    log.info("序列化后--->>>>{}", deviceDataUpRo);
-                    // 保存数据 放到tdengine
-                    int a = deviceService.saveDeviceData(dbr_SnByChannelId,deviceDataUpRo.getData());
-                    if(a>0){
-                        // 接收数据成功
-                        ctx.writeAndFlush(JSON.toJSONString(CloudR.Response(CloudDevicePushAckEnum.DATA_PUSH_ACK_SUCCESS)));
-                    }
-                    else{
-                        // 接收数据失败
-                        ctx.writeAndFlush(JSON.toJSONString(CloudR.Response(CloudDevicePushAckEnum.DATA_PUSH_ACK_ERROR)));
-                    }
+                    // 设备数据上报数据量大 数据库操作耗时较高  所以放到异步线程里面去做。 为什么直接开启业务线程嘞？这样的话不管你处理什么任务都开个线程不太灵活。
+                    group.submit(()->{
+                        log.info("group.submit 异步执行的线程："+Thread.currentThread().getName());
+                        // 接收到设备的数据
+                        DeviceDataDto deviceDataUpRo = JSON.parseObject(message, DeviceDataDto.class);
+                        log.info("序列化后--->>>>{}", deviceDataUpRo);
+                        // 保存数据 放到tdengine
+                        int a = deviceService.saveDeviceData(dbr_SnByChannelId,deviceDataUpRo.getData());
+                        if(a>0){
+                            // 接收数据成功
+                            ctx.writeAndFlush(JSON.toJSONString(CloudR.Response(CloudDevicePushAckEnum.DATA_PUSH_ACK_SUCCESS)));
+                        }
+                        else{
+                            // 接收数据失败
+                            ctx.writeAndFlush(JSON.toJSONString(CloudR.Response(CloudDevicePushAckEnum.DATA_PUSH_ACK_ERROR)));
+                        }
+                    });
                 }
                 else if(t == 6){
                     // 客户端响应服务器的CMD命令执行状态

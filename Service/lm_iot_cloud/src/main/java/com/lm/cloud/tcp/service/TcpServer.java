@@ -64,7 +64,7 @@ public class TcpServer implements ITcpServer {
                     // tcp缓冲区
                     .option(ChannelOption.SO_BACKLOG, 128)
                     // 将网络数据积累到一定的数量后,服务器端才发送出去,会造成一定的延迟。希望服务是低延迟的,建议将TCP_NODELAY设置为true
-                    .childOption(ChannelOption.TCP_NODELAY, false)
+                    .childOption(ChannelOption.TCP_NODELAY, true)
                     // 保持长连接
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     // 绑定端口，开始接收进来的连接

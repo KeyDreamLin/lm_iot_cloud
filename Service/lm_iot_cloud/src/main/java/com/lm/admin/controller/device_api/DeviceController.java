@@ -58,9 +58,6 @@ public class DeviceController {
      */
     @PostMapping("/onLineCount")
     public Long onLineCount(){
-        // 获取计数器的值 如果key不存在就是null
-//        Object count = SredisTemplate.opsForValue().get(CloudRedisKey.DeviceOnLineCount);
-//        return Long.valueOf((count == null ? 0 : count).toString());
         return RedisDeviceUtils.getDeviceOnLineCount();
     }
 
@@ -76,7 +73,11 @@ public class DeviceController {
     }
 
 
-
+    /**
+     * 下发设备命令
+     * @param deviceCmdBo
+     * @return
+     */
     @PostMapping("/cmd")
     public String cmd(@RequestBody DeviceCmdBo deviceCmdBo){
         log.info("------>{}",deviceCmdBo);

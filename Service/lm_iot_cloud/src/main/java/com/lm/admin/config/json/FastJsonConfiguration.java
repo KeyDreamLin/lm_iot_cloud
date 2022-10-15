@@ -39,13 +39,17 @@ public class FastJsonConfiguration {
                 JSONReader.Feature.SupportArrayToBean,      // 支持数据映射的方式
                 JSONReader.Feature.InitStringFieldAsEmpty,  // 初始化String字段为空字符串""
                 JSONReader.Feature.AllowUnQuotedFieldNames  // 不支持不带双引号的key
+
         );
 
         config.setWriterFeatures(
-                JSONWriter.Feature.PrettyFormat,                // 格式化输出
+                JSONWriter.Feature.FieldBased,                  // 反序列化
                 JSONWriter.Feature.WriteNulls,                  // 序列化输出空值字段
-                JSONWriter.Feature.NullAsDefaultValue,          // 将空置输出为缺省值，Number类型的null都输出为0，String类型的null输出为""，数组和Collection类型的输出为[]
-                JSONWriter.Feature.BrowserCompatible            // 在大范围超过JavaScript支持的整数，输出为字符串格式
+                JSONWriter.Feature.BrowserCompatible,            // 在大范围超过JavaScript支持的整数，输出为字符串格式
+                JSONWriter.Feature.WriteNullStringAsEmpty,
+                JSONWriter.Feature.WriteNullNumberAsZero,
+                JSONWriter.Feature.WriteNullBooleanAsFalse,
+                JSONWriter.Feature.WriteNullListAsEmpty
         );
 
         converter.setFastJsonConfig(config);

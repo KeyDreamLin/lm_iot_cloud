@@ -1,6 +1,7 @@
-package com.lm.admin.controller.code;
+package com.lm.admin.controller.common_api.code;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
+import com.lm.admin.controller.common_api.CommonBaseController;
 import com.lm.admin.utils.pwd.Base64;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +22,16 @@ import java.util.concurrent.TimeUnit;
 
 import static com.lm.common.redis.adminkey.RedisAndHeaderKey.REDIS_CODE_UUID_KEY;
 
+
 /**
- * /api/
- * @author: Lm
+ * 验证码接口 管理员和普通用户共用
+ * path : /api/common/***
+ * @author Lm
  * @date: 2022/10/3 20:02
- * @rturn a
- **/
+ */
 @Slf4j
 @RestController
-@RequestMapping("/api")
-public class CodeController {
+public class CodeController extends CommonBaseController {
     @Autowired
     private DefaultKaptcha defaultKaptcha; // 验证码生成类
     @Autowired

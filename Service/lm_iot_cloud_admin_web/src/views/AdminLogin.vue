@@ -59,7 +59,7 @@ import router from '@/router';
 // 状态管理
 import stroe from '@/stroe';
 import adminLoginService from '@/services/admin_user/AdminLoginService';
-import codeService from '@/services/code/CodeService.js';
+import codeService from '@/services/common/code/CodeService.js';
 
 import { onMounted, ref } from 'vue';
 
@@ -84,18 +84,6 @@ onMounted(()=>{
     setInterval(newCodeEvent, 4 * 60 * 1000);
 });
 const AdminLoginEvent = async () => {
-    // try{
-    //     let serverReponse = await adminLoginService.login(adminLoginData.value);
-    //     console.log("服务器回调:登录成功信息--------->",serverReponse.data);
-    //     // 登录成功就跳转到后台
-    //     router.push("/");
-    // }catch(err){
-    //     console.log("服务器回调:登录异常信息--------->",err);
-    // }finally{
-    //     // 不管你登录成功还是失败都刷新
-    //     // 登录过一次就要刷新一次验证码 当然不刷后端也做处理了 同一个UUID返回异常
-    //     newCodeEvent();
-    // }
     try{
         let serverReponse = await stroe.dispatch("user/toLogin",adminLoginData.value);
         console.log("服务器回调:登录成功信息--------->",serverReponse);

@@ -2,6 +2,8 @@
 //import { createRouter, createWebHashHistory } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 
+import deviceList from '@/views/device/list.vue'
+import deviceModelList from '@/views/device/model/list.vue'
 // 子路由
 const routes_children = [
     {
@@ -10,6 +12,18 @@ const routes_children = [
         meta: { title: '仪表盘' },
         component: () =>
         import('@/views/dashboard/LmDashboard.vue'),
+    },
+    {
+        path: '/device/list',
+        name: "设备列表",
+        meta: { title: '设备列表' },
+        component : deviceList,
+    },
+    {
+        path: '/device/model/list',
+        name: "/device/model/list",
+        meta: { title: '物模型管理' },
+        component : deviceModelList,
     },
     {
         path: '/test',

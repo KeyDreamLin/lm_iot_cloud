@@ -50,7 +50,6 @@ import LmMenu from '@/layouts/LmMenu.vue';
     bottom: 0;
     height: 100%;
     background: #f9f9f9;
-    /* background: rgb(143, 75, 75); */
     display: flex;
     flex-direction: column;
     /* 左右30px */
@@ -61,12 +60,17 @@ import LmMenu from '@/layouts/LmMenu.vue';
 .lm-right-up_box{
     width: 100%;
     height: 80px;
-    /* background: rgb(212, 84, 84); */
 }
 /* 右边下盒子用于子路由展示 */
 .lm-right-down_box{
     width: 100%;
     flex-grow: 1;
-    /* background: rgb(171, 9, 9); */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+/* 隐藏滑动条 */
+.lm-right-down_box::-webkit-scrollbar {
+    display: none;
+    width: 0;
 }
 </style>

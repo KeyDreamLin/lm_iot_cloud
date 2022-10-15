@@ -10,8 +10,9 @@ import com.lm.admin.entity.pojo.devicemodel.DeviceModel;
 import com.lm.admin.entity.vo.device.DevicePageVo;
 import com.lm.admin.mapper.mysql.device.DeviceMapper;
 import com.lm.admin.mapper.tdengine.DeviceDataMapper;
-import com.lm.admin.service.devicemodel.DeviceModelServiceImp;
+import com.lm.admin.service.devicemodel.DeviceModelService;
 import com.lm.admin.utils.mybiats.Pager;
+import com.lm.cloud.tcp.service.utils.RedisDeviceUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,9 @@ public class IDeviceService implements DeviceServiceImpl {
 
     // 设备物模型
     @Autowired
-    private DeviceModelServiceImp deviceModelService;
+    private DeviceModelService deviceModelService;
+
+
     // 设置日期格式
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
 
@@ -69,15 +72,18 @@ public class IDeviceService implements DeviceServiceImpl {
      */
     @Override
     public int saveDeviceData(String sn, Map<String, String> dataMap) {
-        AtomicReference<Integer> saveCount = new AtomicReference<>(0);
-        dataMap.forEach((k,v)->{
-            saveCount.set(
-                    saveCount.get()+
-                            // 拼接 表名 sn_yyyyMMdd
-                    deviceDataMapper.saveDeviceData(sn + "_" + simpleDateFormat.format(new Date()), sn, k, v)
-            );
-        });
-        return saveCount.get();
+        // 因为这个方法是在异步里面执行的，所以插入数据库需要同步线程
+        synchronized(this) {
+            AtomicReference<Integer> saveCount = new AtomicReference<>(0);
+            dataMap.forEach((k, v) -> {
+                saveCount.set(
+                        saveCount.get() +
+                                // 拼接 表名 sn_yyyyMMdd
+                                deviceDataMapper.saveDeviceData(sn + "_" + simpleDateFormat.format(new Date()), sn, k, v)
+                );
+            });
+            return saveCount.get();
+        }
     }
 
     /**
@@ -182,12 +188,16 @@ public class IDeviceService implements DeviceServiceImpl {
 
         // 返回Bo
         List<DeviceBo> deviceBoList = new ArrayList<>();
-
+        // pojo 转bo
         db_deicePage.forEach(item->{
             DeviceBo deviceBo = new DeviceBo();
             BeanUtils.copyProperties(item,deviceBo);
+            // 顺便查询设备是否在线
+            deviceBo.setIsOnLine(RedisDeviceUtils.getDeviceIsOnLienBySn(deviceBo.getSn()));
             deviceBoList.add(deviceBo);
         });
+
+
         pager.setRecords(deviceBoList);
         return pager;
     }

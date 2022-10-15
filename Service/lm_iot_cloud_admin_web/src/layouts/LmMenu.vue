@@ -10,65 +10,83 @@
         </div>
         <!-- 菜单位置 -->
         <div class="lm-menu-main_box">
-            <el-tree 
-                :data="data" accordion
-                @node-click="handleNodeClick" 
-                :props="{label:'name'}"
+            <el-menu
+                :default-active="thisPath"
+                @select="selectMenuEvent"
             >
-              <template #default="{ node, data }">
-                  <div class="flex items-center">
-                      <span>{{ node.label }}</span>
-                  </div>
-              </template>
-          </el-tree>
+                <template v-for="(menu_root, index) in menuTerrData" :key="menu_root.id +''">
+                    <!-- 父元素有子元素的 -->
+                    <template v-if="menu_root.children.length > 0">
+                        <!-- 因为父元素的path是一样的 所以index不能用path用id代替就行 -->
+                        <el-sub-menu :index="menu_root.id +''">
+                            <template #title>
+                                <span>{{ menu_root.name }}</span>
+                            </template>
+                            <!-- 遍历子元素出来 -->
+                            <template 
+                                v-for="(menu_c ,index) in menu_root.children" 
+                                :key="menu_c.id +''"
+                            >
+                                <!-- index 用path是方便获取到路由路径后选中对应的项 -->
+                                <el-menu-item :index="menu_c.path">
+                                    <template #title>
+                                        <span>{{ menu_c.name }}</span>
+                                    </template>
+                                </el-menu-item>
+
+                            </template>
+                        </el-sub-menu>
+                    </template>
+                    <!-- 无子元素的父元素 -->
+                    <template v-else>
+                        <!-- index 用path是方便获取到路由路径后选中对应的项 -->
+                        <el-menu-item :index="menu_root.path">
+                            <template #title>
+                                <span>{{ menu_root.name }}</span>
+                            </template>
+                        </el-menu-item>
+                    </template>
+                </template>
+            </el-menu> 
+            {{thisPathName}}
         </div>
     </div>
 </template>
 
 <script setup>
-import WebManage from '@/views/WebManage.vue';
-const handleNodeClick = (data) => {
-    console.log(data)
+import { ref , onMounted, computed } from 'vue'
+import permissionService from '@/services/common/permission/PermissionService'
+// 用于路由对象 对路由进行操作
+import { useRouter } from 'vue-router';
+// 用于获取当前路由的状态和地址
+import { useRoute } from 'vue-router';
+// 用于路由对象 对路由进行操作
+const router = useRouter();
+// 用于获取当前路由的状态和地址
+const route = useRoute();
+
+// 菜单数据
+const menuTerrData  =ref([]);
+// 当前路由的地址
+const thisPath = computed(() => { return route.path; });
+// 获取菜单信息
+const initMenu = async()  =>{
+    let response = await permissionService.menuTree();
+    menuTerrData.value = response.data;
+    console.log(menuTerrData.value);
 }
-const data  = [
-  {
-    path:"/",
-    name: '仪表盘'
-  },
-  {
-    path:"/device",
-    name: '设备管理',
-    children:[
-        {
-            path:"/device/model",
-            name: '物模型管理',
-        },
-        {
-            path:"/device/list",
-            name: '设备列表',
-        },
-    ]
-  },
-  {
-    path:"/user",
-    name: '用户管理',
-    children:[
-        {
-            path:"/user/list",
-            name: '用户列表',
-        },
-        {
-            path:"/user/roles",
-            name: '角色列表',
-        },
-        {
-            path:"/user/permission",
-            name: '权限列表',
-        },
-    ]
-  },
-]
+// 菜单选中项回调
+const selectMenuEvent = (indexPath) =>{
+    console.log("菜单选中项回调--->",indexPath);
+    router.push(indexPath);
+}
+
+onMounted(()=>{
+    initMenu();
+});
 </script>
+
+
 <style scoped>
 /* 菜单整体盒子 */
 .lm-menu_box{
@@ -116,38 +134,43 @@ const data  = [
     padding: 0 22px 0;
     overflow-y:auto;
 }
-/* 隐藏tree的icon */
-.lm-menu-main_box :deep(.el-tree-node__content > .el-icon){
-    height: 0;
-    width: 0;
-    line-height: 0;
+
+/* 去除默认的右边线 */
+.lm-menu-main_box :deep(.el-menu){
+    border-right: none;
+}
+
+/* 不显示滚动条 */
+.lm-menu-main_box::-webkit-scrollbar {
     display: none;
+    width: 0;
 }
-
-/* tree内容区域 */
-.lm-menu-main_box :deep(.el-tree-node__content){
-    height: 48px;
-    padding: 20px !important;
-    display: flex;
-    align-self: center;
-    justify-self: center;
+.lm-menu-main_box :deep(.el-sub-menu__title) {
     border-radius: 15px;
-    margin-bottom: 10px;
+    margin: 5px 0 ;
+}
+.lm-menu-main_box :deep(.el-menu-item) {
+    border-radius: 15px;
+    margin: 5px 0 ;
 }
 
-/* tree选中高亮 */
-.lm-menu-main_box :deep(.el-tree-node.is-current > .el-tree-node__content) {
+/* 改变elementui 侧边栏移入颜色 */
+.lm-menu-main_box :deep(.el-sub-menu__title:hover) {
+    background:#ebdffe;
+}
+.lm-menu-main_box :deep(.el-menu-item:hover) {
+    background:#ebdffe;
+}
+.lm-menu-main_box :deep(.el-submenu__title:hover) {
+    background:#ebdffe;
+}
+/* 改变elementui 侧边栏移入颜色 */
+
+
+ /* tree选中高亮 */
+ .lm-menu-main_box :deep(.el-menu-item.is-active){
     color: #fff;
     background:#a162f7;
-    box-shadow: 0px 8px 20px 0px rgba(122, 137, 254, 0.25);
+    border-radius: 15px;
 }
-/* tree的标签 */
-.lm-menu-main_box :deep(.el-tree-node__label){
-    width: 100%;
-}
-/* tree的标签子节点 */
-.lm-menu-main_box :deep(.el-tree-node__children){
-    padding-left: 15px;
-}
-
 </style>

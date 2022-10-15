@@ -2,7 +2,7 @@
     <div class="lm-header_box">
         <div class="lm-header-container_box">
             <div class="lm-header-router-name_box">
-                我是路由的名字
+                {{thisPathName}}
             </div>
             <div class="lm-header-user-info_box">
                 <el-avatar 
@@ -37,7 +37,14 @@
 </template>
 <script setup>
 // 状态管理
+import { ref , onMounted, computed } from 'vue'
 import stroe from '@/stroe';
+// 用于获取当前路由的状态和地址
+import { useRoute } from 'vue-router';
+// 用于获取当前路由的状态和地址
+const route = useRoute();
+// 获取当前路由地址
+const thisPathName = computed(() => { return route.meta.title; });
 
 </script>
 <style scoped>

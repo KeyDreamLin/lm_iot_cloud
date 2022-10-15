@@ -10,7 +10,7 @@ import router from '@/router';
 
 // create an axios instance
 const lm_request_admin = axios.create({
-    baseURL: "/api/common",
+    baseURL: "/api/device",
     timeout: 5000,
     isToken: true, // 是否需要带token请求
 })

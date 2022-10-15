@@ -39,4 +39,6 @@ public interface DeviceMapper {
             @Param("pageSize") Integer pageSize,
             @Param("keyword") String keyword
     );
+
+
 }

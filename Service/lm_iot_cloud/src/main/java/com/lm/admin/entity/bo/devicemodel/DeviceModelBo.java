@@ -1,6 +1,8 @@
-package com.lm.admin.entity.pojo.devicemodel;
+package com.lm.admin.entity.bo.devicemodel;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,7 +15,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeviceModel implements Serializable {
+public class DeviceModelBo implements Serializable {
 
     // 主键 雪花
     private Long id;
@@ -44,10 +46,4 @@ public class DeviceModel implements Serializable {
 
     // 模型 类型   0是传感器 1是开关量 其他待定
     private Integer modelType;
-
-    // 创建时间
-
-    private Date createTime;
-    // 更新时间
-    private Date updateTime;
 }

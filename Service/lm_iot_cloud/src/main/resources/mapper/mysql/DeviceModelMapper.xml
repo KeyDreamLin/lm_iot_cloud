@@ -4,4 +4,9 @@
     <select id="findDeviceModelBySn" resultType="com.lm.admin.entity.pojo.devicemodel.DeviceModel">
         SELECT * FROM lm_device_model where sn = #{sn}
     </select>
+    <select id="findDeviceGroupingModelByGid" resultType="com.lm.admin.entity.pojo.devicemodel.DeviceModel">
+        SELECT * FROM `lm_device_model` as la WHERE la.device_id in(
+            SELECT device_id FROM `lm_grouping_owner_device`  as lb WHERE lb.grouping_device_id = #{grouping_device_id}
+        )
+    </select>
 </mapper>

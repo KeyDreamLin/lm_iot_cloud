@@ -4,6 +4,7 @@ package com.lm.admin.service.device;
 import com.lm.admin.entity.bo.device.DeviceBo;
 import com.lm.admin.entity.bo.device.DeviceDataBo;
 import com.lm.admin.entity.bo.device.DeviceIdentifierAndNameDataBo;
+import com.lm.admin.entity.bo.devicemodel.DeviceModelBo;
 import com.lm.admin.entity.dto.device.DeviceAuthDto;
 import com.lm.admin.entity.pojo.device.Device;
 import com.lm.admin.entity.pojo.devicemodel.DeviceModel;
@@ -97,7 +98,7 @@ public class IDeviceService implements DeviceServiceImpl {
     public  List<DeviceIdentifierAndNameDataBo> getDeviceNewData(String sn) {
 
         // 1、先查询设备对应的物模型
-        List<DeviceModel> deiceModelBySn = deviceModelService.getDeiceModelBySn(sn);
+        List<DeviceModelBo> deiceModelBySn = deviceModelService.getDeiceModelBySn(sn);
 
         // 如果该设备没有创建物模型
         if(deiceModelBySn.size() <= 0 ){

@@ -1,5 +1,6 @@
 package com.lm.admin.service.devicemodel;
 
+import com.lm.admin.entity.bo.devicemodel.DeviceModelBo;
 import com.lm.admin.entity.pojo.devicemodel.DeviceModel;
 
 import java.util.List;
@@ -17,5 +18,7 @@ public interface DeviceModelService {
      * @param sn 设备sn码
      * @return List<DeviceModel>
      */
-    List<DeviceModel> getDeiceModelBySn(String sn);
+    List<DeviceModelBo> getDeiceModelBySn(String sn);
+
+
 }

@@ -59,4 +59,6 @@ public interface DeviceDataMapper {
      * @return
      */
     DeviceCmdData getDeviceCmdDataByCmdId(@Param("cmdID") String cmdID);
+
+
 }

@@ -1,12 +1,15 @@
 package com.lm.admin.service.devicemodel;
 
 
+import com.lm.admin.entity.bo.devicemodel.DeviceModelBo;
 import com.lm.admin.entity.pojo.devicemodel.DeviceModel;
 import com.lm.admin.mapper.mysql.device.DeviceModelMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +28,14 @@ public class DeviceModelServiceImp implements DeviceModelService {
      * @return List<DeviceModel>
      */
     @Override
-    public List<DeviceModel> getDeiceModelBySn(String sn) {
-        return deviceModelDataMapper.findDeviceModelBySn(sn);
+    public List<DeviceModelBo> getDeiceModelBySn(String sn) {
+        List<DeviceModelBo> listBo = new ArrayList<>();
+        deviceModelDataMapper.findDeviceModelBySn(sn).forEach(item->{
+            DeviceModelBo deviceModelBo = new DeviceModelBo();
+            BeanUtils.copyProperties(item,deviceModelBo);
+            listBo.add(deviceModelBo);
+        });
+
+        return listBo;
     }
 }

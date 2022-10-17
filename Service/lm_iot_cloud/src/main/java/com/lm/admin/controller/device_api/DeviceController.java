@@ -5,8 +5,12 @@ import com.lm.admin.common.r.DeviceResultEnum;
 import com.lm.admin.entity.bo.device.DeviceCmdBo;
 import com.lm.admin.entity.bo.device.DeviceIdentifierAndNameDataBo;
 import com.lm.admin.entity.bo.device.DeviceBo;
+import com.lm.admin.entity.bo.devicemodel.DeviceModelBo;
+import com.lm.admin.entity.pojo.devicemodel.DeviceModel;
 import com.lm.admin.entity.vo.device.DevicePageVo;
+import com.lm.admin.entity.vo.devicemodel.DeviceModelVo;
 import com.lm.admin.service.device.DeviceServiceImpl;
+import com.lm.admin.service.devicemodel.DeviceModelService;
 import com.lm.admin.utils.LmAssert;
 import com.lm.admin.utils.SnowflakeIdWorker;
 import com.lm.admin.utils.mybiats.Pager;
@@ -34,7 +38,8 @@ public class DeviceController {
 
     @Autowired
     private DeviceServiceImpl deviceService;
-
+    @Autowired
+    private DeviceModelService deviceModelService;
     // 操作Redis
     @Autowired
     private StringRedisTemplate SredisTemplate;
@@ -70,6 +75,17 @@ public class DeviceController {
     @PostMapping("/page")
     public Pager<DeviceBo> listPage(@RequestBody DevicePageVo pager){
         return deviceService.getDevicePager(pager);
+    }
+
+    /**
+     * 根据设备Sn查询到对应的物模型数据
+     * path: /api/device/devicemodel
+     * @param deviceModelVo
+     * @return
+     */
+    @PostMapping("/devicemodel")
+    public List<DeviceModelBo> getDeviceModel(@RequestBody DeviceModelVo deviceModelVo){
+        return deviceModelService.getDeiceModelBySn(deviceModelVo.getSn());
     }
 
 

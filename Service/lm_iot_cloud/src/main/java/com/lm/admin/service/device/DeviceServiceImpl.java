@@ -16,12 +16,17 @@ import java.util.Map;
 */
 public interface DeviceServiceImpl {
     /**
-     * 根据sn码查询到设备信息
+     * 根据sn码查询到设备信息 - 用于鉴权
      * @param sn
      * @return
      */
     DeviceAuthDto getDeviceBySn(String sn);
-
+    /**
+     * 根据sn码查询到设备信息
+     * @param sn
+     * @return
+     */
+    DeviceBo getDeviceBoBySn(String sn);
 
     /**
      * 保存设备数据

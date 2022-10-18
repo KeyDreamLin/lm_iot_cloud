@@ -32,7 +32,7 @@ public class FastJsonConfiguration {
         FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
         //自定义配置...
         FastJsonConfig config = new FastJsonConfig();
-        config.setDateFormat("yyyy-MM-dd HH:mm:ss:ms");
+        config.setDateFormat("yyyy-MM-dd HH:mm:ss");
 
         config.setReaderFeatures(
                 JSONReader.Feature.FieldBased,              // 反序列化

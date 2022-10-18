@@ -19,4 +19,5 @@ public class DevicePageVo {
     private Integer pageSize = 10;
     // 搜索关键字 sn(条件查询必须等于)  或者  设备名称(模糊搜索)
     private String keyword = null;
+
 }

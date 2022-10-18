@@ -17,5 +17,13 @@ export default {
         console.log("snsnsnsnnsns",sn);
         let temp = lm_request.post(`/newdata/${sn}`);
         return temp;
+    },
+    /**
+     * 获取设备是否在线
+     * @param {} sn 
+     */
+    isOnLineBySn(sn){
+        let temp = lm_request.post(`/online/${sn}`);
+        return temp;
     }
 }

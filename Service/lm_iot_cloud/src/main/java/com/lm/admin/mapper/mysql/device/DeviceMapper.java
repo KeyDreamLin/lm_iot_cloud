@@ -20,7 +20,7 @@ public interface DeviceMapper {
      * @param sn
      * @return
      */
-    DeviceAuthDto findDeviceBySn(@Param("sn") String sn);
+    Device findDeviceBySn(@Param("sn") String sn);
 
     /**
      * 查询全部的设备数量

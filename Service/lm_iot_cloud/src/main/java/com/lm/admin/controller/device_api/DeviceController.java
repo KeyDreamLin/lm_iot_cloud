@@ -67,6 +67,16 @@ public class DeviceController {
     }
 
     /**
+     * 查询根据sn查询设备是否在线
+     * path /api/device/online/{sn}
+     * @param sn
+     * @return
+     */
+    @PostMapping("/online/{sn}")
+    public Boolean isOnLineBySn(@PathVariable("sn") String sn){
+        return RedisDeviceUtils.getDeviceIsOnLienBySn(sn);
+    }
+    /**
      * 分页查询设备列表
      * path: /api/device/page
      * @param pager
@@ -76,6 +86,17 @@ public class DeviceController {
     public Pager<DeviceBo> listPage(@RequestBody DevicePageVo pager){
         return deviceService.getDevicePager(pager);
     }
+//
+//    /**
+//     * 根据id获取设备信息
+//     * @param sn
+//     * @return
+//     */
+//    @PostMapping("/device/{sn}")
+//    public DeviceBo getDeviceBySn(@PathVariable("sn") String sn){
+//        return deviceService.getDeviceBoBySn(sn);
+//    }
+
 
     /**
      * 根据设备Sn查询到对应的物模型数据

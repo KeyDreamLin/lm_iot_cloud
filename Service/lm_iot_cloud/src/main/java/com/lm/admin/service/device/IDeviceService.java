@@ -61,9 +61,25 @@ public class IDeviceService implements DeviceServiceImpl {
      */
     @Override
     public DeviceAuthDto getDeviceBySn(String sn) {
-        return deviceMapper.findDeviceBySn(sn);
+        DeviceAuthDto deviceAuthDto = new DeviceAuthDto();
+        Device deviceBySn = deviceMapper.findDeviceBySn(sn);
+        // TODO 加null
+        BeanUtils.copyProperties(deviceBySn,deviceAuthDto);
+        return deviceAuthDto;
     }
-
+    /**
+     * 根据sn码查询到设备信息
+     * @param sn
+     * @return
+     */
+    @Override
+    public DeviceBo getDeviceBoBySn(String sn) {
+        DeviceBo deviceBo = new DeviceBo();
+        Device deviceBySn = deviceMapper.findDeviceBySn(sn);
+        // TODO 加null
+        BeanUtils.copyProperties(deviceBySn,deviceBo);
+        return deviceBo;
+    }
     /**
      * 保存设备数据
      *

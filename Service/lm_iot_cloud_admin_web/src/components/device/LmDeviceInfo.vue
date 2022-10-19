@@ -75,7 +75,7 @@
                         <el-col :span="16">
                             <div class="flex items-center">
                                 <span class="lm-device-title">实时刷新:</span>
-                                <el-switch class="ml-1" v-model="isRealTime" size="large"/>
+                                <el-switch :disabled="!deviceData.isOnLine" class="ml-1" @click="RealTimeSwitchEvent" :value="isRealTime" size="large"/>
                             </div>
                         </el-col>
                     </el-row>
@@ -109,13 +109,16 @@
                                         </template>
                                         <!-- 开关类型 并且设备上线 -->
                                         <template v-if="deviceModel.modelType==1">
-                                            {{
+                                            <span class="lm-data-value">
+                                                {{
                                                 deviceModel.val==1 
-                                                    ? 
-                                                        deviceModel.dataSpecs[1].name
-                                                    :
-                                                        deviceModel.dataSpecs[0].name
-                                            }}
+                                                ? 
+                                                deviceModel.dataSpecs[1].name
+                                                :
+                                                deviceModel.dataSpecs[0].name
+                                                }}
+                                            </span>
+                                            
                                             <template v-if="deviceData.isOnLine==true">
                                                 <el-switch
                                                 color="#b48bf7"
@@ -163,7 +166,9 @@ const deviceData = ref(null);
 // 设备物模型数据
 const deviceModelData = ref([]);
 // 刷新数据定时器
-let timer = null;
+let timerData = null;
+// 刷新设备是否在线定时器
+let timerIsOnline = null;
 // 是否开启数据定时器
 const isRealTime = ref(false);
 // ref打开设备详情
@@ -177,13 +182,27 @@ const open = async (data) => {
     // 获取设备物模型
     await getDeivceModel();
     // 获取设备物模型数据对应的值
-    await getDeivceModelVal();
-
+    await getDeivceModelVal();     
     // 开启定时器
-    timer = setInterval(RealTimeDeivceModelVal, 5 * 1000);
+    timerIsOnline = setInterval(getIsOnline, 2 * 1000);
+    
 }
+// 实时刷新数据开关事件
+const RealTimeSwitchEvent = () => {
+    if(deviceData.value.isOnLine == true){
+        isRealTime.value = !isRealTime.value;
+    }
+    if(isRealTime.value == true){
+        // 开启定时器
+        timerData = setInterval(RealTimeDeivceModelVal, 5 * 1000);
+    }
+    else{
+        // 销毁定时器
+        clearInterval(timerData);
+    }
+}
+// 获取设备信息
 const getDeviceData = async () => {
-    // 获取一次设备信息
     let server = await deviceService.listPage({keyword:deviceData.value.sn});
     deviceData.value = server.data.records[0];
 }
@@ -218,14 +237,20 @@ const getDeivceModelVal = async () => {
     console.log("设备物模型最新数据----->",deviceModelData.value);
 }
 // 用于实时刷新数据
-const RealTimeDeivceModelVal= async () => {
-    // 明天多加一个定时器用于刷新设备是否在线
-    let temp = await deviceService.isOnLineBySn(deviceData.value.sn);
-    deviceData.value.isOnLine = temp.data;
-    console.log(temp);
-
+const RealTimeDeivceModelVal = async () => {
+ 
     if(isRealTime.value == true && deviceData.value.isOnLine == true){
         await getDeivceModelVal();
+    }
+}
+// 获取设备是否在线
+const getIsOnline = async () => {
+    let temp = await deviceService.isOnLineBySn(deviceData.value.sn);
+    deviceData.value.isOnLine = temp.data;
+    console.log("__________________+)(*&YTGHJKas)");
+    // 如果设备离线就关闭不允许实时刷新数据
+    if(temp.data == false){
+        isRealTime.value = false;
     }
 }
 // 关闭设备详情
@@ -234,7 +259,8 @@ const close = () => {
     isShowDialog.value = false;
     isRealTime.value = false;
     // 关闭窗口就把定时器销毁
-    clearInterval(timer);
+    clearInterval(timerData);
+    clearInterval(timerIsOnline);
 }
 
 // 抛出句柄 让父组件可以使用里面的方法 

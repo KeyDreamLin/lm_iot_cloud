@@ -17,14 +17,14 @@ import java.util.Date;
 @NoArgsConstructor
 public class DeviceModelBo implements Serializable {
 
-    // 主键 雪花
-    private Long id;
+//    // 主键 雪花
+//    private Long id;
 
     // 对应的设备sn
     private String sn;
-
-    // 对应设备id
-    private Long deviceId;
+//
+//    // 对应设备id
+//    private Long deviceId;
 
     // 图标
     private String icon;

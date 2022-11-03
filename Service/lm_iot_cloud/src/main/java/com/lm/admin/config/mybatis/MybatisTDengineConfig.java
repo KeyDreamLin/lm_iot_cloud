@@ -40,6 +40,7 @@ public class MybatisTDengineConfig {
         dataSource.setUrl(url);
         dataSource.setUsername(user);
         dataSource.setPassword(password);
+        dataSource.setValidationQuery("select server_status();");
 //        dataSource.setDbType("com.alibaba.druid.pool.DruidDataSource");
         return dataSource;
     }

@@ -6,10 +6,14 @@ import com.lm.admin.entity.bo.device.DeviceCmdBo;
 import com.lm.admin.entity.bo.device.DeviceIdentifierAndNameDataBo;
 import com.lm.admin.entity.bo.device.DeviceBo;
 import com.lm.admin.entity.bo.devicemodel.DeviceModelBo;
+import com.lm.admin.entity.pojo.devicegrouping.DeviceGrouping;
 import com.lm.admin.entity.pojo.devicemodel.DeviceModel;
 import com.lm.admin.entity.vo.device.DevicePageVo;
+import com.lm.admin.entity.vo.devicegrouping.DeviceGroupingPageVo;
 import com.lm.admin.entity.vo.devicemodel.DeviceModelVo;
+import com.lm.admin.mapper.mysql.device.DeviceGroupingMapper;
 import com.lm.admin.service.device.DeviceServiceImpl;
+import com.lm.admin.service.devicegrouping.DeviceGroupingServiceImpl;
 import com.lm.admin.service.devicemodel.DeviceModelService;
 import com.lm.admin.utils.LmAssert;
 import com.lm.admin.utils.SnowflakeIdWorker;
@@ -40,6 +44,8 @@ public class DeviceController {
     private DeviceServiceImpl deviceService;
     @Autowired
     private DeviceModelService deviceModelService;
+    @Autowired
+    private DeviceGroupingServiceImpl deviceGroupingService;
     // 操作Redis
     @Autowired
     private StringRedisTemplate SredisTemplate;
@@ -86,17 +92,6 @@ public class DeviceController {
     public Pager<DeviceBo> listPage(@RequestBody DevicePageVo pager){
         return deviceService.getDevicePager(pager);
     }
-//
-//    /**
-//     * 根据id获取设备信息
-//     * @param sn
-//     * @return
-//     */
-//    @PostMapping("/device/{sn}")
-//    public DeviceBo getDeviceBySn(@PathVariable("sn") String sn){
-//        return deviceService.getDeviceBoBySn(sn);
-//    }
-
 
     /**
      * 根据设备Sn查询到对应的物模型数据
@@ -109,6 +104,28 @@ public class DeviceController {
         return deviceModelService.getDeiceModelBySn(deviceModelVo.getSn());
     }
 
+    /**
+     * 分页查询设备分组列表
+     * path: /api/device/devicegroupingpage
+     * @param pager
+     * @return 分页数据
+     */
+    @PostMapping("/devicegroupingpage")
+    public Pager<DeviceGrouping> deviceGroupingPage(@RequestBody DeviceGroupingPageVo pager){
+        return deviceGroupingService.getDeviceGroupingPager(pager);
+    }
+
+    /**
+     * 根据设备分组id查询到设备的信息列表
+     * path: /api/device/devicegrouping/devices/{gid}
+     * @param gid 分组id
+     * @param  DeviceBo 设备数据
+     * @return
+     */
+    @PostMapping("/devicegrouping/devices/{gid}")
+    public List<DeviceBo> deviceGroupigList(@PathVariable("gid") Long gid){
+        return deviceService.getDevicesByGroupingId(gid);
+    }
 
     /**
      * 下发设备命令

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 获取redis设备信息工具类
@@ -114,6 +115,17 @@ public class RedisDeviceUtils {
         }
         // 如果id不为空就返回true 代表设备在线的状态
         return  LmAssert.isNotEmpty(getCidBySn(sn));
+    }
+
+    /**
+     * 删除全部设备在线状态
+     * @return
+     */
+    public static Boolean delAll(){
+        // 用于服务器异常、重启、维护、更新后id和sn还存在于redis中，影响设备的再次上线
+        Set<String> keys = staticStringRedisTemplate.keys("lmCloud:*");//清空redis数据库中所有的键值对
+        staticStringRedisTemplate.delete(keys);
+        return true;
     }
 
 }

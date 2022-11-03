@@ -40,5 +40,11 @@ public interface DeviceMapper {
             @Param("keyword") String keyword
     );
 
+    /**
+     * 根据设备分组id查询到对应的设备信息列表
+     * @param groupingId 分组id
+     * @return
+     */
+    List<Device> findDevicesByGroupingId(@Param("groupingId") Long groupingId);
 
 }

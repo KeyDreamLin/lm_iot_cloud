@@ -80,7 +80,7 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
             } else {
 
                 if(t == 3 ){
-                    // 设备数据上报数据量大 数据库操作耗时较高  所以放到异步线程里面去做。 为什么直接开启业务线程嘞？这样的话不管你处理什么任务都开个线程不太灵活。
+                    // 设备数据上报数据量大 数据库操作耗时较高  所以放到异步线程里面去做。 为什么不直接开启业务线程嘞？这样的话不管你处理什么任务都开个线程不太灵活。
                     group.submit(()->{
                         log.info("group.submit 异步执行的线程："+Thread.currentThread().getName());
                         // 接收到设备的数据

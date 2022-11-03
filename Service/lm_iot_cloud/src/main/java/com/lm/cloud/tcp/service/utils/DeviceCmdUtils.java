@@ -59,15 +59,14 @@ public class DeviceCmdUtils {
         db_deviceCmdData.setNts(System.currentTimeMillis());
         db_deviceCmdData.setCmdID(SnowflakeIdWorker.getDeviceId().toString());
         db_deviceCmdData.setData(deviceCmdBo.getData().toString());
+        db_deviceCmdData.setApitag(deviceCmdBo.getApitag());
         // 默认的状态是设备未响应
         db_deviceCmdData.setStatus(false);
 
         // 向设备发送指令
         ctx.writeAndFlush(
                 JSON.toJSONString(
-                        CloudR.Cmd(
-                                db_deviceCmdData.getCmdID(), deviceCmdBo.getData()
-                        )
+                        CloudR.Cmd(db_deviceCmdData.getCmdID(),deviceCmdBo.getApitag(), deviceCmdBo.getData())
                 )
         );
 

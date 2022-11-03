@@ -45,4 +45,12 @@ public interface DeviceServiceImpl {
      * @return
      */
     Pager<DeviceBo> getDevicePager(DevicePageVo devicePageVo);
+
+    /**
+     * 根据设备分组id查询到对应的设备信息列表
+     * @param gid 分组id
+     * @return
+     */
+    List<DeviceBo> getDevicesByGroupingId(Long gid);
+
 }

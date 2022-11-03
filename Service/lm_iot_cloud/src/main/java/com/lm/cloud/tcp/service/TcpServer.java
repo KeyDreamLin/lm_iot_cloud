@@ -3,6 +3,7 @@ package com.lm.cloud.tcp.service;
 import com.lm.cloud.tcp.service.config.ChannelInit;
 import com.lm.cloud.tcp.service.config.ITcpServer;
 import com.lm.cloud.tcp.service.config.ServerProperties;
+import com.lm.cloud.tcp.service.utils.RedisDeviceUtils;
 import com.lm.common.redis.devicekey.CloudRedisKey;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
@@ -38,11 +39,10 @@ public class TcpServer implements ITcpServer {
 
     private EventLoopGroup workerGroup;
 
-    @Autowired
-    private StringRedisTemplate redisTemplate;  // 操作Redis
 
     @Override
     public void start() {
+        RedisDeviceUtils.delAll();
         log.info("初始化 TCP server ...");
         bossGroup = serverProperties.isUseEpoll() ? new EpollEventLoopGroup() : new NioEventLoopGroup();
         workerGroup = serverProperties.isUseEpoll() ? new EpollEventLoopGroup() : new NioEventLoopGroup();
@@ -70,10 +70,7 @@ public class TcpServer implements ITcpServer {
                     // 绑定端口，开始接收进来的连接
                     .bind().sync();
             log.info("tcpServer启动成功！开始监听端口：{}", serverProperties.getPort());
-            // 用于服务器异常、重启、维护、更新后id和sn还存在于redis中，影响设备的再次上线
-            redisTemplate.delete("lmCloud:cloud:");
-            // 删除设备计数器
-            redisTemplate.delete(CloudRedisKey.DeviceOnLineCount);
+
 
         } catch (Exception e) {
             e.printStackTrace();

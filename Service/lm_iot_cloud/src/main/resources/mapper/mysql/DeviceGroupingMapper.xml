@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lm.admin.mapper.mysql.device.DeviceGroupingMapper">
+    <select id="findDeviceGroupingCount" resultType="java.lang.Integer">
+        SELECT count(1) FROM lm_device_grouping
+    </select>
+    <select id="findDeviceGroupingPage" resultType="com.lm.admin.entity.pojo.devicegrouping.DeviceGrouping">
+        select * from lm_device_grouping
+        <where>
+            <if test="keyword != null">
+                `name` LIKE "%"#{keyword}"%"
+            </if>
+        </where>
+        limit #{pageIndex},#{pageSize}
+    </select>
+</mapper>

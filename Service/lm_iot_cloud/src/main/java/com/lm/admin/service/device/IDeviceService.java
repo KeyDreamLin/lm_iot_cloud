@@ -220,6 +220,28 @@ public class IDeviceService implements DeviceServiceImpl {
     }
 
     /**
+     * 根据设备分组id查询到对应的设备信息列表
+     *
+     * @param gid 分组id
+     * @return
+     */
+    @Override
+    public List<DeviceBo> getDevicesByGroupingId(Long gid) {
+        // 返回Bo
+        List<DeviceBo> deviceBoList = new ArrayList<>();
+        // pojo 转bo
+        List<Device> devicesByGroupingId = deviceMapper.findDevicesByGroupingId(gid);
+        devicesByGroupingId.forEach(item->{
+            DeviceBo deviceBo = new DeviceBo();
+            BeanUtils.copyProperties(item,deviceBo);
+            // 顺便查询设备是否在线
+            deviceBo.setIsOnLine(RedisDeviceUtils.getDeviceIsOnLienBySn(deviceBo.getSn()));
+            deviceBoList.add(deviceBo);
+        });
+        return deviceBoList;
+    }
+
+    /**
      * 去重
      * @param keyExtractor
      * @param <T>

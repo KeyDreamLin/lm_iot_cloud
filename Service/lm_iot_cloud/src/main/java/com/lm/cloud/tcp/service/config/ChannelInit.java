@@ -34,7 +34,7 @@ public class ChannelInit extends ChannelInitializer<NioSocketChannel> {
         // 10秒后无上报数据就提出服务器 需要发送#skip
         channel.pipeline()
                 // 心跳时间
-                .addLast("idle", new IdleStateHandler(100, 100, 100, TimeUnit.SECONDS))
+                .addLast("idle", new IdleStateHandler(10, 10, 10, TimeUnit.SECONDS))
                 // 添加解码器
                 .addLast(stringDecoder)
                 // 添加字符串编码器

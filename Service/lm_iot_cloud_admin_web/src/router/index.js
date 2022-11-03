@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import deviceList from '@/views/device/list.vue'
 import deviceModelList from '@/views/device/model/list.vue'
+import deviceGrouping from '@/views/device/grouping.vue'
 
 // 子路由
 const routes_children = [
@@ -26,7 +27,12 @@ const routes_children = [
         meta: { title: '物模型管理' },
         component : deviceModelList,
     },
-
+    {
+        path: '/device/grouping',
+        name: "/device/grouping",
+        meta: { title: '设备分组' },
+        component : deviceGrouping,
+    },
     {
         path: '/test',
         name: "test",

@@ -16,6 +16,7 @@
                 #{dcd.nts},
                 #{dcd.cmdID},
                 #{dcd.data},
+                #{dcd.apitag},
                 #{dcd.status},
                 #{dcd.rts}
               );

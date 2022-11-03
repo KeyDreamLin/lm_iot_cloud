@@ -25,5 +25,14 @@ export default {
     isOnLineBySn(sn){
         let temp = lm_request.post(`/online/${sn}`);
         return temp;
-    }
+    },
+    /**
+     * 发送命令到设备
+     * @param {*} 
+     * @returns 
+     */
+    cmd(params={}){
+        let temp = lm_request.post(`/cmd`,params);
+        return temp;
+    },
 }

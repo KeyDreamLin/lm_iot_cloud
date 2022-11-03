@@ -19,6 +19,8 @@ public class DeviceCmdData implements java.io.Serializable  {
     private String cmdID ;
     // 命令下发数据
     private String data ;
+    // 传感器标识符
+    private String apitag;
     // 命令是否响应 0 false 命令已创建 1 true 设备已响应
     private Boolean status ;
     // 命令响应时间

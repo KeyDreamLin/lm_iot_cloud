@@ -22,4 +22,10 @@
         </where>
             limit #{pageIndex},#{pageSize}
     </select>
+    <!-- 根据设备分组id查询到对应的设备信息列表 -->
+    <select id="findDevicesByGroupingId"  resultType="com.lm.admin.entity.pojo.device.Device">
+        SELECT ld.*  from `lm_device` as ld WHERE ld.id in(
+            SELECT lgd.device_id from lm_grouping_owner_device as lgd where lgd.grouping_device_id = #{groupingId}
+        )
+    </select>
 </mapper>

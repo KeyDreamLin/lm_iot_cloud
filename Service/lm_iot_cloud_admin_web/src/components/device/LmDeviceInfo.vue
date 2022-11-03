@@ -1,4 +1,5 @@
 <template>
+    <!-- 设备详细信息 -->
     <!-- before-close关闭方法前的回调 用于确认是否关闭 -->
     <div class="lm-dialog-main">
         <el-dialog
@@ -87,6 +88,7 @@
                         <template v-for="(deviceModel,index) in deviceModelData">
                             <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="2" class="mb-5">
                                 <el-card class="">
+                                    {{deviceModel}}
                                     <!-- 物模型卡片头部 -->
                                     <div class="lm-data-header_box">
                                         <!-- 左右布局 -->
@@ -101,6 +103,7 @@
                                     </div>
                                     <!-- 设备数据的值 -->
                                     <div class="lm-data-value_box">
+                                        
                                         <template v-if="deviceModel.modelType==0">
                                             <span class="lm-data-value">
                                                 {{deviceModel.val}}
@@ -118,14 +121,13 @@
                                                 deviceModel.dataSpecs[0].name
                                                 }}
                                             </span>
-                                            
                                             <template v-if="deviceData.isOnLine==true">
+                                                <!-- 操作执行器 -->
                                                 <el-switch
-                                                color="#b48bf7"
-                                                v-model="value"
-                                                size="large"
-                                                active-text="Open"
-                                                inactive-text="Close"
+                                                    color="#b48bf7"
+                                                    v-model="deviceModel.val"
+                                                    size="large"
+                                                    @click="SwitchCmdEvent(deviceModel)"
                                                 />
                                             </template>
                                          
@@ -229,7 +231,18 @@ const getDeivceModelVal = async () => {
         responseValData.forEach(valModel=>{
             // 如果标识符是相等的话就把值赋进去
             if(modelData.identifier == valModel.identifier){
-                modelData.val = valModel.val != '' ?  valModel.val : "N/A"  ;
+               // 处理bool的数据 因为我们在java中将数据全部变成字符串来保存的，hhhh
+               if(modelData.dataType === "bool"){
+                        if(valModel.val == "1"){
+                            modelData.val = true;
+                        } 
+                        else{
+                            modelData.val = false;
+                        }
+                }
+                else {
+                    modelData.val = valModel.val != '' ?  valModel.val : "N/A"  ;
+                }
                 modelData.ts = valModel.ts != null ?  valModel.ts : "— —"  ;
             }
         });
@@ -252,6 +265,18 @@ const getIsOnline = async () => {
     if(temp.data == false){
         isRealTime.value = false;
     }
+}
+// 操作当前物模型的执行器
+const SwitchCmdEvent = async (thisModelData) => {
+    let cmdData = {
+        sn:deviceData.value.sn,
+        apitag:thisModelData.identifier,
+        data: thisModelData.val,
+    }
+    console.log("cmd",cmdData);
+    let Cmdresponse = await deviceService.cmd(cmdData);
+    console.log("cmd----------------",Cmdresponse);
+    // console.log("________________________________________________LLLLLLLLLLLLLLLLLLL",thisModelData);
 }
 // 关闭设备详情
 const close = () => {
@@ -366,6 +391,8 @@ defineExpose({
 .lm-data-value_box{
     height: 42px;
     margin-top: 5px;
+    display: flex;
+    align-items: center;
 }
 
 /* 物模型数据的值 */

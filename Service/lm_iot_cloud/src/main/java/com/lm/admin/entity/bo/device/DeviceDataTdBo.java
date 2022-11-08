@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
-* DeviceDataBo 设备数据返回
+* DeviceDataTdBo td设备数据返回
 * 创建人:Lm<br/>
 * 时间：2022-09-23 <br/>
 *
@@ -16,7 +16,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeviceDataBo implements java.io.Serializable  {
+public class DeviceDataTdBo implements java.io.Serializable  {
     // 时间主键
     private Date ts;
     // 设备标识符

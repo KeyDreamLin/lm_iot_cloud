@@ -2,23 +2,26 @@ package com.lm.admin.service.device;
 
 
 import com.lm.admin.entity.bo.device.DeviceBo;
-import com.lm.admin.entity.bo.device.DeviceDataBo;
+import com.lm.admin.entity.bo.device.DeviceDataTdBo;
 import com.lm.admin.entity.bo.device.DeviceIdentifierAndNameDataBo;
-import com.lm.admin.entity.bo.devicemodel.DeviceModelBo;
+import com.lm.admin.entity.bo.device.DeviceModelAndNewDataBo;
 import com.lm.admin.entity.dto.device.DeviceAuthDto;
+import com.lm.admin.entity.dto.device.DeviceNewDataDto;
 import com.lm.admin.entity.pojo.device.Device;
-import com.lm.admin.entity.pojo.devicemodel.DeviceModel;
 import com.lm.admin.entity.vo.device.DevicePageVo;
 import com.lm.admin.mapper.mysql.device.DeviceMapper;
 import com.lm.admin.mapper.tdengine.DeviceDataMapper;
 import com.lm.admin.service.devicemodel.DeviceModelService;
 import com.lm.admin.utils.mybiats.Pager;
 import com.lm.cloud.tcp.service.utils.RedisDeviceUtils;
+import com.lm.common.redis.devicekey.CloudRedisKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -48,6 +51,9 @@ public class IDeviceService implements DeviceServiceImpl {
     @Autowired
     private DeviceModelService deviceModelService;
 
+    // 按照名字去匹配 不能用Autowired因为用类型匹配的
+    @Resource(name = "fastjson2RedisTemplate")
+    private RedisTemplate redisTemplate;  // 操作Redis
 
     // 设置日期格式
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -104,7 +110,20 @@ public class IDeviceService implements DeviceServiceImpl {
     }
 
     /**
-     * @description: 获取设备最新数据
+     * 保存设备最新数据使用redis
+     *
+     * @param deviceNewDataDto
+     * @return
+     */
+    public boolean saveDeviceDataRedis(DeviceNewDataDto deviceNewDataDto){
+        deviceNewDataDto.setTs(System.currentTimeMillis());
+        redisTemplate.opsForValue().set(CloudRedisKey.DeviceNewDataKey + deviceNewDataDto.getSn(),deviceNewDataDto);
+        return true;
+    }
+
+
+    /**
+     * @description: 获取设备最新数据 td
      * @author: Lm
      * @date: 2022/10/8 15:25
      * @param  sn, identifierMap
@@ -114,7 +133,7 @@ public class IDeviceService implements DeviceServiceImpl {
     public  List<DeviceIdentifierAndNameDataBo> getDeviceNewData(String sn) {
 
         // 1、先查询设备对应的物模型
-        List<DeviceModelBo> deiceModelBySn = deviceModelService.getDeiceModelBySn(sn);
+        List<DeviceModelAndNewDataBo> deiceModelBySn = deviceModelService.getDeiceModelBySn(sn);
 
         // 如果该设备没有创建物模型
         if(deiceModelBySn.size() <= 0 ){
@@ -134,22 +153,22 @@ public class IDeviceService implements DeviceServiceImpl {
         }
 
         // 3、根据标识符字符串 sn 查询到对应的设备数据
-        List<DeviceDataBo> deviceDataBos = deviceDataMapper.fineDeviceDatas(sn, identifierStr, deiceModelBySn.size());
+        List<DeviceDataTdBo> deviceDataTdBos = deviceDataMapper.fineDeviceDatas(sn, identifierStr, deiceModelBySn.size());
 
 
 
         // 4、因为有些数据是没有上报到时序数据库里面的 但是查询时序数据库的时候查询会多出来数据 所以要去除重复的标识符
-        deviceDataBos = deviceDataBos.stream().filter(
-                distinctByKey(DeviceDataBo::getIdentifier)
+        deviceDataTdBos = deviceDataTdBos.stream().filter(
+                distinctByKey(DeviceDataTdBo::getIdentifier)
         ).collect(Collectors.toList());
 
         // 拼接 标识符和数据
-        Map<String, String> identifierToValMap = deviceDataBos.stream().collect(
-                Collectors.toMap(DeviceDataBo::getIdentifier ,DeviceDataBo::getVal)
+        Map<String, String> identifierToValMap = deviceDataTdBos.stream().collect(
+                Collectors.toMap(DeviceDataTdBo::getIdentifier , DeviceDataTdBo::getVal)
         );
         // 拼接 标识符和时间
-        Map<String, Date> identifierToTsMap = deviceDataBos.stream().collect(
-                Collectors.toMap(DeviceDataBo::getIdentifier ,DeviceDataBo::getTs)
+        Map<String, Date> identifierToTsMap = deviceDataTdBos.stream().collect(
+                Collectors.toMap(DeviceDataTdBo::getIdentifier , DeviceDataTdBo::getTs)
         );
 
 
@@ -170,6 +189,39 @@ public class IDeviceService implements DeviceServiceImpl {
 
 //        log.info("--->{}",deviceIdentifierAndNameDataList);
         return deviceIdentifierAndNameDataList;
+    }
+
+    /**
+     * @description: 获取设备最新数据 redis
+     *
+     * @param  sn, identifierMap
+     * @return DeviceIdentifierAndNameDataBo  标识符对应的设备数据
+     **/
+    @Override
+    public List<DeviceModelAndNewDataBo> getDeviceNewDataRedis(String sn) {
+        // 1、先查询设备对应的物模型
+        List<DeviceModelAndNewDataBo> deiceModelBySn = deviceModelService.getDeiceModelBySn(sn);
+
+        // 如果该设备没有创建物模型
+        if(deiceModelBySn.size() <= 0 ){
+            // TODO 统一处理一下抛出异常
+            return null;
+        }
+        // 查询redis设备数据
+        DeviceNewDataDto deviceNewDataDto =(DeviceNewDataDto) redisTemplate.opsForValue().get(CloudRedisKey.DeviceNewDataKey + sn);
+        if(deviceNewDataDto == null){
+            return deiceModelBySn;
+        }
+        deiceModelBySn.stream().forEach(modelItem->{
+            // 通过物模型的标识符 获取 redis的 dataMap的val
+            String val = deviceNewDataDto.getData().get(modelItem.getIdentifier());
+            if(val!=null){
+                modelItem.setVal(val);
+            }
+            modelItem.setTs(new java.sql.Date(deviceNewDataDto.getTs()));
+
+        });
+        return deiceModelBySn;
     }
 
     /**

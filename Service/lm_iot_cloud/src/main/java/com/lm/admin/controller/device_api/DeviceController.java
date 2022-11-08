@@ -1,28 +1,20 @@
 package com.lm.admin.controller.device_api;
 
-import com.alibaba.fastjson2.JSON;
 import com.lm.admin.common.r.DeviceResultEnum;
-import com.lm.admin.entity.bo.device.DeviceCmdBo;
-import com.lm.admin.entity.bo.device.DeviceIdentifierAndNameDataBo;
+import com.lm.admin.entity.vo.device.DeviceCmdVo;
 import com.lm.admin.entity.bo.device.DeviceBo;
-import com.lm.admin.entity.bo.devicemodel.DeviceModelBo;
+import com.lm.admin.entity.bo.device.DeviceModelAndNewDataBo;
 import com.lm.admin.entity.pojo.devicegrouping.DeviceGrouping;
-import com.lm.admin.entity.pojo.devicemodel.DeviceModel;
 import com.lm.admin.entity.vo.device.DevicePageVo;
 import com.lm.admin.entity.vo.devicegrouping.DeviceGroupingPageVo;
 import com.lm.admin.entity.vo.devicemodel.DeviceModelVo;
-import com.lm.admin.mapper.mysql.device.DeviceGroupingMapper;
 import com.lm.admin.service.device.DeviceServiceImpl;
 import com.lm.admin.service.devicegrouping.DeviceGroupingServiceImpl;
 import com.lm.admin.service.devicemodel.DeviceModelService;
 import com.lm.admin.utils.LmAssert;
-import com.lm.admin.utils.SnowflakeIdWorker;
 import com.lm.admin.utils.mybiats.Pager;
-import com.lm.cloud.common.r.CloudR;
 import com.lm.cloud.tcp.service.utils.DeviceCmdUtils;
 import com.lm.cloud.tcp.service.utils.RedisDeviceUtils;
-import com.lm.common.redis.devicekey.CloudRedisKey;
-import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -54,12 +46,13 @@ public class DeviceController {
     /**
      * 获取该设备的最新数据
      * path : /api/device/newData/{sn}
-     * return DeviceDataBo
+     * return DeviceDataTdBo
      **/
     @PostMapping("/newdata/{sn}")
-    public List<DeviceIdentifierAndNameDataBo> newData(@PathVariable("sn") String sn){
+    public List<DeviceModelAndNewDataBo> newData(@PathVariable("sn") String sn){
         log.info("----->{}",sn);
-        return deviceService.getDeviceNewData(sn);
+
+        return deviceService.getDeviceNewDataRedis(sn);
     }
 
     /**
@@ -100,7 +93,7 @@ public class DeviceController {
      * @return
      */
     @PostMapping("/devicemodel")
-    public List<DeviceModelBo> getDeviceModel(@RequestBody DeviceModelVo deviceModelVo){
+    public List<DeviceModelAndNewDataBo> getDeviceModel(@RequestBody DeviceModelVo deviceModelVo){
         return deviceModelService.getDeiceModelBySn(deviceModelVo.getSn());
     }
 
@@ -119,7 +112,7 @@ public class DeviceController {
      * 根据设备分组id查询到设备的信息列表
      * path: /api/device/devicegrouping/devices/{gid}
      * @param gid 分组id
-     * @param  DeviceBo 设备数据
+     * @param  List<DeviceBo> 设备数据
      * @return
      */
     @PostMapping("/devicegrouping/devices/{gid}")
@@ -129,18 +122,18 @@ public class DeviceController {
 
     /**
      * 下发设备命令
-     * @param deviceCmdBo
+     * @param deviceCmdVo
      * @return
      */
     @PostMapping("/cmd")
-    public String cmd(@RequestBody DeviceCmdBo deviceCmdBo){
-        log.info("------>{}",deviceCmdBo);
+    public String cmd(@RequestBody DeviceCmdVo deviceCmdVo){
+        log.info("------>{}", deviceCmdVo);
         // sn码判断是否为空  空抛出异常
-        LmAssert.isEmptyEx(deviceCmdBo.getSn(), DeviceResultEnum.DEVICE_SN_NULL_ERROR);
+        LmAssert.isEmptyEx(deviceCmdVo.getSn(), DeviceResultEnum.DEVICE_SN_NULL_ERROR);
         // Data参数必须携带，值可以为空
-        LmAssert.isNotNull(deviceCmdBo.getData(), DeviceResultEnum.DEVICE_DATA_NULL_ERROR);
+        LmAssert.isNotNull(deviceCmdVo.getData(), DeviceResultEnum.DEVICE_DATA_NULL_ERROR);
         // 请求设备命令
-        DeviceCmdUtils.requestCmd(deviceCmdBo);
+        DeviceCmdUtils.requestCmd(deviceCmdVo);
         return "命令发送成功!";
     }
 }

@@ -1,11 +1,12 @@
 package com.lm.cloud.tcp.service;
 
 import com.alibaba.fastjson2.JSON;
+import com.lm.admin.entity.dto.device.DeviceNewDataDto;
 import com.lm.admin.service.device.IDeviceService;
 import com.lm.admin.utils.JSONUtils;
 import com.lm.admin.utils.LmAssert;
 import com.lm.cloud.common.auth.DeviceAuth;
-import com.lm.admin.entity.dto.device.DeviceDataDto;
+import com.lm.admin.entity.dto.device.DeviceAllDataDto;
 import com.lm.cloud.common.r.CloudDeviceConnRespEnum;
 import com.lm.cloud.common.r.CloudDevicePushAckEnum;
 import com.lm.cloud.common.r.CloudR;
@@ -50,7 +51,6 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
         log.info("成功建立连接,channelId：{}", ctx.channel().id().asLongText());
         super.channelActive(ctx);
     }
-
     // 笔记
     // channelRead 和 channelRead0 的区别
     // channelRead很明显做了一个消息类型检查 channelRead0是直接获取
@@ -82,13 +82,16 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
                 if(t == 3 ){
                     // 设备数据上报数据量大 数据库操作耗时较高  所以放到异步线程里面去做。 为什么不直接开启业务线程嘞？这样的话不管你处理什么任务都开个线程不太灵活。
                     group.submit(()->{
-                        log.info("group.submit 异步执行的线程："+Thread.currentThread().getName());
-                        // 接收到设备的数据
-                        DeviceDataDto deviceDataUpRo = JSON.parseObject(message, DeviceDataDto.class);
-                        log.info("序列化后--->>>>{}", deviceDataUpRo);
+//                        log.info("group.submit 异步执行的线程："+Thread.currentThread().getName());
+                        // 接收到设备最新数据
+                        DeviceNewDataDto deviceDataUpRo = JSON.parseObject(message, DeviceNewDataDto.class);
+                        deviceDataUpRo.setSn(dbr_SnByChannelId);
+//                        log.info("序列化后--->>>>{}", deviceDataUpRo);
                         // 保存数据 放到tdengine
                         int a = deviceService.saveDeviceData(dbr_SnByChannelId,deviceDataUpRo.getData());
-                        if(a>0){
+                        // 保存数据到redis
+                        boolean b = deviceService.saveDeviceDataRedis(deviceDataUpRo);
+                        if(b){
                             // 接收数据成功
                             ctx.writeAndFlush(JSON.toJSONString(CloudR.Response(CloudDevicePushAckEnum.DATA_PUSH_ACK_SUCCESS)));
                         }
@@ -101,7 +104,7 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
                 else if(t == 6){
                     // 客户端响应服务器的CMD命令执行状态
                     // 序列化设备的数据
-                    DeviceDataDto deviceDataUpRo = JSON.parseObject(message, DeviceDataDto.class);
+                    DeviceAllDataDto deviceDataUpRo = JSON.parseObject(message, DeviceAllDataDto.class);
                     log.info("序列化后--->>>>{}", deviceDataUpRo);
                     DeviceCmdUtils.responseCmd(deviceDataUpRo,dbr_SnByChannelId);
                 }

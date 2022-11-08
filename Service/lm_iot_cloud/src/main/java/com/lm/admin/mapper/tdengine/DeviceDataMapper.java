@@ -3,7 +3,7 @@ package com.lm.admin.mapper.tdengine;
 import com.lm.admin.entity.pojo.devicecmddata.DeviceCmdData;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import com.lm.admin.entity.bo.device.DeviceDataBo;
+import com.lm.admin.entity.bo.device.DeviceDataTdBo;
 
 import java.util.List;
 
@@ -18,13 +18,23 @@ import java.util.List;
 public interface DeviceDataMapper {
 
     /**
-     * 查询用户最新的数据
+     * 查询用户最新的数据 多个数据
      * @param sn 设备sn码
      * @param identifierStr 标识符字符串 'tag1','tag2','tag3'
      * @param identifierCount 多少个标识符
-     * @return List<DeviceDataBo>
+     * @return List<DeviceDataTdBo>
      */
-    List<DeviceDataBo> fineDeviceDatas(@Param("sn") String sn , @Param("identifierStr") String identifierStr,@Param("identifierCount") Integer identifierCount);
+    List<DeviceDataTdBo> fineDeviceDatas(@Param("sn") String sn , @Param("identifierStr") String identifierStr, @Param("identifierCount") Integer identifierCount);
+
+    /**
+     * 查询用户最新的数据 查询一个数据 传入一个标签
+     * @param sn 设备sn码
+     * @param identifierStr 标识符字符串 'tag1'
+     * @param identifierCount 多少个标识符
+     * @return List<DeviceDataTdBo>
+     */
+    DeviceDataTdBo fineDeviceData(@Param("sn") String sn , @Param("identifierStr") String identifierStr, @Param("identifierCount") Integer identifierCount);
+
 
     /**
      * 保存设备发过来的数据

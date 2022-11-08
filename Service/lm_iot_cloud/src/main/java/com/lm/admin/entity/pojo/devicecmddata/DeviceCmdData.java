@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeviceCmdData implements java.io.Serializable  {
-    // 命令创建时间
+    // 命令创建时间 转换成时间戳 避免时区问题
     private Long nts;
     // 命令id
     private String cmdID ;

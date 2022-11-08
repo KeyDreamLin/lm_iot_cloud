@@ -62,8 +62,8 @@ public class MybatisMySqlConfig {
 
         //此处创建一个Configuration 注意包不要引错了
         org.apache.ibatis.session.Configuration configuration=new org.apache.ibatis.session.Configuration();
-        //配置日志实现
-        configuration.setLogImpl(StdOutImpl.class);
+        //配置日志实现 需要再开
+//        configuration.setLogImpl(StdOutImpl.class);
         //此处可以添加其他mybatis配置 例如转驼峰命名
         configuration.setMapUnderscoreToCamelCase(true);
 

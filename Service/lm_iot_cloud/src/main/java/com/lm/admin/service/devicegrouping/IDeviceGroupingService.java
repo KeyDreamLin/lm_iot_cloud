@@ -1,36 +1,15 @@
 package com.lm.admin.service.devicegrouping;
 
 
-import com.lm.admin.entity.bo.device.DeviceBo;
-import com.lm.admin.entity.bo.device.DeviceDataBo;
-import com.lm.admin.entity.bo.device.DeviceIdentifierAndNameDataBo;
-import com.lm.admin.entity.bo.devicemodel.DeviceModelBo;
-import com.lm.admin.entity.dto.device.DeviceAuthDto;
-import com.lm.admin.entity.pojo.device.Device;
 import com.lm.admin.entity.pojo.devicegrouping.DeviceGrouping;
-import com.lm.admin.entity.vo.device.DevicePageVo;
 import com.lm.admin.entity.vo.devicegrouping.DeviceGroupingPageVo;
 import com.lm.admin.mapper.mysql.device.DeviceGroupingMapper;
-import com.lm.admin.mapper.mysql.device.DeviceMapper;
-import com.lm.admin.mapper.tdengine.DeviceDataMapper;
-import com.lm.admin.service.devicemodel.DeviceModelService;
 import com.lm.admin.utils.mybiats.Pager;
-import com.lm.cloud.tcp.service.utils.RedisDeviceUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
 *  服务实现类

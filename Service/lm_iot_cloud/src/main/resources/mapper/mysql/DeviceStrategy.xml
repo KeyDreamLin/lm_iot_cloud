@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lm.admin.mapper.mysql.device.DeviceStrategyMapper">
+    <select id="findAllDeviceStrategyDto" resultType="com.lm.admin.entity.dto.devicestrategy.DeviceStrategyDto">
+        SELECT `exp_str`,`ret_data`,`status`FROM `lm_device_strategy`
+    </select>
+</mapper>

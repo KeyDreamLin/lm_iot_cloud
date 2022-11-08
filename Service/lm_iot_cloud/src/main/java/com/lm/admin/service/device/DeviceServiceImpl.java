@@ -2,7 +2,9 @@ package com.lm.admin.service.device;
 
 import com.lm.admin.entity.bo.device.DeviceBo;
 import com.lm.admin.entity.bo.device.DeviceIdentifierAndNameDataBo;
+import com.lm.admin.entity.bo.device.DeviceModelAndNewDataBo;
 import com.lm.admin.entity.dto.device.DeviceAuthDto;
+import com.lm.admin.entity.dto.device.DeviceNewDataDto;
 import com.lm.admin.entity.vo.device.DevicePageVo;
 import com.lm.admin.utils.mybiats.Pager;
 
@@ -36,8 +38,19 @@ public interface DeviceServiceImpl {
      */
     int saveDeviceData(String sn, Map<String, String> dataMap);
 
-    // 获取设备最新数据
+    /**
+     * 保存设备最新数据使用redis
+     *
+     * @param deviceNewDataDto
+     * @return
+     */
+    boolean saveDeviceDataRedis(DeviceNewDataDto deviceNewDataDto);
+
+    // 获取设备最新数据 td
     List<DeviceIdentifierAndNameDataBo> getDeviceNewData(String sn);
+
+    // 获取设备最新数据 redis
+    List<DeviceModelAndNewDataBo> getDeviceNewDataRedis(String sn);
 
     /**
      * 分页查询

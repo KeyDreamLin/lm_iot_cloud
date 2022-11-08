@@ -4,14 +4,13 @@ import com.alibaba.fastjson2.JSON;
 import com.lm.admin.entity.dto.device.DeviceAuthDto;
 import com.lm.admin.service.device.IDeviceService;
 import com.lm.admin.utils.LmAssert;
-import com.lm.admin.entity.dto.device.DeviceDataDto;
+import com.lm.admin.entity.dto.device.DeviceAllDataDto;
 import com.lm.cloud.common.r.CloudDeviceConnRespEnum;
 import com.lm.cloud.common.r.CloudR;
 import com.lm.cloud.tcp.service.utils.RedisDeviceUtils;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 /**
@@ -26,7 +25,7 @@ public class DeviceAuth {
 
     public CloudR TcpAuth(ChannelHandlerContext ctx, String msg){
 
-        DeviceDataDto deviceDataUpCo = JSON.parseObject(msg, DeviceDataDto.class);
+        DeviceAllDataDto deviceDataUpCo = JSON.parseObject(msg, DeviceAllDataDto.class);
 
         Integer tcp_ret_t = deviceDataUpCo.getT();
         String tcp_ret_deviceSn = deviceDataUpCo.getSn();

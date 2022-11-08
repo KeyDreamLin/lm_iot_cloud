@@ -2,19 +2,16 @@ package com.lm.cloud.tcp.service.utils;
 
 import com.alibaba.fastjson2.JSON;
 import com.lm.admin.common.r.DeviceResultEnum;
-import com.lm.admin.common.r.R;
-import com.lm.admin.entity.bo.device.DeviceCmdBo;
-import com.lm.admin.entity.dto.device.DeviceDataDto;
+import com.lm.admin.entity.vo.device.DeviceCmdVo;
+import com.lm.admin.entity.dto.device.DeviceAllDataDto;
 import com.lm.admin.entity.pojo.devicecmddata.DeviceCmdData;
 import com.lm.admin.mapper.tdengine.DeviceDataMapper;
-import com.lm.admin.utils.DateTool;
 import com.lm.admin.utils.LmAssert;
 import com.lm.admin.utils.SnowflakeIdWorker;
 import com.lm.cloud.common.r.CloudR;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.unit.DataUnit;
 
 import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
@@ -27,6 +24,7 @@ import java.util.Date;
  */
 @Component
 public class DeviceCmdUtils {
+    // 注意时区问题 这里bean里面的ts采用时间戳的形式
 
     @Autowired
     private DeviceDataMapper deviceDataMapper;
@@ -42,12 +40,12 @@ public class DeviceCmdUtils {
 
     /**
      * 服务器请求客户端命令
-     * @param deviceCmdBo  请求的数据
+     * @param deviceCmdVo  请求的数据
      * @return
      */
-    public static Boolean requestCmd(DeviceCmdBo deviceCmdBo){
+    public static Boolean requestCmd(DeviceCmdVo deviceCmdVo){
         // 通过sn获取id
-        String dbR_idBySn = RedisDeviceUtils.getCidBySn(deviceCmdBo.getSn());
+        String dbR_idBySn = RedisDeviceUtils.getCidBySn(deviceCmdVo.getSn());
         // 通过sn获取id   id如果为空 那就是设备不在线 抛出异常
         LmAssert.isEmptyEx(dbR_idBySn, DeviceResultEnum.DEVICE_NOT_ONLINE_ERROR);
 
@@ -58,22 +56,22 @@ public class DeviceCmdUtils {
         DeviceCmdData db_deviceCmdData = new DeviceCmdData();
         db_deviceCmdData.setNts(System.currentTimeMillis());
         db_deviceCmdData.setCmdID(SnowflakeIdWorker.getDeviceId().toString());
-        db_deviceCmdData.setData(deviceCmdBo.getData().toString());
-        db_deviceCmdData.setApitag(deviceCmdBo.getApitag());
+        db_deviceCmdData.setData(deviceCmdVo.getData().toString());
+        db_deviceCmdData.setApitag(deviceCmdVo.getApitag());
         // 默认的状态是设备未响应
         db_deviceCmdData.setStatus(false);
 
         // 向设备发送指令
         ctx.writeAndFlush(
                 JSON.toJSONString(
-                        CloudR.Cmd(db_deviceCmdData.getCmdID(),deviceCmdBo.getApitag(), deviceCmdBo.getData())
+                        CloudR.Cmd(db_deviceCmdData.getCmdID(), deviceCmdVo.getApitag(), deviceCmdVo.getData())
                 )
         );
 
         // 保存命令日记
         sDeviceDataMapper.saveDeiceCmd(
-                deviceCmdBo.getSn()+"_"+simpleDateFormat.format(new Date()).toString() + "_cmd",
-                deviceCmdBo.getSn(),
+                deviceCmdVo.getSn()+"_"+simpleDateFormat.format(new Date()).toString() + "_cmd",
+                deviceCmdVo.getSn(),
                 db_deviceCmdData
         );
 
@@ -82,20 +80,20 @@ public class DeviceCmdUtils {
 
     /**
      * 设备命令响应
-     * @param deviceDataDto 设备发送给服务器的数据
+     * @param deviceAllDataDto 设备发送给服务器的数据
      * @param sn 设备sn码
      * @return
      */
-    public static Boolean responseCmd(DeviceDataDto deviceDataDto,String sn){
-        if(deviceDataDto == null){
+    public static Boolean responseCmd(DeviceAllDataDto deviceAllDataDto, String sn){
+        if(deviceAllDataDto == null){
             return false;
         }
-        if(LmAssert.isEmpty(deviceDataDto.getCmdId())){
+        if(LmAssert.isEmpty(deviceAllDataDto.getCmdId())){
             return false;
         }
 
         // 通过设备响应带回来的cmdID查询到设备命令日记
-        DeviceCmdData deviceCmdDataByCmdId = sDeviceDataMapper.getDeviceCmdDataByCmdId(deviceDataDto.getCmdId());
+        DeviceCmdData deviceCmdDataByCmdId = sDeviceDataMapper.getDeviceCmdDataByCmdId(deviceAllDataDto.getCmdId());
 
         if(deviceCmdDataByCmdId == null){
             return false;

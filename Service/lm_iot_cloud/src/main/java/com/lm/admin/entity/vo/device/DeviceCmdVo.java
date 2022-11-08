@@ -1,4 +1,4 @@
-package com.lm.admin.entity.bo.device;
+package com.lm.admin.entity.vo.device;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeviceCmdBo {
+public class DeviceCmdVo {
 
     // 设备sn码 必填
     private String sn;

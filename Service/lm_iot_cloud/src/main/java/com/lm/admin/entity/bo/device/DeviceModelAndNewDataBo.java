@@ -1,30 +1,24 @@
-package com.lm.admin.entity.bo.devicemodel;
+package com.lm.admin.entity.bo.device;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
 /**
- * 设备物模型数据 - mysql
+ * 设备物模型数据 和 设备的最新数据 redis+mysql
  * @author Lm
  * @date 2022/10/12 9:40
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeviceModelBo implements Serializable {
-
-//    // 主键 雪花
-//    private Long id;
+public class DeviceModelAndNewDataBo implements Serializable {
 
     // 对应的设备sn
     private String sn;
-//
-//    // 对应设备id
-//    private Long deviceId;
 
     // 图标
     private String icon;
@@ -46,4 +40,10 @@ public class DeviceModelBo implements Serializable {
 
     // 模型 类型   0是传感器 1是开关量 其他待定
     private Integer modelType;
+
+    // 设备时间戳
+    private Date ts;
+
+    // 设备数据
+    private String val;
 }

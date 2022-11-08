@@ -10,5 +10,6 @@ public class CloudRedisKey {
     public static String DeviceSnToChannelIdKey = "lmCloud:cloud:tcp:deviceSn:";
     // 设备在线计数器
     public static String DeviceOnLineCount = "lmCloud:cloud:count";
-
+    // 设备最新数据 下一级放deviceSn进去
+    public static String DeviceNewDataKey = "lmCloud:cloud:data:";
 }

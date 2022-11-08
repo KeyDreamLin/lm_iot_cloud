@@ -1,12 +1,8 @@
 package com.lm;
 
-import com.alibaba.fastjson2.JSON;
-import com.lm.admin.entity.bo.device.DeviceCmdBo;
-import com.lm.admin.entity.pojo.devicecmddata.DeviceCmdData;
 import com.lm.admin.entity.pojo.permission.Permission;
 import com.lm.admin.mapper.mysql.permission.PermissionMapper;
 import com.lm.admin.mapper.tdengine.DeviceDataMapper;
-import com.lm.admin.utils.DateTool;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -14,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @SpringBootTest(classes = LmCloudApplication.class)
 @RunWith(SpringRunner.class)

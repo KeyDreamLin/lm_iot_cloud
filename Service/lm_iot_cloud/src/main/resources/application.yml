@@ -4,27 +4,68 @@ server:
 spring:
   redis:
     host: 127.0.0.1
-    port: 6379
+    port: 2655
     database: 7
     password: wenhao
+    # 连接池最大连接数（使用负值表示没有限制）
+    max-active: -1
+    # 连接池最大阻塞等待时间（使用负值表示没有限制）
+    max-wait: -1
+    # 连接超时时间（毫秒）
+    timeout: 2000
 
   datasource:
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 5000
+      # 状态监控
+      filter:
+        stat:
+          enabled: true
+          db-type: mysql
+          # 开启慢sql监控，超过2s 就认为是慢sql，记录到日志中
+          log-slow-sql: true
+          slow-sql-millis: 2000
+      # Spring 监控，利用aop 对指定接口的执行时间，jdbc数进行记录
+      aop-patterns: "com.lm.admin.mapper.*"
+      ########## 配置WebStatFilter，用于采集web关联监控的数据 ##########
+      web-stat-filter:
+        enabled: true                   # 启动 StatFilter
+        url-pattern: /*                 # 过滤所有url
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*" # 排除一些不必要的url
+        session-stat-enable: true       # 开启session统计功能
+        session-stat-max-count: 1000    # session的最大个数,默认100
+      ########## 配置StatViewServlet（监控页面），用于展示Druid的统计信息 ##########
+      stat-view-servlet:
+        # 启用StatViewServlet
+        enabled: true
+        url-pattern: /druid/*
+        # 不允许清空统计数据,重新计算
+        reset-enable: false
+        login-username: root
+        login-password: root
+        # 允许访问的地址，如果allow没有配置或者为空，则允许所有访问
+        allow:
+        # 拒绝访问的地址，deny优先于allow，如果在deny列表中，就算在allow列表中，也会被拒绝
+        deny:
+
     mysql:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/lm_cloud_admin
+      url: jdbc:mysql://127.0.0.1:3306/lm_cloud_admin
       username: root
       password: 123456
       type: com.alibaba.druid.pool.DruidDataSource #简单引入druid
     tdengine:
-      driver-class-name: com.taosdata.jdbc.rs.RestfulDriver
-      url: jdbc:TAOS-RS://127.0.0.1:6041/lm_cloud_data
+      driver-class-name: com.taosdata.jdbc.TSDBDriver
+      url: jdbc:TAOS://127.0.0.1:6030/lm_cloud_data
       username: root
       password: taosdata
 
-
-
-# tcp 自定义的参数
+# netsh interface portproxy add v4tov4 listenport=8859 listenaddress= 192.168.0.149 connectaddress= 192.168.0.149  connectport=3333
+# tcp 自定义的参数 3333 idea 测试端口 做转发
 netty:
   server:
     host: 127.0.0.1
-    port: 20000
+    port: 3333

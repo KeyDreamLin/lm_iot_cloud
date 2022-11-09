@@ -2,7 +2,9 @@
 
 ## 简介
 
-本系统由Java语言所开发。宗旨做一个易使用、简接入的物联云，可在多平台查看、管理、获取信息做简单快捷的物联网系统。欢迎Star⭐️
+本系统由Java语言所开发。宗旨做一个易使用、简接入的物联云，可在多平台查看、管理设备做简单快捷的物联网系统。欢迎Star⭐️
+
+==PS:未做测压！==
 
 ## 目录结构
 
@@ -38,6 +40,7 @@
   - TDengine https://www.taosdata.com/  （时序数据库）
   - Mysql  https://www.mysql.com
   - Redis https://redis.io/ （NoSQL）
+  - Druid https://github.com/alibaba/druid （数据库连接池）
   - Netty  4.1.68.Final https://netty.io/ （网络框架）
   - fastjson2 2.0.14 https://github.com/alibaba/fastjson2 （JSON解析库）
   - QLExpress  https://github.com/alibaba/QLExpress （动态规则库）

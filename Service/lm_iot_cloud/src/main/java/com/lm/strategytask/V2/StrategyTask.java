@@ -50,6 +50,7 @@ public class StrategyTask {
     // 保存匹配正则表达式的值
     Matcher matcher;
 
+    // TODO 后续加上Zset有序排序 作为轮询延迟的任务池
 
 
     // 每1秒轮询一次
@@ -93,57 +94,62 @@ public class StrategyTask {
             try {
                 Object result = expressRunner.execute(dSitem.getExpStr(), context, null, false, false);
                 if((Boolean) result == true){
-                    // TODO 需要处理多个命令使用 & 分割   sdg345ghdgh345gweqer23_led : 1 : 0 & test_tag1 : 1 : 0
-                    // sdg345ghdgh345gweqer23_led : 1 : 0
-                    String[] ret_data_split = dSitem.getRetData().split(":");
-                    // 然后开始拆解 sn_identifier
-                    String sn_identifier[] = ret_data_split[0].split("_");
+                    //  需要处理多个命令使用 & 分割  示例 --> sdg345ghdgh345gweqer23_led : 1 : 0 & test_tag1 : 1 : 0
+                    String[] ret_data_split =  dSitem.getRetData().split("&");
+                    // 循环多个命令
+                    for (String retitem : ret_data_split){
+                        // 示例 --> sdg345ghdgh345gweqer23_led : 1 : 0 做:分割
+                        String[] sn_identifier_time = retitem.split(":");
+                        // 然后开始拆解 sn_identifier
+                        String sn_identifier[] = sn_identifier_time[0].split("_");
 
-                    // 判断是否存在任务
-                    Object o = redisTemplate.opsForValue().get(CloudRedisKey.DeviceStrategyTaskPool + ret_data_split[0]);
-                    if(o == null){
-                        StrategyExecuteCmd strategyExecuteCmd = new StrategyExecuteCmd();
-                        // 拿sn_identifier作为任务名称
-                        strategyExecuteCmd.setTaskName(ret_data_split[0]);
-                        strategyExecuteCmd.setData(ret_data_split[1]);
-                        // 传入延时的时间
-                        strategyExecuteCmd.setExecuteJobTime( (Integer.valueOf(ret_data_split[2]) * 1000) );
-                        // 传入当前时间 + 延时的时间
-                        strategyExecuteCmd.setExecuteJobTimestamp( System.currentTimeMillis() + (Integer.valueOf(ret_data_split[2]) * 1000) );
-
-                        // 传入 sn 和 identifier
-                        strategyExecuteCmd.setSn(sn_identifier[0]);
-                        strategyExecuteCmd.setIdentifier(sn_identifier[1]);
-                        // 放入redis任务池
-                        redisTemplate.opsForValue().set(CloudRedisKey.DeviceStrategyTaskPool + strategyExecuteCmd.getTaskName(), strategyExecuteCmd);
-                        log.info("{}--被放入任务池", strategyExecuteCmd);
-                    }
-                    // 如果存在任务
-                    else{
-                        StrategyExecuteCmd strategyExecuteCmd = (StrategyExecuteCmd) o;
-                        // 如果这个规则的发送命令是没有延时的话 就将有延时命令的任务的延时时间覆盖
-                        // 如果规则中的ret_data是没有设置延时的话 那就将有延时的ret_data覆盖掉
-                        if(ret_data_split[0].equals(strategyExecuteCmd.getTaskName()) && Integer.valueOf(ret_data_split[2]) <= 0 ){
-                            strategyExecuteCmd.setData(ret_data_split[1]);
+                        // 判断是否存在任务
+                        Object o = redisTemplate.opsForValue().get(CloudRedisKey.DeviceStrategyTaskPool + sn_identifier_time[0]);
+                        if(o == null){
+                            StrategyExecuteCmd strategyExecuteCmd = new StrategyExecuteCmd();
+                            // 拿sn_identifier作为任务名称
+                            strategyExecuteCmd.setTaskName(sn_identifier_time[0]);
+                            strategyExecuteCmd.setData(sn_identifier_time[1]);
                             // 传入延时的时间
-                            strategyExecuteCmd.setExecuteJobTime( Integer.valueOf(ret_data_split[2]) );
+                            strategyExecuteCmd.setExecuteJobTime( (Integer.valueOf(sn_identifier_time[2]) * 1000) );
                             // 传入当前时间 + 延时的时间
-                            strategyExecuteCmd.setExecuteJobTimestamp( System.currentTimeMillis()  );
+                            strategyExecuteCmd.setExecuteJobTimestamp( System.currentTimeMillis() + (Integer.valueOf(sn_identifier_time[2]) * 1000) );
 
                             // 传入 sn 和 identifier
                             strategyExecuteCmd.setSn(sn_identifier[0]);
                             strategyExecuteCmd.setIdentifier(sn_identifier[1]);
                             // 放入redis任务池
                             redisTemplate.opsForValue().set(CloudRedisKey.DeviceStrategyTaskPool + strategyExecuteCmd.getTaskName(), strategyExecuteCmd);
+                            log.info("{}--被放入任务池", strategyExecuteCmd);
+                        }
+                        // 如果存在任务
+                        else{
+                            StrategyExecuteCmd strategyExecuteCmd = (StrategyExecuteCmd) o;
+                            // 如果这个规则的发送命令是没有延时的话 就将有延时命令的任务的延时时间覆盖
+                            // 如果规则中的ret_data是没有设置延时的话 那就将有延时的ret_data覆盖掉
+                            if(ret_data_split[0].equals(strategyExecuteCmd.getTaskName()) && Integer.valueOf(ret_data_split[2]) <= 0 ){
+                                strategyExecuteCmd.setData(ret_data_split[1]);
+                                // 传入延时的时间
+                                strategyExecuteCmd.setExecuteJobTime( Integer.valueOf(ret_data_split[2]) );
+                                // 传入当前时间 + 延时的时间
+                                strategyExecuteCmd.setExecuteJobTimestamp( System.currentTimeMillis()  );
+
+                                // 传入 sn 和 identifier
+                                strategyExecuteCmd.setSn(sn_identifier[0]);
+                                strategyExecuteCmd.setIdentifier(sn_identifier[1]);
+                                // 放入redis任务池
+                                redisTemplate.opsForValue().set(CloudRedisKey.DeviceStrategyTaskPool + strategyExecuteCmd.getTaskName(), strategyExecuteCmd);
+                            }
                         }
                     }
+
 
                 }
                 else{
                     // 不用 放空
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         });
     }
@@ -164,13 +170,17 @@ public class StrategyTask {
                 DeviceNewDataDto deviceNewDataDto = (DeviceNewDataDto) redisTemplate.opsForValue().get(CloudRedisKey.DeviceNewDataKey + strategyExecuteCmd.getSn());
                 // 如果查询不到设备数据 那就不管
                 if (deviceNewDataDto == null) {
-                    return;
+                    // 执行命令完删除就好了
+                    redisTemplate.delete(itemKey);
+                    continue;
                 }
                 // 获取指定的值
                 String newDataVal = deviceNewDataDto.getData().get(deviceCmdVo.getIdentifier());
                 // 如果查询不到值 那就不管
                 if (newDataVal == null) {
-                    return;
+                    // 执行命令完删除就好了
+                    redisTemplate.delete(itemKey);
+                    continue;
                 }
                 // 如果最新的数据和发送的数据一样就不重复发送了
                 if (deviceCmdVo.getData().equals(newDataVal) == true) {

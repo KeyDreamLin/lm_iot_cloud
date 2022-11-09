@@ -1,13 +1,10 @@
 package com.lm.admin.config.mybatis;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.logging.stdout.StdOutImpl;
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
-import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
-import org.slf4j.ILoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -37,7 +34,7 @@ public class MybatisMySqlConfig {
 
     @Bean(name = "mysqlDataSource")
     public DataSource mysqlDataSource() {
-        DruidDataSource dataSource = new DruidDataSource();
+        DruidDataSource dataSource = DruidDataSourceBuilder.create().build();
         dataSource.setDriverClassName(driverClass);
         dataSource.setUrl(url);
         dataSource.setUsername(user);

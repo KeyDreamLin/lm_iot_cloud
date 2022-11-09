@@ -1,6 +1,7 @@
 package com.lm.admin.config.mybatis;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import org.apache.ibatis.logging.stdout.StdOutImpl;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -35,7 +36,8 @@ public class MybatisTDengineConfig {
 
     @Bean(name = "tdengineDataSource")
     public DataSource clusterDataSource() {
-        DruidDataSource dataSource = new DruidDataSource();
+        // 使用DruidDataSourceBuilder初始化数据源Druid才能监控的到SQL
+        DruidDataSource dataSource = DruidDataSourceBuilder.create().build();
         dataSource.setDriverClassName(driverClass);
         dataSource.setUrl(url);
         dataSource.setUsername(user);

@@ -29,20 +29,19 @@
 
 - 😝 https://emojipedia.org/ 
 
-
-
 ## 技术文档
 
 
 
 - 后端
-  - Spring、SpringBoot、SpringAOP、 SpringWeb。。。
-  - TDengine https://www.taosdata.com/
+  - Spring、SpringBoot、SpringAOP、 SpringWeb。。。 
+  - TDengine https://www.taosdata.com/  （时序数据库）
   - Mysql  https://www.mysql.com
-  - Redis https://redis.io/
-  - Netty  4.1.68.Final https://netty.io/
-  - fastjson2 2.0.14 https://github.com/alibaba/fastjson2
-
+  - Redis https://redis.io/ （NoSQL）
+  - Netty  4.1.68.Final https://netty.io/ （网络框架）
+  - fastjson2 2.0.14 https://github.com/alibaba/fastjson2 （JSON解析库）
+  - QLExpress  https://github.com/alibaba/QLExpress （动态规则库）
+  
 - 前端
   - vue3 https://cn.vuejs.org/
   - vite https://cn.vitejs.dev/

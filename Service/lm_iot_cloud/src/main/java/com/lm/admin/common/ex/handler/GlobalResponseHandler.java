@@ -32,7 +32,7 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-       log.info("admin后台统一数据处理msg--->{}",body.toString());
+//       log.info("admin后台统一数据处理msg--->{}",body.toString());
         //判断如果是抛出异常的时候，则使用R.error
        if (body instanceof ErrorHandler){
 

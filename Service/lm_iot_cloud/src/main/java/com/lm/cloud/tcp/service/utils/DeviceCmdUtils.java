@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 /**
  * 设备命令工具类
@@ -57,16 +58,28 @@ public class DeviceCmdUtils {
         db_deviceCmdData.setNts(System.currentTimeMillis());
         db_deviceCmdData.setCmdID(SnowflakeIdWorker.getDeviceId().toString());
         db_deviceCmdData.setData(deviceCmdVo.getData().toString());
-        db_deviceCmdData.setApitag(deviceCmdVo.getApitag());
+        db_deviceCmdData.setApitag(deviceCmdVo.getIdentifier());
         // 默认的状态是设备未响应
         db_deviceCmdData.setStatus(false);
 
-        // 向设备发送指令
-        ctx.writeAndFlush(
-                JSON.toJSONString(
-                        CloudR.Cmd(db_deviceCmdData.getCmdID(), deviceCmdVo.getApitag(), deviceCmdVo.getData())
-                )
-        );
+        // 如果指令中存在整数数字 就将 以 int发送
+        if(isInteger(deviceCmdVo.getData())){
+            // 向设备发送指令
+            ctx.writeAndFlush(
+                    JSON.toJSONString(
+                            CloudR.Cmd(db_deviceCmdData.getCmdID(), deviceCmdVo.getIdentifier(), Integer.valueOf(deviceCmdVo.getData()))
+                    )
+            );
+        }
+        // 否则使用string TODO 判断 浮点数 float double
+        else{
+            ctx.writeAndFlush(
+                    JSON.toJSONString(
+                            CloudR.Cmd(db_deviceCmdData.getCmdID(), deviceCmdVo.getIdentifier(), deviceCmdVo.getData())
+                    )
+            );
+        }
+
 
         // 保存命令日记
         sDeviceDataMapper.saveDeiceCmd(
@@ -113,4 +126,18 @@ public class DeviceCmdUtils {
         );
         return true;
     }
+
+
+    /*方法二：推荐，速度最快
+     * 判断是否为整数
+     * @param str 传入的字符串
+     * @return 是整数返回true,否则返回false
+     */
+
+    public static boolean isInteger(String str) {
+        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+        return pattern.matcher(str).matches();
+    }
+
+
 }

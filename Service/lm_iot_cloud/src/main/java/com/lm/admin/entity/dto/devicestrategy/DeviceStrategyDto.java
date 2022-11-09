@@ -16,7 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeviceStrategyDto implements Serializable {
-
+    private Long id;
     // 表达式/字符串
     private String expStr;
     // 需要返回的数据

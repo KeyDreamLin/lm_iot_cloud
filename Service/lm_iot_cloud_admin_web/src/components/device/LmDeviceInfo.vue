@@ -128,6 +128,8 @@
                                                     v-model="deviceModel.val"
                                                     size="large"
                                                     @click="SwitchCmdEvent(deviceModel)"
+                                                    :active-value="deviceModel.dataSpecs[1].value"
+                                                    :inactive-value="deviceModel.dataSpecs[0].value"
                                                 />
                                             </template>
                                          
@@ -227,24 +229,21 @@ const getDeivceModelVal = async () => {
                 modelData.dataSpecs = JSON.parse(modelData.dataSpecs);
             }
         }
-        // 获取最新的值
+        // 获取最新的值 
         responseValData.forEach(valModel=>{
-            // 如果标识符是相等的话就把值赋进去
-            if(modelData.identifier == valModel.identifier){
-               // 处理bool的数据 因为我们在java中将数据全部变成字符串来保存的，hhhh
-               if(modelData.dataType === "bool"){
-                        if(valModel.val == "1"){
-                            modelData.val = true;
-                        } 
-                        else{
-                            modelData.val = false;
-                        }
+                // 如果标识符是相等的话就把值赋进去
+                if(modelData.identifier == valModel.identifier){
+                    // 处理bool的数据 因为我们在java中将数据全部变成字符串来保存的，hhhh
+                    if(modelData.dataType === "bool"){
+                        // 将字符串转int
+                        modelData.val = valModel.val - 0;
+                    }
+                    else {
+                        modelData.val = valModel.val != '' ?  valModel.val : "N/A"  ;
+                    }
+                    modelData.ts = valModel.ts != null ?  valModel.ts : "— —"  ;
                 }
-                else {
-                    modelData.val = valModel.val != '' ?  valModel.val : "N/A"  ;
-                }
-                modelData.ts = valModel.ts != null ?  valModel.ts : "— —"  ;
-            }
+               
         });
     });
     console.log("设备物模型最新数据----->",deviceModelData.value);
@@ -270,7 +269,7 @@ const getIsOnline = async () => {
 const SwitchCmdEvent = async (thisModelData) => {
     let cmdData = {
         sn:deviceData.value.sn,
-        apitag:thisModelData.identifier,
+        identifier:thisModelData.identifier,
         data: thisModelData.val,
     }
     console.log("cmd",cmdData);

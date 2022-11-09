@@ -86,6 +86,8 @@
                                                     v-model="deviceData.val"
                                                     size="large"
                                                     @click="SwitchCmdEvent(deviceData)"
+                                                    :active-value="deviceData.dataSpecs[1].value"
+                                                    :inactive-value="deviceData.dataSpecs[0].value"
                                                     />
                                                 </template>
                                             </template>
@@ -176,7 +178,6 @@ const getDeviceGroupingOfData = async (isRealTime) => {
         // 获取该设备最新的值
         let responseValData = await deviceService.getNewData(item.sn);
         responseValData = responseValData.data;
-        console.log("22222222222222",responseValData);
         // 通过data里面的物模型数据去遍历
         item.data.forEach(modelData=>{
             // 处理执行器里面的dataSpecs 是个字符串不能直接用
@@ -184,26 +185,23 @@ const getDeviceGroupingOfData = async (isRealTime) => {
                 if (typeof modelData.dataSpecs === "string") {
                     modelData.dataSpecs = JSON.parse(modelData.dataSpecs);
                 }
+                console.log("22222222222222",modelData);
             }
+            console.log("333333333333333333",modelData);
+
             // 获取最新的值 
             responseValData.forEach(valModel=>{
                 // 如果标识符是相等的话就把值赋进去
                 if(modelData.identifier == valModel.identifier){
-                  
                     // 处理bool的数据 因为我们在java中将数据全部变成字符串来保存的，hhhh
                     if(modelData.dataType === "bool"){
-                        if(valModel.val == "1"){
-                            modelData.val = true;
-                        } 
-                        else{
-                            modelData.val = false;
-                        }
+                        // 将字符串转int
+                        modelData.val = valModel.val - 0;
                     }
                     else {
                         modelData.val = valModel.val != '' ?  valModel.val : "N/A"  ;
                     }
                     modelData.ts = valModel.ts != null ?  valModel.ts : "— —"  ;
-                    
                 }
                
             });
@@ -227,8 +225,9 @@ const getIsOnline = async () => {
 const SwitchCmdEvent = async (thisModelData) => {
     let cmdData = {
         sn:thisModelData.sn,
-        apitag:thisModelData.identifier,
-        data: thisModelData.val,
+        identifier:thisModelData.identifier,
+        // 将bool转为数字
+        data: thisModelData.val+0,
     }
     console.log("cmd",cmdData);
     let Cmdresponse = await deviceService.cmd(cmdData);

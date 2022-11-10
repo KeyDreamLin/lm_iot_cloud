@@ -127,10 +127,10 @@ public class StrategyTask {
                             StrategyExecuteCmd strategyExecuteCmd = (StrategyExecuteCmd) o;
                             // 如果这个规则的发送命令是没有延时的话 就将有延时命令的任务的延时时间覆盖
                             // 如果规则中的ret_data是没有设置延时的话 那就将有延时的ret_data覆盖掉
-                            if(ret_data_split[0].equals(strategyExecuteCmd.getTaskName()) && Integer.valueOf(ret_data_split[2]) <= 0 ){
-                                strategyExecuteCmd.setData(ret_data_split[1]);
+                            if(sn_identifier_time[0].equals(strategyExecuteCmd.getTaskName()) && Integer.valueOf(sn_identifier_time[2]) <= 0 ){
+                                strategyExecuteCmd.setData(sn_identifier_time[1]);
                                 // 传入延时的时间
-                                strategyExecuteCmd.setExecuteJobTime( Integer.valueOf(ret_data_split[2]) );
+                                strategyExecuteCmd.setExecuteJobTime( Integer.valueOf(sn_identifier_time[2]) );
                                 // 传入当前时间 + 延时的时间
                                 strategyExecuteCmd.setExecuteJobTimestamp( System.currentTimeMillis()  );
 
@@ -170,16 +170,12 @@ public class StrategyTask {
                 DeviceNewDataDto deviceNewDataDto = (DeviceNewDataDto) redisTemplate.opsForValue().get(CloudRedisKey.DeviceNewDataKey + strategyExecuteCmd.getSn());
                 // 如果查询不到设备数据 那就不管
                 if (deviceNewDataDto == null) {
-                    // 执行命令完删除就好了
-                    redisTemplate.delete(itemKey);
                     continue;
                 }
                 // 获取指定的值
                 String newDataVal = deviceNewDataDto.getData().get(deviceCmdVo.getIdentifier());
                 // 如果查询不到值 那就不管
                 if (newDataVal == null) {
-                    // 执行命令完删除就好了
-                    redisTemplate.delete(itemKey);
                     continue;
                 }
                 // 如果最新的数据和发送的数据一样就不重复发送了

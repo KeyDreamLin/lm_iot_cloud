@@ -2,7 +2,7 @@ package com.lm.cloud.common.auth;
 
 import com.alibaba.fastjson2.JSON;
 import com.lm.admin.entity.dto.device.DeviceAuthDto;
-import com.lm.admin.service.device.IDeviceService;
+import com.lm.admin.service.device.DeviceServiceImpl;
 import com.lm.admin.utils.LmAssert;
 import com.lm.admin.entity.dto.device.DeviceAllDataDto;
 import com.lm.cloud.common.r.CloudDeviceConnRespEnum;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class DeviceAuth {
 
     @Autowired
-    private IDeviceService iDeviceService; //查询设备mysql
+    private DeviceServiceImpl iDeviceService; //查询设备mysql
 
     public CloudR TcpAuth(ChannelHandlerContext ctx, String msg){
 

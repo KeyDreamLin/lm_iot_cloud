@@ -120,7 +120,7 @@ public class StrategyTask {
                             strategyExecuteCmd.setIdentifier(sn_identifier[1]);
                             // 放入redis任务池
                             redisTemplate.opsForValue().set(CloudRedisKey.DeviceStrategyTaskPool + strategyExecuteCmd.getTaskName(), strategyExecuteCmd);
-                            log.info("{}--被放入任务池", strategyExecuteCmd);
+                            // log.info("{}--被放入任务池", strategyExecuteCmd);
                         }
                         // 如果存在任务
                         else{
@@ -155,7 +155,7 @@ public class StrategyTask {
     }
 
     // redis任务线程
-    @Scheduled(fixedRate = 100)
+    @Scheduled(fixedRate = 500)
     private void JobTask(){
         Set<String> keys = redisTemplate.keys(CloudRedisKey.DeviceStrategyTaskPool + "*");
         for (String itemKey : keys) {

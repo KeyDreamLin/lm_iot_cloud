@@ -8,7 +8,7 @@ import com.lm.admin.controller.admin_api.AdminBaseController;
 import com.lm.admin.entity.bo.adminuser.AdminUserLoginBo;
 import com.lm.admin.entity.pojo.adminuser.AdminUser;
 import com.lm.admin.entity.vo.adminuser.AdminUserLoginVo;
-import com.lm.admin.service.adminuser.AdminUserServiceImpl;
+import com.lm.admin.service.adminuser.IAdminUserService;
 import com.lm.admin.utils.LmAssert;
 import com.lm.common.redis.adminkey.RedisAndHeaderKey;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 public class LoginController extends AdminBaseController implements RedisAndHeaderKey {
     // 管理员服务
     @Autowired
-    private AdminUserServiceImpl adminUserService;
+    private IAdminUserService adminUserService;
 
     @Autowired
     private JwtConfig jwtService;

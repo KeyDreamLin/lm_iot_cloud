@@ -2,10 +2,12 @@
 //import { createRouter, createWebHashHistory } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 
-import deviceList from '@/views/device/list.vue'
+import deviceList from '@/views/device/device/list.vue'
 import deviceModelList from '@/views/device/model/list.vue'
-import deviceGrouping from '@/views/device/grouping.vue'
+import deviceGroupingList from '@/views/device/grouping/list.vue'
 
+import deviceStrategyList from '@/views/device/strategy/list.vue'
+import deviceStrategyForm from '@/views/device/strategy/examine.vue'
 // 子路由
 const routes_children = [
     {
@@ -31,7 +33,22 @@ const routes_children = [
         path: '/device/grouping',
         name: "/device/grouping",
         meta: { title: '设备分组' },
-        component : deviceGrouping,
+        component : deviceGroupingList,
+    },
+    {
+        path: '/device/strategy',
+        name: "/device/strategy",
+        meta: { title: '场景联动' ,isFather: true},
+        component : deviceStrategyList,
+        children:[
+            {
+                path: '/device/strategy/examine',
+                name: "/device/strategy",
+                meta: { title: '场景联动详情',isFather: false },
+                component : deviceStrategyForm,
+            }
+        ],
+   
     },
     {
         path: '/test',

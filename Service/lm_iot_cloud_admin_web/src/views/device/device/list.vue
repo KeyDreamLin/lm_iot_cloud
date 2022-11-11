@@ -1,4 +1,5 @@
 <template>
+    <!-- 设备信息列表 -->
     <div>
        <el-row :gutter="20" >
             <template v-for="(deviceinfo,index) in deviceData">
@@ -73,7 +74,7 @@ const { toClipboard } = useClipboard();
 const deviceData = ref([]);
 // 分页查询设备信息
 const pageDeive = async ()  =>{
-    const deviceResponse = await deviceService.listPage();
+    const deviceResponse = await deviceService.listPage({pageSize:20});
     deviceData.value = deviceResponse.data.records;
     console.log(deviceData.value);
 }

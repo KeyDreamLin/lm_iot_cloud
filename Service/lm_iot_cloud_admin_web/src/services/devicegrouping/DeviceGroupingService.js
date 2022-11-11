@@ -10,11 +10,11 @@ export default {
     },
 
      /**
-     * 获取设备分组分页查询
-     * @returns 
+     * 根据设备分组id查询到设备的信息列表
+     * @returns params 分组id
      */
-    deviceGroupigList(params) {
-        let temp = lm_request.post("devicegrouping/devices/"+params);
+    deviceByGroupingId(params) {
+        let temp = lm_request.post("/devices/groupingid/"+params);
         return temp;
     },
 }

@@ -1,47 +1,33 @@
-package com.lm.admin.controller.device_api;
+package com.lm.admin.controller.device_api.device;
 
 import com.lm.admin.common.r.DeviceResultEnum;
+import com.lm.admin.controller.device_api.DeviceBaseController;
 import com.lm.admin.entity.vo.device.DeviceCmdVo;
 import com.lm.admin.entity.bo.device.DeviceBo;
 import com.lm.admin.entity.bo.device.DeviceModelAndNewDataBo;
-import com.lm.admin.entity.pojo.devicegrouping.DeviceGrouping;
 import com.lm.admin.entity.vo.device.DevicePageVo;
-import com.lm.admin.entity.vo.devicegrouping.DeviceGroupingPageVo;
-import com.lm.admin.entity.vo.devicemodel.DeviceModelVo;
-import com.lm.admin.service.device.DeviceServiceImpl;
-import com.lm.admin.service.devicegrouping.DeviceGroupingServiceImpl;
-import com.lm.admin.service.devicemodel.DeviceModelService;
+import com.lm.admin.service.device.IDeviceService;
 import com.lm.admin.utils.LmAssert;
 import com.lm.admin.utils.mybiats.Pager;
 import com.lm.cloud.tcp.service.utils.DeviceCmdUtils;
 import com.lm.cloud.tcp.service.utils.RedisDeviceUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /**
+ * 设备信息接口
+ * api:/api/device/***
  * @author Lm
  * @date 2022/10/8 15:05
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/device")
-@ResponseBody
-public class DeviceController {
-
+public class DeviceController extends DeviceBaseController {
     @Autowired
-    private DeviceServiceImpl deviceService;
-    @Autowired
-    private DeviceModelService deviceModelService;
-    @Autowired
-    private DeviceGroupingServiceImpl deviceGroupingService;
-    // 操作Redis
-    @Autowired
-    private StringRedisTemplate SredisTemplate;
-
+    private IDeviceService deviceService;
 
     /**
      * 获取该设备的最新数据
@@ -86,37 +72,16 @@ public class DeviceController {
         return deviceService.getDevicePager(pager);
     }
 
-    /**
-     * 根据设备Sn查询到对应的物模型数据
-     * path: /api/device/devicemodel
-     * @param deviceModelVo
-     * @return
-     */
-    @PostMapping("/devicemodel")
-    public List<DeviceModelAndNewDataBo> getDeviceModel(@RequestBody DeviceModelVo deviceModelVo){
-        return deviceModelService.getDeiceModelBySn(deviceModelVo.getSn());
-    }
 
-    /**
-     * 分页查询设备分组列表
-     * path: /api/device/devicegroupingpage
-     * @param pager
-     * @return 分页数据
-     */
-    @PostMapping("/devicegroupingpage")
-    public Pager<DeviceGrouping> deviceGroupingPage(@RequestBody DeviceGroupingPageVo pager){
-        return deviceGroupingService.getDeviceGroupingPager(pager);
-    }
 
     /**
      * 根据设备分组id查询到设备的信息列表
-     * path: /api/device/devicegrouping/devices/{gid}
+     * path: /api/device/groupingid/devices/{gid}
      * @param gid 分组id
-     * @param  List<DeviceBo> 设备数据
-     * @return
+     * @return List<DeviceBo> 设备数据
      */
-    @PostMapping("/devicegrouping/devices/{gid}")
-    public List<DeviceBo> deviceGroupigList(@PathVariable("gid") Long gid){
+    @PostMapping("/devices/groupingid/{gid}")
+    public List<DeviceBo> deviceByGroupingId(@PathVariable("gid") Long gid){
         return deviceService.getDevicesByGroupingId(gid);
     }
 

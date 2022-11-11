@@ -10,7 +10,7 @@ import java.util.List;
  * @date 2022/10/8 16:48
  */
 
-public interface DeviceModelService {
+public interface IDeviceModelService {
 
     /**
      * 获取设备物模型列表

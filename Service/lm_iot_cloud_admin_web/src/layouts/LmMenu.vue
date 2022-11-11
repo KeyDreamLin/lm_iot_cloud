@@ -28,7 +28,7 @@
                                 :key="menu_c.id +''"
                             >
                                 <!-- index 用path是方便获取到路由路径后选中对应的项 -->
-                                <el-menu-item :index="menu_c.path">
+                                <el-menu-item :index="menu_c.pathname">
                                     <template #title>
                                         <span>{{ menu_c.name }}</span>
                                     </template>
@@ -39,8 +39,8 @@
                     </template>
                     <!-- 无子元素的父元素 -->
                     <template v-else>
-                        <!-- index 用path是方便获取到路由路径后选中对应的项 -->
-                        <el-menu-item :index="menu_root.path">
+                        <!-- index 用pathname是方便获取到 子路由中的子路由 路径后选中对应的项 -->
+                        <el-menu-item :index="menu_root.pathname">
                             <template #title>
                                 <span>{{ menu_root.name }}</span>
                             </template>
@@ -68,7 +68,7 @@ const route = useRoute();
 // 菜单数据
 const menuTerrData  =ref([]);
 // 当前路由的地址
-const thisPath = computed(() => { return route.path; });
+const thisPath = computed(() => { return route.name; });
 // 获取菜单信息
 const initMenu = async()  =>{
     let response = await permissionService.menuTree();

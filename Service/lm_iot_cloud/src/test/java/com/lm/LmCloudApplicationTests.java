@@ -8,12 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
-//@SpringBootTest(classes = LmCloudApplication.class)
+@SpringBootTest(classes = LmCloudApplication.class)
 @RunWith(SpringRunner.class)
 @Slf4j
 class LmCloudApplicationTests {
@@ -23,22 +25,30 @@ class LmCloudApplicationTests {
 
     @Autowired
     private PermissionMapper permissionMapper;
-
+    @Autowired
+    private RedisTemplate redisTemplate;
     @Test
     public void contextLoads() {
+
+        Long executionUp = System.currentTimeMillis();
+        for (int i = 0 ;i<100000;i++){
+            redisTemplate.opsForValue().set("Test_count",i);
+        }
+        Long executionDwon = System.currentTimeMillis();
+        log.info("{}",executionDwon-executionUp);
         //{dslkfhlahvhvdslhghwo2_led}:1:10&{test_led1}:1:0
-        String aaa = "{dslkfhlahvhvdslhghwo2_led}:1:10&{test_led1}:1:0";
-        String bbb[] = aaa.split("&");
-
-        double a = 1.12345678912345;
-        // float 是8位有效数字，第7位数字将会四舍五入 所以正则表达式大于等于8的就是float
-        float b = 1.12345678f;
-        String c = "1.13e2";
-        String cc = "1.1234567";
-
-        System.out.println(Float.valueOf(c));
-
-        System.out.println(a+",,,,,,,,"+b);
+//        String aaa = "{dslkfhlahvhvdslhghwo2_led}:1:10&{test_led1}:1:0";
+//        String bbb[] = aaa.split("&");
+//
+//        double a = 1.12345678912345;
+//        // float 是8位有效数字，第7位数字将会四舍五入 所以正则表达式大于等于8的就是float
+//        float b = 1.12345678f;
+//        String c = "1.13e2";
+//        String cc = "1.1234567";
+//
+//        System.out.println(Float.valueOf(c));
+//
+//        System.out.println(a+",,,,,,,,"+b);
 //        final List<Permission> permission = permissionMapper.findPermission();
 //        log.info("{}",permission);
 //        DeviceCmdData a = new DeviceCmdData();

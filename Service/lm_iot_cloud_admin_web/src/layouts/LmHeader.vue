@@ -44,7 +44,10 @@ import { useRoute } from 'vue-router';
 // 用于获取当前路由的状态和地址
 const route = useRoute();
 // 获取当前路由地址
-const thisPathName = computed(() => { return route.meta.title; });
+const thisPathName = computed(() => { 
+    console.log("---",route.meta);
+    return route.meta.title; 
+});
 
 </script>
 <style scoped>

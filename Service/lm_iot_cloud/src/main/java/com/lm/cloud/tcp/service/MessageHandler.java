@@ -2,8 +2,7 @@ package com.lm.cloud.tcp.service;
 
 import com.alibaba.fastjson2.JSON;
 import com.lm.admin.entity.dto.device.DeviceNewDataDto;
-import com.lm.admin.service.device.IDeviceService;
-import com.lm.admin.utils.JSONUtils;
+import com.lm.admin.service.device.DeviceServiceImpl;
 import com.lm.admin.utils.LmAssert;
 import com.lm.cloud.common.auth.DeviceAuth;
 import com.lm.admin.entity.dto.device.DeviceAllDataDto;
@@ -38,7 +37,7 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
     @Autowired
     private DeviceAuth deviceAuth;
     @Autowired
-    private IDeviceService deviceService;
+    private DeviceServiceImpl deviceService;
     @Autowired
     private StringRedisTemplate redisTemplate;  // 操作Redis
 
@@ -60,7 +59,7 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
     protected void channelRead0(ChannelHandlerContext ctx, String message) throws Exception {
         // 用于查询对应的sn码 如果id存在sn码 就代表鉴权过了
         String dbr_SnByChannelId = RedisDeviceUtils.getSnByCid(ctx.channel().id().asLongText());
-        if (JSONUtils.isJSONValidate(message)) {
+        if (JSON.isValid(message)) {
             Integer t = JSON.parseObject(message).getInteger("t");
             // 查询是否授权 如果根据id查不到sn码就表示未鉴权
             if (LmAssert.isEmpty(dbr_SnByChannelId)) {
@@ -78,28 +77,27 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
 //                ctx.writeAndFlush("测试用途:未授权 请发起授权信息");
                 return;
             } else {
-
                 if(t == 3 ){
                     // 设备数据上报数据量大 数据库操作耗时较高  所以放到异步线程里面去做。 为什么不直接开启业务线程嘞？这样的话不管你处理什么任务都开个线程不太灵活。
+                    // log.info("group.submit 异步执行的线程："+Thread.currentThread().getName());
+                    // 接收到设备最新数据
+                    DeviceNewDataDto deviceDataUpRo = JSON.parseObject(message, DeviceNewDataDto.class);
+                    deviceDataUpRo.setSn(dbr_SnByChannelId);
+                    // log.info("序列化后--->>>>{}", deviceDataUpRo);
                     group.submit(()->{
-//                        log.info("group.submit 异步执行的线程："+Thread.currentThread().getName());
-                        // 接收到设备最新数据
-                        DeviceNewDataDto deviceDataUpRo = JSON.parseObject(message, DeviceNewDataDto.class);
-                        deviceDataUpRo.setSn(dbr_SnByChannelId);
-//                        log.info("序列化后--->>>>{}", deviceDataUpRo);
                         // 保存数据 放到tdengine
                         int a = deviceService.saveDeviceData(dbr_SnByChannelId,deviceDataUpRo.getData());
-                        // 保存数据到redis
-                        boolean b = deviceService.saveDeviceDataRedis(deviceDataUpRo);
-                        if(b){
-                            // 接收数据成功
-                            ctx.writeAndFlush(JSON.toJSONString(CloudR.Response(CloudDevicePushAckEnum.DATA_PUSH_ACK_SUCCESS)));
-                        }
-                        else{
-                            // 接收数据失败
-                            ctx.writeAndFlush(JSON.toJSONString(CloudR.Response(CloudDevicePushAckEnum.DATA_PUSH_ACK_ERROR)));
-                        }
                     });
+                    // 保存数据到redis
+                    boolean b = deviceService.saveDeviceDataRedis(deviceDataUpRo);
+                    if(b){
+                        // 接收数据成功
+                        ctx.writeAndFlush(JSON.toJSONString(CloudR.Response(CloudDevicePushAckEnum.DATA_PUSH_ACK_SUCCESS)));
+                    }
+                    else{
+                        // 接收数据失败
+                        ctx.writeAndFlush(JSON.toJSONString(CloudR.Response(CloudDevicePushAckEnum.DATA_PUSH_ACK_ERROR)));
+                    }
                 }
                 else if(t == 6){
                     // 客户端响应服务器的CMD命令执行状态

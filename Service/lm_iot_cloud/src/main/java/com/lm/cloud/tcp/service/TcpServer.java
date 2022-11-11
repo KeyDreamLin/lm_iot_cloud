@@ -45,8 +45,8 @@ public class TcpServer implements ITcpServer {
     public void start() {
         RedisDeviceUtils.delAll();
         log.info("初始化 TCP server ...");
-        bossGroup = serverProperties.isUseEpoll() ? new EpollEventLoopGroup() : new NioEventLoopGroup();
-        workerGroup = serverProperties.isUseEpoll() ? new EpollEventLoopGroup() : new NioEventLoopGroup();
+        bossGroup = new NioEventLoopGroup();
+        workerGroup = new NioEventLoopGroup();
         this.tcpServer();
     }
 
@@ -57,12 +57,12 @@ public class TcpServer implements ITcpServer {
         try {
             new ServerBootstrap()
                     .group(bossGroup, workerGroup)
-                    .channel(serverProperties.isUseEpoll() ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
+                    .channel(NioServerSocketChannel.class)
                     .localAddress(new InetSocketAddress(serverProperties.getPort()))
                     // 配置 编码器、解码器、业务处理
                     .childHandler(channelInit)
                     // tcp缓冲区
-                    .option(ChannelOption.SO_BACKLOG, 128)
+                    .option(ChannelOption.SO_BACKLOG, 1024)
                     // 将网络数据积累到一定的数量后,服务器端才发送出去,会造成一定的延迟。希望服务是低延迟的,建议将TCP_NODELAY设置为true
                     .childOption(ChannelOption.TCP_NODELAY, true)
                     // 保持长连接

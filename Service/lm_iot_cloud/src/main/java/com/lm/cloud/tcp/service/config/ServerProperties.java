@@ -26,9 +26,4 @@ public class ServerProperties {
      */
     private Integer port;
 
-    /**
-     * 传输模式linux上开启会有更高的性能
-     */
-    private boolean useEpoll;
-
 }

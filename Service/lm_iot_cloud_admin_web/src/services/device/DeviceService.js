@@ -27,6 +27,14 @@ export default {
         return temp;
     },
     /**
+     * 根据设备分组id查询到设备的信息列表
+     * @returns params 分组id
+     */
+    deviceByGroupingId(params) {
+    let temp = lm_request.post("/devices/groupingid/"+params);
+    return temp;
+    },
+    /**
      * 发送命令到设备
      * @param {*} 
      * @returns 

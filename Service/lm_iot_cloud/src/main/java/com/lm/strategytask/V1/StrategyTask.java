@@ -4,7 +4,7 @@ import com.lm.admin.entity.dto.device.DeviceNewDataDto;
 import com.lm.admin.entity.dto.devicestrategy.DeviceStrategyDto;
 import com.lm.admin.entity.vo.device.DeviceCmdVo;
 import com.lm.admin.mapper.tdengine.DeviceDataMapper;
-import com.lm.admin.service.device.DeviceServiceImpl;
+import com.lm.admin.service.device.IDeviceService;
 import com.lm.admin.service.devicestrategy.DeviceStrategyServiceImpl;
 import com.lm.cloud.tcp.service.utils.DeviceCmdUtils;
 import com.lm.common.redis.devicekey.CloudRedisKey;
@@ -12,9 +12,7 @@ import com.ql.util.express.DefaultContext;
 import com.ql.util.express.ExpressRunner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
@@ -41,7 +39,7 @@ public class StrategyTask {
     private DeviceDataMapper deviceDataMapper;
 
     @Autowired
-    private DeviceServiceImpl deviceService;
+    private IDeviceService deviceService;
 
     // 设备策略列表
     private List<DeviceStrategyDto> deviceStrategyDtos ;

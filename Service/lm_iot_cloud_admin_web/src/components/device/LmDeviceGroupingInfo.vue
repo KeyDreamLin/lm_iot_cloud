@@ -111,7 +111,6 @@
 </template>
 <script setup>
 import deviceService from '@/services/device/DeviceService';
-import deviceGroupingService from '@/services/devicegrouping/DeviceGroupingService';
 import { onMounted, ref } from 'vue';
 const isShowDialog = ref(false);
 // 当前对话框设备分组信息的数据
@@ -129,7 +128,7 @@ const open = async (data) => {
     thisDeviceGroupingData.value = data_copy ;
     console.log(thisDeviceGroupingData.value);
     // 传入分组信息id 查询出分组内的设备信息
-    let ServerReqDevices = await deviceGroupingService.deviceGroupigList(thisDeviceGroupingData.value.id);
+    let ServerReqDevices = await deviceService.deviceByGroupingId(thisDeviceGroupingData.value.id);
     // 保存服务器查询到的分组设备信息
     deviceGroupingData.value = ServerReqDevices.data;
     console.log("分组设备信息-----------",deviceGroupingData.value);

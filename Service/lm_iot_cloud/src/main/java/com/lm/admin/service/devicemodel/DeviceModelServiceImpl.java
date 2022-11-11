@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class DeviceModelServiceImp implements DeviceModelService {
+public class DeviceModelServiceImpl implements IDeviceModelService {
     @Autowired
     private DeviceModelMapper deviceModelDataMapper;
 

@@ -1,7 +1,7 @@
 package com.lm.admin.entity.pojo.device;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import lombok.*;
 

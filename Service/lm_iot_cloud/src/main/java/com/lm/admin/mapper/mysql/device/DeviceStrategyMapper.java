@@ -1,13 +1,11 @@
 package com.lm.admin.mapper.mysql.device;
 
+import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListPageBo;
 import com.lm.admin.entity.dto.devicestrategy.DeviceStrategyDto;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyPageVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
-import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,4 +20,20 @@ public interface DeviceStrategyMapper {
      * @return
      */
     List<DeviceStrategyDto> findAllDeviceStrategyDto();
+
+    /**
+     * 查询全部的策略数量
+     * @return
+     */
+    Integer findDeviceStrategyCount();
+
+    /**
+     * 策略 分页 模糊 查询
+     * @param  List<DeviceStrategyListPageBo>
+     * @return
+     */
+    List<DeviceStrategyListPageBo> findDeviceStrategyPage(            @Param("pageIndex") Integer pageIndex ,
+                                                                      @Param("pageSize") Integer pageSize,
+                                                                      @Param("keyword") String keyword);
+
 }

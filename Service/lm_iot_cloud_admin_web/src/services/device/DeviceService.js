@@ -2,7 +2,7 @@ import lm_request from '@/utils/device_request.js'
 export default {
 
     /**
-     * 获取设备分页查询
+     * 获取设备 信息 分页 查询指定设备
      * @returns 
      */
     listPage(params={}) {
@@ -31,8 +31,8 @@ export default {
      * @returns params 分组id
      */
     deviceByGroupingId(params) {
-    let temp = lm_request.post("/devices/groupingid/"+params);
-    return temp;
+        let temp = lm_request.post("/devices/groupingid/"+params);
+        return temp;
     },
     /**
      * 发送命令到设备

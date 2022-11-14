@@ -13,9 +13,10 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@SpringBootTest(classes = LmCloudApplication.class)
+//@SpringBootTest(classes = LmCloudApplication.class)
 @RunWith(SpringRunner.class)
 @Slf4j
 class LmCloudApplicationTests {
@@ -30,12 +31,14 @@ class LmCloudApplicationTests {
     @Test
     public void contextLoads() {
 
-        Long executionUp = System.currentTimeMillis();
-        for (int i = 0 ;i<100000;i++){
-            redisTemplate.opsForValue().set("Test_count",i);
-        }
-        Long executionDwon = System.currentTimeMillis();
-        log.info("{}",executionDwon-executionUp);
+
+//
+//        Long executionUp = System.currentTimeMillis();
+//        for (int i = 0 ;i<100000;i++){
+//            redisTemplate.opsForValue().set("Test_count",i);
+//        }
+//        Long executionDwon = System.currentTimeMillis();
+//        log.info("{}",executionDwon-executionUp);
         //{dslkfhlahvhvdslhghwo2_led}:1:10&{test_led1}:1:0
 //        String aaa = "{dslkfhlahvhvdslhghwo2_led}:1:10&{test_led1}:1:0";
 //        String bbb[] = aaa.split("&");

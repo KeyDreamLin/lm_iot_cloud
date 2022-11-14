@@ -1,5 +1,6 @@
 package com.lm.admin.service.devicestrategy;
 
+import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyInfoBo;
 import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListPageBo;
 import com.lm.admin.entity.dto.devicestrategy.DeviceStrategyDto;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyPageVo;
@@ -60,6 +61,16 @@ public class DeviceStrategyServiceImpl implements IDeviceStrategyService {
 
         pager.setRecords(db_deicePage);
         return pager;
+    }
+
+    /**
+     * 根据策略id查询策略信息
+     * @param Sid
+     * @return
+     */
+    @Override
+    public DeviceStrategyInfoBo getDeviceStrategyById(Long Sid) {
+        return deviceStrategyMapper.findDeviceStrategyById(Sid);
     }
 
 

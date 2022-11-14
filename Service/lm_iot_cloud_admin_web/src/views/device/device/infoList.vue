@@ -58,9 +58,7 @@
                 </el-col> 
             </template>
        </el-row>
-       <lm-device-info ref="DeivceDialogRef"></lm-device-info>
 </div> 
-  
 </template>
 <script setup>
 import lmDeviceInfo from '@/components/device/LmDeviceInfo.vue'
@@ -69,7 +67,18 @@ import deviceService from '@/services/device/DeviceService';
 import { onMounted, ref } from 'vue';
 // 复制工具
 import useClipboard from 'vue-clipboard3';
+// 用于路由对象 对路由进行操作
+import { useRouter } from 'vue-router';
+// 用于获取当前路由的状态和地址
+import { useRoute } from 'vue-router';
+
+// 用于路由对象 对路由进行操作
+const router = useRouter();
+// 用于获取当前路由的状态和地址
+const route = useRoute();
 const { toClipboard } = useClipboard();
+
+
 // 设备数据列表
 const deviceData = ref([]);
 // 分页查询设备信息
@@ -100,7 +109,8 @@ onMounted(()=>{
 const DeivceDialogRef = ref(null);
 // 打开设备详情
 const openDeivceInfo=(deviceData)=>{
-    DeivceDialogRef.value.open(deviceData);
+    console.log("-----------------",deviceData);
+    router.push("/device/info/lookOneInfo?sn="+deviceData.sn);
 }
 </script>
 <style scoped>

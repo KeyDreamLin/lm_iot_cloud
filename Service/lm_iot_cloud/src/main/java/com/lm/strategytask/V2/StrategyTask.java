@@ -67,7 +67,7 @@ public class StrategyTask {
         // 2、循环遍历所有的规则
         deviceStrategyDtos.forEach(dSitem->{
             // 3、使用正则表达式 获取策略表达式里面{}里面设备和标签的值并查询出最新数据
-            matcher = pattern.matcher(dSitem.getExpStr());
+            matcher = pattern.matcher(dSitem.getTriggerStr());
             // 将正则表达式解析到的数据 传入上下文 ------ 处理策略表达式里面的数据
             while (matcher.find()) {
                 // 将正则表达式解析出来的存入
@@ -87,15 +87,15 @@ public class StrategyTask {
                 context.put(sn_tag_str, sn_tag_device_val);
             }
             // 4、将策略表达式里面的{}去除掉
-            dSitem.setExpStr(getDelStrSymbol(dSitem.getExpStr()));
+            dSitem.setTriggerStr(getDelStrSymbol(dSitem.getTriggerStr()));
             // 5、去除策略表达式的值 然后使用规则引擎判断处理表达式是否触发
 
             //下面五个参数意义分别是 表达式，上下文，errorList，是否缓存，是否输出日志
             try {
-                Object result = expressRunner.execute(dSitem.getExpStr(), context, null, false, false);
+                Object result = expressRunner.execute(dSitem.getTriggerStr(), context, null, false, false);
                 if((Boolean) result == true){
                     //  需要处理多个命令使用 & 分割  示例 --> sdg345ghdgh345gweqer23_led : 1 : 0 & test_tag1 : 1 : 0
-                    String[] ret_data_split =  dSitem.getRetData().split("&");
+                    String[] ret_data_split =  dSitem.getActionStr().split("&");
                     // 循环多个命令
                     for (String retitem : ret_data_split){
                         // 示例 --> sdg345ghdgh345gweqer23_led : 1 : 0 做:分割
@@ -155,7 +155,7 @@ public class StrategyTask {
     }
 
     // redis任务线程
-    @Scheduled(fixedRate = 500)
+    @Scheduled(fixedRate = 300)
     private void JobTask(){
         Set<String> keys = redisTemplate.keys(CloudRedisKey.DeviceStrategyTaskPool + "*");
         for (String itemKey : keys) {
@@ -186,9 +186,9 @@ public class StrategyTask {
                     DeviceCmdUtils.requestCmd(deviceCmdVo);
                     log.info("{}---发送指令", deviceCmdVo);
                 }
-                // 执行命令完删除就好了
-                redisTemplate.delete(itemKey);
             }
+            // 执行命令完删除就好了
+            redisTemplate.delete(itemKey);
         }
     }
 

@@ -46,8 +46,7 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        log.info("\n");
-        log.info("成功建立连接,channelId：{}", ctx.channel().id().asLongText());
+//        log.info("成功建立连接,channelId：{}", ctx.channel().id().asLongText());
         super.channelActive(ctx);
     }
     // 笔记
@@ -65,9 +64,9 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
             if (LmAssert.isEmpty(dbr_SnByChannelId)) {
                 // 只有t才能发起鉴权
                 if (t == 1) {
-                    // 设备鉴权 不建议放异步线程
-                    ctx.writeAndFlush(JSON.toJSONString(deviceAuth.TcpAuth(ctx, message)));
                     log.info("测试用途:开始授权");
+                    // 设备鉴权 不能放异步线程
+                    ctx.writeAndFlush(JSON.toJSONString(deviceAuth.TcpAuth(ctx, message)));
                     return;
                 }
                 // 未授权 请发起授权信息
@@ -114,7 +113,7 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        log.info("100秒内未读到信息--->{}", ctx.channel().id().asLongText());
+        log.info("10秒内未读到信息--->{}", ctx.channel().id().asLongText());
         ctx.channel().close(); //关闭连接
     }
 

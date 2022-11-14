@@ -1,6 +1,7 @@
 package com.lm.admin.controller.device_api.devicestrategy;
 
 import com.lm.admin.controller.device_api.DeviceBaseController;
+import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyInfoBo;
 import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListPageBo;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyPageVo;
 import com.lm.admin.service.devicestrategy.DeviceStrategyServiceImpl;
@@ -29,6 +30,17 @@ public class DeviceStrategyController extends DeviceBaseController {
     @PostMapping("/devicestrategy/page")
     public Pager<DeviceStrategyListPageBo> page(@RequestBody DeviceStrategyPageVo deviceStrategyPageVo){
         return deviceStrategyService.getDeviceStrategyPage(deviceStrategyPageVo);
+    }
+
+    /**
+     * 根据策略id获取策略信息
+     * api: /api/device/devicestrategy/{sid}
+     * @param id 策略id
+     * @return
+     */
+    @PostMapping("/devicestrategy/{id}")
+    public DeviceStrategyInfoBo getInfoById(@PathVariable Long id){
+        return deviceStrategyService.getDeviceStrategyById(id);
     }
 
 }

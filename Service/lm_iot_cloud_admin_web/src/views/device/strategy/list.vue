@@ -1,6 +1,6 @@
 <template>
     <!-- 策略 -->
-    <div class="lm_strategy_main" v-if="$route.meta.isFather">
+    <div class="lm_strategy_main">
         <!-- 策略搜索添加 头部 -->
         <div class="lm_strategy_header">
 
@@ -22,9 +22,11 @@
         </div>
         <!-- 策略列表展示 -->
         <div class="lm_strategy_dataMian">
-            <el-table :data="table_strategy_data" style="width: 100%"
-            :header-cell-style="{ textAlign: 'center' }"
-            :cell-style="{ textAlign: 'center' }" >
+            <el-table 
+                :data="table_strategy_data" style="width: 100%"
+                :header-cell-style="{ textAlign: 'center' }"
+                :cell-style="{ textAlign: 'center' }" 
+            >
                 <el-table-column prop="name" label="规则名称" width="180" />
                 <el-table-column prop="describe" label="规则描述">
                     <template #default="scope">
@@ -46,29 +48,20 @@
                 <el-table-column prop="createTime" label="创建时间" width="180" />
                 <el-table-column  label="操作" width="300" >
                     <template #default="scope">
-                        <el-tag class="mx-1 mt-1" type="info" color="#b48bf7" effect="dark" round>查看</el-tag>
+                        <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round @click="examineEvent(scope.row.id)">查看</el-tag>
                         <template v-if="scope.row.status==1">
-                            <el-tag class="mx-1 mt-1" type="info" color="#b48bf7" effect="dark" round>停止</el-tag>
-                            <el-tag class="mx-1 mt-1" type="info" color="#b48bf7" effect="dark" round>触发</el-tag>
+                            <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>停止</el-tag>
+                            <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>触发</el-tag>
                         </template>
                         <template v-if="scope.row.status==0">
-                            <el-tag class="mx-1 mt-1" type="info" color="#b48bf7" effect="dark" round>启动</el-tag>
+                            <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>启动</el-tag>
                         </template>
-                        <el-tag class="mx-1 mt-1" type="info" color="#b48bf7" effect="dark" round>日记</el-tag>
-                        <el-tag class="mx-1 mt-1" type="info" color="#b48bf7" effect="dark" round>删除</el-tag>
+                        <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>日记</el-tag>
+                        <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>删除</el-tag>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
-    </div>
-    <div>
-        <router-view v-slot="{ Component }">
-            <transition name="fade">
-                <keep-alive>
-                    <component :is="Component"></component>
-                </keep-alive>
-            </transition>
-        </router-view>
     </div>
 </template>
 
@@ -76,6 +69,16 @@
 // 策略服务类
 import deviceStrategyService from '@/services/devicestrategy/DeviceStrategyService';
 import { onMounted, ref } from 'vue';
+// 用于路由对象 对路由进行操作
+import { useRouter } from 'vue-router';
+// 用于获取当前路由的状态和地址
+import { useRoute } from 'vue-router';
+
+// 用于路由对象 对路由进行操作
+const router = useRouter();
+// 用于获取当前路由的状态和地址
+const route = useRoute();
+
 // 策略表格数据
 const table_strategy_data = ref([]);
 // 获取策略分页列表
@@ -85,6 +88,10 @@ const getStrategyPage = ( async ()=>{
     console.log("------>>>>",responseData);
     table_strategy_data.value = responseData.data.records;
     console.log("------",table_strategy_data.value);
+});
+// 查看策略详细信息
+const examineEvent=((thisRowId)=>{
+    router.push("/device/strategy/examine?id="+thisRowId);
 });
 onMounted(()=>{
     getStrategyPage();
@@ -131,7 +138,7 @@ onMounted(()=>{
     cursor:pointer;
 }
 /* 去除tag标签的边框线 */
-.lm_strategy_dataMian :deep(.el-tag--dark.el-tag--info){
+.lm_strategy_dataMian :deep(.el-tag--dark.el-tag){
     border:none;
 }
 </style>

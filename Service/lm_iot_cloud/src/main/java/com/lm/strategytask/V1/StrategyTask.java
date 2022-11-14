@@ -73,7 +73,7 @@ public class StrategyTask {
         // 2、循环遍历所有的规则
         deviceStrategyDtos.forEach(dSitem->{
             // 3、使用正则表达式 获取策略表达式里面{}里面设备和标签的值并查询出最新数据
-            matcher = pattern.matcher(dSitem.getExpStr());
+            matcher = pattern.matcher(dSitem.getTriggerStr());
             // 将正则表达式解析到的数据 传入上下文 ------ 处理策略表达式里面的数据
             while (matcher.find()) {
                 // 将正则表达式解析出来的存入
@@ -93,12 +93,12 @@ public class StrategyTask {
                 context.put(sn_tag_str, sn_tag_device_val);
             }
             // 4、将策略表达式里面的{}去除掉
-            dSitem.setExpStr(getDelStrSymbol(dSitem.getExpStr()));
+            dSitem.setTriggerStr(getDelStrSymbol(dSitem.getTriggerStr()));
             // 5、去除策略表达式的值 然后使用规则引擎判断处理表达式是否触发
 
             //下面五个参数意义分别是 表达式，上下文，errorList，是否缓存，是否输出日志
             try {
-                Object result = expressRunner.execute(dSitem.getExpStr(), context, null, true, false);
+                Object result = expressRunner.execute(dSitem.getTriggerStr(), context, null, true, false);
                 if((Boolean) result == true){
                     log.info("{}---->{}-----{}",dSitem,result,context);
 
@@ -110,7 +110,7 @@ public class StrategyTask {
                     if(o == null){
                         // 1、解析ret_data的数据 {dslkfhlahvhvdslhghwo2_led}:1:10 & {test_led1}:1:0
 
-                        String ret_data_split[] = dSitem.getRetData().split("&");
+                        String ret_data_split[] = dSitem.getActionStr().split("&");
 
                         // 创建任务
                         CmdJob addJob = new CmdJob();

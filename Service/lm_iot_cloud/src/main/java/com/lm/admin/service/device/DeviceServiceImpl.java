@@ -209,9 +209,28 @@ public class DeviceServiceImpl implements IDeviceService {
         }
         // 查询redis设备数据
         DeviceNewDataDto deviceNewDataDto =(DeviceNewDataDto) redisTemplate.opsForValue().get(CloudRedisKey.DeviceNewDataKey + sn);
+
+        // 如果查询redis的设备数据为null 就获取td的数据
         if(deviceNewDataDto == null){
+            // 获取td的数据
+            List<DeviceIdentifierAndNameDataBo> deviceTdData = getDeviceNewData(sn);
+            // 遍历物模型的数据
+            deiceModelBySn.forEach(modelItem->{
+                // 遍历td的数据
+                deviceTdData.forEach(tdData->{
+                    // 如果标识符相同
+                    if(modelItem.getIdentifier().equals(tdData.getIdentifier())){
+                        // 拼接数据
+                        modelItem.setVal(tdData.getVal());
+                        modelItem.setTs(tdData.getTs());
+                    }
+                });
+            });
             return deiceModelBySn;
         }
+
+
+        // 如果redis有数据就处理redis的数据
         deiceModelBySn.stream().forEach(modelItem->{
             // 通过物模型的标识符 获取 redis的 dataMap的val
             String val = deviceNewDataDto.getData().get(modelItem.getIdentifier());

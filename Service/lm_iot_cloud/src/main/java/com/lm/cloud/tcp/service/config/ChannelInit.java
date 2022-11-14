@@ -38,11 +38,11 @@ public class ChannelInit extends ChannelInitializer<NioSocketChannel> {
         channel.pipeline()
                 // 心跳时间
                 .addLast("idle", new IdleStateHandler(10, 10, 10, TimeUnit.SECONDS))
-                // 添加解码器
-                .addLast(new JsonObjectDecoder())
-                .addLast(stringDecoder)
                 // 添加字符串编码器
                 .addLast(stringEncoder)
+                // 添加解码器
+                .addLast(stringDecoder)
+                .addLast(new JsonObjectDecoder())
                 // 添加消息处理器
                 .addLast("messageHandler", messageHandler);
     }

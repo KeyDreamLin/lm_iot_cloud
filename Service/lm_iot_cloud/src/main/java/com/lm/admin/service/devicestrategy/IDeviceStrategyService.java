@@ -1,9 +1,11 @@
 package com.lm.admin.service.devicestrategy;
 
+import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyInfoBo;
 import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListPageBo;
 import com.lm.admin.entity.dto.devicestrategy.DeviceStrategyDto;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyPageVo;
 import com.lm.admin.utils.mybiats.Pager;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -25,5 +27,7 @@ public interface IDeviceStrategyService {
      * @return
      */
     Pager<DeviceStrategyListPageBo> getDeviceStrategyPage(DeviceStrategyPageVo deviceStrategyPageVo);
+
+    DeviceStrategyInfoBo getDeviceStrategyById(Long Sid);
 
 }

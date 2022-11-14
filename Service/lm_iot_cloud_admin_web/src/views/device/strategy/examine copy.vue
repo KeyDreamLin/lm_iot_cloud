@@ -14,29 +14,101 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 // 策略id
 const pathStrategyID = computed(()=>{return route.query.id});
-// 策略信息
-const strategyInfo = ref({});
 // 解析后的策略信息  
 const parseStrategy = ref({
-    triggerList:[],
-    actionList:[],
+    triggerList:[
+        {
+            deviceSn:"a",
+            deviceModelIdentifier:"t1",
+            operator:">",
+            cutOff:"1"
+        },
+        {
+            deviceSn:"",
+            deviceModelIdentifier:"",
+            operator:"&&"
+        },
+        {
+            deviceSn:"b",
+            deviceModelIdentifier:"t2",
+            operator:">=",
+            cutOff:"2"
+        },
+        {
+            deviceSn:"",
+            deviceModelIdentifier:"",
+            operator:"||"
+        },
+        {
+            deviceSn:"c",
+            deviceModelIdentifier:"t3",
+            operator:">",
+            cutOff:"3"
+        },
+        {
+            deviceSn:"",
+            deviceModelIdentifier:"",
+            operator:"||"
+        },
+        {
+            deviceSn:"w",
+            deviceModelIdentifier:"t4",
+            operator:"<=",
+            cutOff:"4"
+        },
+        {
+            deviceSn:"",
+            deviceModelIdentifier:"",
+            operator:"||"
+        },
+        {
+            deviceSn:"ff",
+            deviceModelIdentifier:"t5",
+            operator:"==",
+            cutOff:"'Xiao马2'"
+        },
+    ],
+    actionList:[
+        {
+            deviceSn:"sadasdf",
+            deviceModelIdentifier:"let",
+            cmdData:"1",
+            delayTime:"0",
+        },
+        {
+            deviceSn:"",
+            deviceModelIdentifier:"",
+            cmdData:"",
+            delayTime:"",
+            separator:"&"
+        },
+        {
+            deviceSn:"saasghgdf",
+            deviceModelIdentifier:"let2",
+            cmdData:"1",
+            delayTime:"10",
+        },
+    ],
 });
-
 // 获取策略信息
 const getStrategyInfo = (async ()=>{
     let responseStrategyInfo = await  deviceStrategyService.getInfoById(pathStrategyID.value);
-    strategyInfo.value = responseStrategyInfo.data;
     console.log("strategy---------",responseStrategyInfo);
 });
-
-
+// 关系运算符
+const relationalOperatorList = ["<=",">=",">","<","==","!="];
+// 逻辑运算符
+const logicalOperatorList = ["&&","||"];
+// /\{(.*?)\}/g                     提取{}中的值
+// /([^_]+)/g                         提取sn_identifier的值 0是sn 1是identifier
+// /[<= >= > < == !=]+/g            提取关系运算符的正则表达式
+// /[&& ||]+/g                      提取逻辑运算符的正则表达式
+// /[^ <= >= >< == != && ||]+ /g    提取除了关系、逻辑表达式的值
 // 将触发策略规则的表达式字符串 转换为 对象列表 
 const triggerStrToObjList = ((triggerStr)=>{
-    // /\{(.*?)\}/g                     提取{}中的值
-    // /([^_]+)/g                       提取sn_identifier的值 0是sn 1是identifier
-    // /[<= >= > < == !=]+/g            提取关系运算符的正则表达式
-    // /[&& ||]+/g                      提取逻辑运算符的正则表达式
-    // /[^ <= >= >< == != && ||]+ /g    提取除了关系、逻辑表达式的值
+    // {sdaf_tag1}>10&&{asfsd_tag2}<10
+    console.log("triggerStrToObjList_处理前-->",triggerStr);
+
     // 1、通过正则表达式提取{}中的值
     // 保存sn码和标识符的列表
     let sn_identifier_list = triggerStr.match(/\{(.*?)\}/g);
@@ -57,16 +129,16 @@ const triggerStrToObjList = ((triggerStr)=>{
         // 然后将策略表达式中的sn_Identifier 删除
         delSI_triggerStr = delSI_triggerStr.replace(sn_identifier_list[i],"");
     }
-    // console.log("strategy_examine-triggerObjListToStr 去除{}、sn_Identifier后的策略表达式的值->",sn_identifier_list,delSI_triggerStr);
+    console.log("strategy_examine-triggerObjListToStr 去除{}、sn_Identifier后的策略表达式的值->",sn_identifier_list,delSI_triggerStr);
 
     // 提取策略表达式 中的 关系运算符
     let relationalOperatorList = delSI_triggerStr.match(/[<= >= > < == !=]+/g);
     // 提取策略表达式 中的 判断值cutOff
     let cutOffList = delSI_triggerStr.match(/[^ <= >= >< == != && ||]+/g);
-    // console.log("策略表达式中的关系运算符",relationalOperatorList,"以及判断的值",cutOffList);
+    console.log("策略表达式中的关系运算符",relationalOperatorList,"以及判断的值",cutOffList);
     // 提取策略表达式 中的 逻辑运算符 
     let logicalOperatorList = delSI_triggerStr.match(/[&& ||]+/g );
-    // console.log("策略表达式中的逻辑运算符",logicalOperatorList);
+    console.log("策略表达式中的逻辑运算符",logicalOperatorList);
 
     let tempParseStrategy = {
         triggerList:[]
@@ -86,30 +158,26 @@ const triggerStrToObjList = ((triggerStr)=>{
             operator:"",
             cutOff:""
         };
-        // 处理sn_identifier
+        
         let sn_or_identifier = sn_identifier_list[i].match(/([^_]+)/g);
-        // 将sn传入
         tempTrigger1.deviceSn = sn_or_identifier[0];
-        // 将identifier传入
         tempTrigger1.deviceModelIdentifier = sn_or_identifier[1];
-        // 将关系标识符传入
         tempTrigger1.operator = relationalOperatorList[i];
-        // 将关系判断值传入
         tempTrigger1.cutOff = cutOffList[i];
         // 关系表达式必定是会比逻辑关系符要少一个的 要加判断
         if(i<logicalOperatorList.length){
-            // 将逻辑判断值传入
             tempTrigger2.operator = logicalOperatorList[i];
         }
-        // 传入数组
+
         tempParseStrategy.triggerList.push(tempTrigger1);
         if(i<logicalOperatorList.length){
             tempParseStrategy.triggerList.push(tempTrigger2);
         }
-        // console.log(tempTrigger1,tempTrigger2);
+
+        console.log(tempTrigger1,tempTrigger2);
     }
-    console.log("strategy_examine-triggerObjListToStr 触发策略规则表达式字符串解析出对象列表--->",tempParseStrategy.triggerList);
-    return tempParseStrategy.triggerList;
+    console.log(tempParseStrategy);
+
 });
 
 // 将对象列表 转换为 触发策略规则的表达式字符串
@@ -129,60 +197,12 @@ const triggerObjListToStr = (()=>{
     console.log("strategy_examine-triggerObjListToStr-triggerStr->",triggerStr);
     return triggerStr;
 });
+onActivated(()=>{
 
-// 将 执行规则命令 的 表达式字符串 转换为 对象列表 
-const actionStrToObjList = ((actionStr)=>{
-//  /[^&]+/g    拆解 执行命令
-// /([^_]+)/g                       提取sn_identifier的值 0是sn 1是identifier
-    // console.log("--->",actionStr);
-    // 通过& 拆解多个执行规则命令
-    let sn_identifier_cmdCal_delayTime_list = actionStr.match(/[^&]+/g);
-
-    // console.log("strategy_examine-actionStrToObjList 解析执行命令后的列表-->",sn_identifier_cmdCal_delayTime_list);
-    let actionList = [];
-    for (let i = 0; i < sn_identifier_cmdCal_delayTime_list.length; i++) {
-        let temp_sn_identifier_cmdCal_delayTime = sn_identifier_cmdCal_delayTime_list[i].match(/[^:]+/g);
-        let tmepAction = {
-            deviceSn:"",
-            deviceModelIdentifier:"",
-            cmdData:"",
-            delayTime:"0",
-        };
-        // 将sn码和设备标识符解析出来 
-        let temp_sn_identifier = temp_sn_identifier_cmdCal_delayTime[0].match(/([^_]+)/g);
-        tmepAction.deviceSn = temp_sn_identifier[0];
-        tmepAction.deviceModelIdentifier = temp_sn_identifier[1];
-        tmepAction.cmdData = temp_sn_identifier_cmdCal_delayTime[1].match(/([^_]+)/g)[0];
-        tmepAction.delayTime = temp_sn_identifier_cmdCal_delayTime[2].match(/([^_]+)/g)[0];
-        actionList.push(tmepAction);
-    }
-    console.log("strategy_examine-actionStrToObjList 解析规则执行命令字符串后的对象列表-->",actionList);
-    return actionList;
-});
-// 将 执行规则命令 的 对象列表 转换为 表达式字符串
-const actionObjListToStr = (()=>{
-    let actionStr = "";
-    for (let i = 0; i < parseStrategy.value.actionList.length; i++) {
-        let temp = parseStrategy.value.actionList[i];
-        if(i==parseStrategy.value.actionList.length-1){
-            actionStr+= `${temp.deviceSn}_${temp.deviceModelIdentifier}:${temp.cmdData}:${temp.delayTime}`;
-        }
-        else{
-            actionStr+= `${temp.deviceSn}_${temp.deviceModelIdentifier}:${temp.cmdData}:${temp.delayTime}&`;
-
-        }
-    }
-    console.log("-----------------",actionStr);
-    return actionStr;
-});
-onActivated(async()=>{
-
-    await getStrategyInfo();
-    // 解析服务器传过来的策略规则表达式
-    parseStrategy.value.triggerList = await triggerStrToObjList(strategyInfo.value.triggerStr);
-    parseStrategy.value.actionList = await actionStrToObjList(strategyInfo.value.actionStr);
-    console.log("strategy_examine-onActivated 将表达式字符串解析完后的对象列表--->",parseStrategy.value);
-    // actionStrToObjList(actionObjListToStr());
+    getStrategyInfo();
+    console.log("strategy_examine-onActivated->",triggerObjListToStr());
+    
+    triggerStrToObjList(triggerObjListToStr());
 });
 // onDeactivated
 </script>

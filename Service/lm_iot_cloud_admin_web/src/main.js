@@ -35,4 +35,8 @@ app.use(stroe)
 // 注册自定义组件
 app.use(LmUi)
 
+
+// 屏蔽警告信息
+app.config.warnHandler = () => null;
+
 app.mount('#app')

@@ -2,12 +2,23 @@
 //import { createRouter, createWebHashHistory } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 
-import deviceList from '@/views/device/device/list.vue'
+// ------------------- 设备、数据、信息 -------------------
+import deviceChildPage from '@/views/device/device/childPage.vue'
+import deviceInfoList from '@/views/device/device/infoList.vue'
+import deviceLookOneInfo from '@/views/device/device/lookOneInfo.vue'
+// ------------------- 设备、数据、信息 -------------------
+
+
 import deviceModelList from '@/views/device/model/list.vue'
+
 import deviceGroupingList from '@/views/device/grouping/list.vue'
 
+// ------------------- 策略 -------------------
+import deviceStrategyChildPage from '@/views/device/strategy/childPage.vue'
 import deviceStrategyList from '@/views/device/strategy/list.vue'
 import deviceStrategyForm from '@/views/device/strategy/examine.vue'
+// ------------------- 策略 -------------------
+
 // 子路由
 const routes_children = [
     {
@@ -18,10 +29,20 @@ const routes_children = [
         import('@/views/dashboard/LmDashboard.vue'),
     },
     {
-        path: '/device/list',
-        name: "设备列表",
-        meta: { title: '设备列表' },
-        component : deviceList,
+        path: '/device/info',
+        meta: { title: '设备信息容器', Lname: '/device/info/list'},
+        component : deviceChildPage,
+        children:[
+            {
+                path: '/device/info/list',
+                meta: { title: '设备列表', Lname: '/device/info/list'},
+                component : deviceInfoList,
+            },  {
+                path: '/device/info/lookOneInfo',
+                meta: { title: '设备详情', Lname: '/device/info/list'},
+                component : deviceLookOneInfo,
+            },
+        ]
     },
     {
         path: '/device/model/list',
@@ -37,18 +58,20 @@ const routes_children = [
     },
     {
         path: '/device/strategy',
-        name: "/device/strategy",
-        meta: { title: '场景联动' ,isFather: true},
-        component : deviceStrategyList,
+        meta: { title: '场景联动', Lname: '/device/strategy/list'},
+        component : deviceStrategyChildPage,
         children:[
             {
+                path: '/device/strategy/list',
+                meta: { title: '场景联动', Lname: '/device/strategy/list'},
+                component : deviceStrategyList,
+            },
+            {
                 path: '/device/strategy/examine',
-                name: "/device/strategy",
-                meta: { title: '场景联动详情',isFather: false },
+                meta: { title: '场景联动详情', Lname: '/device/strategy/list'},
                 component : deviceStrategyForm,
             }
         ],
-   
     },
     {
         path: '/test',

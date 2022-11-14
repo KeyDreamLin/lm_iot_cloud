@@ -1,5 +1,6 @@
 package com.lm.admin.mapper.mysql.device;
 
+import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyInfoBo;
 import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListPageBo;
 import com.lm.admin.entity.dto.devicestrategy.DeviceStrategyDto;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyPageVo;
@@ -27,13 +28,20 @@ public interface DeviceStrategyMapper {
      */
     Integer findDeviceStrategyCount();
 
+
     /**
      * 策略 分页 模糊 查询
-     * @param  List<DeviceStrategyListPageBo>
-     * @return
+     * @param pageIndex
+     * @param pageSize
+     * @param keyword
+     * @return List<DeviceStrategyListPageBo>
      */
-    List<DeviceStrategyListPageBo> findDeviceStrategyPage(            @Param("pageIndex") Integer pageIndex ,
-                                                                      @Param("pageSize") Integer pageSize,
-                                                                      @Param("keyword") String keyword);
+    List<DeviceStrategyListPageBo> findDeviceStrategyPage(
+        @Param("pageIndex") Integer pageIndex ,
+        @Param("pageSize") Integer pageSize,
+        @Param("keyword") String keyword
+    );
+
+    DeviceStrategyInfoBo findDeviceStrategyById(@Param("Sid") Long Sid);
 
 }

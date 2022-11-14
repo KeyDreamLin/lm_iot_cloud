@@ -36,8 +36,7 @@ public class DeviceController extends DeviceBaseController {
      **/
     @PostMapping("/newdata/{sn}")
     public List<DeviceModelAndNewDataBo> newData(@PathVariable("sn") String sn){
-        log.info("----->{}",sn);
-
+//        log.info("----->{}",sn);
         return deviceService.getDeviceNewDataRedis(sn);
     }
 
@@ -92,7 +91,7 @@ public class DeviceController extends DeviceBaseController {
      */
     @PostMapping("/cmd")
     public String cmd(@RequestBody DeviceCmdVo deviceCmdVo){
-        log.info("------>{}", deviceCmdVo);
+        log.info("cmd------>{}", deviceCmdVo);
         // sn码判断是否为空  空抛出异常
         LmAssert.isEmptyEx(deviceCmdVo.getSn(), DeviceResultEnum.DEVICE_SN_NULL_ERROR);
         // Data参数必须携带，值可以为空

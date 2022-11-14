@@ -17,10 +17,10 @@ import java.util.Date;
 @NoArgsConstructor
 public class DeviceStrategyDto implements Serializable {
     private Long id;
-    // 表达式/字符串
-    private String expStr;
-    // 需要返回的数据
-    private String retData;
+    // 触发条件表达式字符串
+    private String triggerStr;
+    // 执行动作字符串
+    private String actionStr;
     // 是否启用 0 不启用 1 启用
     private Integer status;
 

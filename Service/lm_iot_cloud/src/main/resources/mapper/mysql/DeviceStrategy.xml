@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lm.admin.mapper.mysql.device.DeviceStrategyMapper">
     <select id="findAllDeviceStrategyDto" resultType="com.lm.admin.entity.dto.devicestrategy.DeviceStrategyDto">
-        SELECT `id`,`exp_str`,`ret_data`,`status`FROM `lm_device_strategy`
+        SELECT `id`,`trigger_str`,`action_str`,`status`FROM `lm_device_strategy`
     </select>
     <!-- 查询所有策略数量 -->
     <select id="findDeviceStrategyCount" resultType="java.lang.Integer">
@@ -23,6 +23,8 @@
         </where>
         limit #{pageIndex},#{pageSize}
     </select>
-
+    <select id="findDeviceStrategyById" resultType="com.lm.admin.entity.bo.devicestrategy.DeviceStrategyInfoBo">
+        select * from lm_device_strategy where id= #{Sid}
+    </select>
 
 </mapper>

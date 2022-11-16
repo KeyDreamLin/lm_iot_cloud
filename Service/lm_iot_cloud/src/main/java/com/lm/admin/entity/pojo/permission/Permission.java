@@ -1,6 +1,8 @@
 package com.lm.admin.entity.pojo.permission;
 
 import com.alibaba.fastjson2.annotation.JSONField;
+import com.lm.admin.config.mybatis.annotation.FieldFill;
+import com.lm.admin.config.mybatis.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,10 +38,12 @@ public class Permission implements java.io.Serializable {
      // 菜单发布
     private Integer status;
 
-     // 创建时间
+    // 创建时间
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
-     // 更新时间
+    // 更新时间
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
      // 菜单名称

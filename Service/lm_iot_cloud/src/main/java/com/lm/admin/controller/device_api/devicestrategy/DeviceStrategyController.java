@@ -4,6 +4,8 @@ import com.lm.admin.controller.device_api.DeviceBaseController;
 import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyInfoBo;
 import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListPageBo;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyPageVo;
+import com.lm.admin.entity.vo.devicestrategy.DeviceStrategySaveVo;
+import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyUpdateVo;
 import com.lm.admin.service.devicestrategy.DeviceStrategyServiceImpl;
 import com.lm.admin.utils.mybiats.Pager;
 import lombok.extern.slf4j.Slf4j;
@@ -43,4 +45,23 @@ public class DeviceStrategyController extends DeviceBaseController {
         return deviceStrategyService.getDeviceStrategyById(id);
     }
 
+    /**
+     * 更新策略信息
+     * @param deviceStrategyUpdateVo
+     * @return
+     */
+    @PostMapping("/devicestrategy/upd")
+    public int update(@RequestBody DeviceStrategyUpdateVo deviceStrategyUpdateVo){
+        return deviceStrategyService.updateDeviceStrategy(deviceStrategyUpdateVo);
+    }
+
+    /**
+     *
+     * @param deviceStrategySaveVo
+     * @return
+     */
+    @PostMapping("/devicestrategy/add")
+    public int add(@RequestBody DeviceStrategySaveVo deviceStrategySaveVo){
+        return deviceStrategyService.addDeviceStrategy(deviceStrategySaveVo);
+    }
 }

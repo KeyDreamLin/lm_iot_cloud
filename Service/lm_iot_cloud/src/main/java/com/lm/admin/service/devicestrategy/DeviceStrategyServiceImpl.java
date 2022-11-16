@@ -4,12 +4,15 @@ import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyInfoBo;
 import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListPageBo;
 import com.lm.admin.entity.dto.devicestrategy.DeviceStrategyDto;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyPageVo;
+import com.lm.admin.entity.vo.devicestrategy.DeviceStrategySaveVo;
+import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyUpdateVo;
 import com.lm.admin.mapper.mysql.device.DeviceStrategyMapper;
 import com.lm.admin.utils.mybiats.Pager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -71,6 +74,33 @@ public class DeviceStrategyServiceImpl implements IDeviceStrategyService {
     @Override
     public DeviceStrategyInfoBo getDeviceStrategyById(Long Sid) {
         return deviceStrategyMapper.findDeviceStrategyById(Sid);
+    }
+
+
+    /**
+     * 更新策略的信息
+     * @param deviceStrategyUpdateVo
+     * @return
+     */
+    @Override
+    public int updateDeviceStrategy(DeviceStrategyUpdateVo deviceStrategyUpdateVo) {
+        if(deviceStrategyUpdateVo==null){
+            return -1;
+        }
+        return deviceStrategyMapper.updateDeviceStrategy(deviceStrategyUpdateVo);
+    }
+
+    /**
+     * 添加一条策略信息
+     * @param deviceStrategySaveVo
+     * @return
+     */
+    @Override
+    public int addDeviceStrategy(DeviceStrategySaveVo deviceStrategySaveVo) {
+        if(deviceStrategySaveVo==null){
+            return -1;
+        }
+        return deviceStrategyMapper.addDeviceStrategy(deviceStrategySaveVo);
     }
 
 

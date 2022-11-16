@@ -4,6 +4,8 @@ import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyInfoBo;
 import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListPageBo;
 import com.lm.admin.entity.dto.devicestrategy.DeviceStrategyDto;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyPageVo;
+import com.lm.admin.entity.vo.devicestrategy.DeviceStrategySaveVo;
+import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyUpdateVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -42,6 +44,24 @@ public interface DeviceStrategyMapper {
         @Param("keyword") String keyword
     );
 
+    /**
+     * 根据策略id查询策略信息
+     * @param Sid
+     * @return
+     */
     DeviceStrategyInfoBo findDeviceStrategyById(@Param("Sid") Long Sid);
 
+    /**
+     * 新建一条策略信息 不带表达式
+     * @param deviceStrategySaveVo
+     * @return
+     */
+    int addDeviceStrategy(@Param("dS") DeviceStrategySaveVo deviceStrategySaveVo);
+
+    /**
+     * 更新策略信息
+     * @param deviceStrategyUpdateVo
+     * @return
+     */
+    int updateDeviceStrategy(@Param("dS") DeviceStrategyUpdateVo deviceStrategyUpdateVo);
 }

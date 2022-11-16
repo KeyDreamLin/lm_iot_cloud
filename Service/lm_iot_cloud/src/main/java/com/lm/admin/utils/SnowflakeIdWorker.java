@@ -1,10 +1,6 @@
 package com.lm.admin.utils;
 
-/**
- * @author 余生一个帆
- * path : https://blog.csdn.net/weixin_44146379/article/details/109220528
- * @date 2022/10/11 09:40
- */
+
 public class SnowflakeIdWorker {
 
     // ==============================Fields===========================================

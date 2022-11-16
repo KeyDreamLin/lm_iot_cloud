@@ -1,7 +1,9 @@
-package com.lm.admin.entity.pojo.adminuser;
+package com.lm.admin.entity.vo.devicestrategy;
 
 import com.lm.admin.config.mybatis.annotation.FieldFill;
+import com.lm.admin.config.mybatis.annotation.IdType;
 import com.lm.admin.config.mybatis.annotation.TableField;
+import com.lm.admin.config.mybatis.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,33 +11,25 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.util.Date;
 
+
 /**
- * 系统管理员
+ * 设备策略 用于保存策略信息 - mysql
  * @author Lm
- * @since 2022-10-02
+ * @date 2022/11/16 16:03
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminUser implements Serializable {
-
-    //主键
+public class DeviceStrategySaveVo implements Serializable {
+    // 策略id
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
-    //名称、姓名
-    private String username;
+    // 策略名称
+    private String name;
 
-    //账号
-    private String account;
-
-    //密码
-    private String password;
-
-    // 头像
-    private String avatar;
-
-    // 发布状态 0 禁用 1未禁用
-    private Integer status;
+    // 策略描述
+    private String describe;
 
     // 创建时间
     @TableField(fill = FieldFill.INSERT)

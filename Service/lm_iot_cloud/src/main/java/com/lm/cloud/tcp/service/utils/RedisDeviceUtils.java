@@ -33,6 +33,7 @@ public class RedisDeviceUtils {
     private static StringRedisTemplate staticStringRedisTemplate;
 
     // 这个注解是java自带的注解（提供了规范，没有实现方法） 由spring实现 他的执行顺序是在Autowired之后  Autowired -> PostConstruct
+    // 就是执行一次方法
     @PostConstruct
     private void setStringRedisTemplate(){
         staticStringRedisTemplate = stringRedisTemplate;

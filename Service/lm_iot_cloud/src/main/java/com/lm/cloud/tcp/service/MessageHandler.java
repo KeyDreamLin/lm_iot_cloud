@@ -56,9 +56,9 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
     // channelRead 中调用了 channelRead0，其会先做消息类型检查，判断当前message 是否需要传递到下一个handler。
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, String message) throws Exception {
-        // 用于查询对应的sn码 如果id存在sn码 就代表鉴权过了
-        String dbr_SnByChannelId = RedisDeviceUtils.getSnByCid(ctx.channel().id().asLongText());
         if (JSON.isValid(message)) {
+            // 用于查询对应的sn码 如果id存在sn码 就代表鉴权过了
+            String dbr_SnByChannelId = RedisDeviceUtils.getSnByCid(ctx.channel().id().asLongText());
             Integer t = JSON.parseObject(message).getInteger("t");
             // 查询是否授权 如果根据id查不到sn码就表示未鉴权
             if (LmAssert.isEmpty(dbr_SnByChannelId)) {

@@ -1,5 +1,7 @@
 package com.lm.admin.entity.pojo.devicemodel;
 
+import com.lm.admin.config.mybatis.annotation.FieldFill;
+import com.lm.admin.config.mybatis.annotation.TableField;
 import lombok.*;
 
 import java.io.Serializable;
@@ -46,7 +48,10 @@ public class DeviceModel implements Serializable {
     private Integer modelType;
 
     // 创建时间
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
+
     // 更新时间
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 }

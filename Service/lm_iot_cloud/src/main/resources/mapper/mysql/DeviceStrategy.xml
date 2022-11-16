@@ -27,4 +27,27 @@
         select * from lm_device_strategy where id= #{Sid}
     </select>
 
+    <!-- 新建一条策略信息 不带表达式 -->
+    <insert id="addDeviceStrategy" >
+        INSERT INTO
+            lm_device_strategy (`id`,`name`,`describe`,`create_time`,`update_time`)
+        VALUES
+               (#{dS.id},#{dS.name},#{dS.describe},#{dS.createTime},#{dS.updateTime})
+    </insert>
+    <!-- 更新策略信息 -->
+    <update id="updateDeviceStrategy" >
+        UPDATE lm_device_strategy
+            <trim prefix="set" suffixOverrides=",">
+                <if test="dS.name!=null">`name`=#{dS.name},</if>
+                <if test="dS.describe!=null">`describe`=#{dS.describe},</if>
+                <if test="dS.triggerStr!=null">`trigger_str`=#{dS.triggerStr},</if>
+                <if test="dS.actionStr!=null">`action_str`=#{dS.actionStr},</if>
+                <if test="dS.status!=null">`status`=#{dS.status},</if>
+                <if test="dS.updateTime!=null">`update_time`=#{dS.updateTime},</if>
+            </trim>
+
+        WHERE
+            id = #{dS.id}
+    </update>
+
 </mapper>

@@ -4,6 +4,8 @@ import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyInfoBo;
 import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListPageBo;
 import com.lm.admin.entity.dto.devicestrategy.DeviceStrategyDto;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyPageVo;
+import com.lm.admin.entity.vo.devicestrategy.DeviceStrategySaveVo;
+import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyUpdateVo;
 import com.lm.admin.utils.mybiats.Pager;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Page;
@@ -28,6 +30,27 @@ public interface IDeviceStrategyService {
      */
     Pager<DeviceStrategyListPageBo> getDeviceStrategyPage(DeviceStrategyPageVo deviceStrategyPageVo);
 
+    /**
+     * 根据策略id查询策略信息
+     * @param Sid
+     * @return
+     */
     DeviceStrategyInfoBo getDeviceStrategyById(Long Sid);
+
+
+    /**
+     * 添加一条策略信息
+     * @param deviceStrategySaveVo
+     * @return
+     */
+    int addDeviceStrategy(DeviceStrategySaveVo deviceStrategySaveVo);
+
+    /**
+     * 更新策略的数据 
+     * @param deviceStrategyUpdateVo
+     * @return
+     */
+    int updateDeviceStrategy(DeviceStrategyUpdateVo deviceStrategyUpdateVo);
+
 
 }

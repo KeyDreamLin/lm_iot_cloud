@@ -107,6 +107,14 @@
             <version>3.2.0</version>
         </dependency>
 
+        <!-- 生成雪花id的库 -->
+        <dependency>
+            <groupId>com.github.yitter</groupId>
+            <artifactId>yitter-idgenerator</artifactId>
+            <version>1.0.6</version>
+        </dependency>
+
+
         <!--单元测试-->
         <dependency>
             <groupId>junit</groupId>

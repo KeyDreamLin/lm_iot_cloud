@@ -149,7 +149,7 @@ public class StrategyTask {
                     // 不用 放空
                 }
             } catch (Exception e) {
-                log.error(e.getMessage());
+//                log.error(e.getMessage());
             }
         });
     }
@@ -186,9 +186,9 @@ public class StrategyTask {
                     DeviceCmdUtils.requestCmd(deviceCmdVo);
                     log.info("{}---发送指令", deviceCmdVo);
                 }
+                // 执行命令完删除就好了
+                redisTemplate.delete(itemKey);
             }
-            // 执行命令完删除就好了
-            redisTemplate.delete(itemKey);
         }
     }
 

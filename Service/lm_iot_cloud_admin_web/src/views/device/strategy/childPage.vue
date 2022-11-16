@@ -27,4 +27,17 @@
     border-color: #a162f7;
     background: #a162f7;
 }
+.lm_strategy_child_box:deep(.el-input){
+    width: inherit;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    line-height: 32px;
+}
+.lm_strategy_child_box:deep(.el-input-number){
+    width: inherit;
+    line-height: inherit;
+}
+
+
 </style>

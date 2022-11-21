@@ -47,6 +47,7 @@ public class DeviceStrategyController extends DeviceBaseController {
 
     /**
      * 更新策略信息
+     * api: /api/device/devicestrategy/upd
      * @param deviceStrategyUpdateVo
      * @return
      */
@@ -56,7 +57,8 @@ public class DeviceStrategyController extends DeviceBaseController {
     }
 
     /**
-     *
+     * 添加一条策略信息
+     * api: /api/device/devicestrategy/add
      * @param deviceStrategySaveVo
      * @return
      */
@@ -64,4 +66,25 @@ public class DeviceStrategyController extends DeviceBaseController {
     public int add(@RequestBody DeviceStrategySaveVo deviceStrategySaveVo){
         return deviceStrategyService.addDeviceStrategy(deviceStrategySaveVo);
     }
+
+    /**
+     * 平台设备策略总数
+     * api: /api/device/devicestrategy/allcount
+     * @return
+     */
+    @PostMapping("/devicestrategy/allcount")
+    public Integer getAllCount() {
+        return deviceStrategyService.getDeviceStrategyAllCount();
+    }
+
+    /**
+     * 平台策略启用的数量
+     * api: /api/device/devicestrategy/opencount
+     * @return
+     */
+    @PostMapping("/devicestrategy/opencount")
+    public Integer getOpenCount() {
+        return deviceStrategyService.getOpenDeviceStrategyCount();
+    }
+
 }

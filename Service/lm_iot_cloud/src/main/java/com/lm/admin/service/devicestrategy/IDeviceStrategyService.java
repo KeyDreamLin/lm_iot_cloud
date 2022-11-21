@@ -52,5 +52,15 @@ public interface IDeviceStrategyService {
      */
     int updateDeviceStrategy(DeviceStrategyUpdateVo deviceStrategyUpdateVo);
 
+    /**
+     * 平台设备策略总数
+     * @return
+     */
+    Integer getDeviceStrategyAllCount();
 
+    /**
+     * 平台策略启用的数量
+     * @return
+     */
+    Integer getOpenDeviceStrategyCount();
 }

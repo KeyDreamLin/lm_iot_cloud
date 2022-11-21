@@ -111,6 +111,8 @@
 </template>
 <script setup>
 import deviceService from '@/services/device/DeviceService';
+import deviceModelService from '@/services/devicemodel/DeviceModelService';
+
 import { onMounted, ref } from 'vue';
 const isShowDialog = ref(false);
 // 当前对话框设备分组信息的数据
@@ -147,7 +149,7 @@ const open = async (data) => {
 // 查询分组设备内的物模型数据
 const getDeviceGroupingOfModel =  async () => {
     deviceGroupingData.value.forEach (async (item) =>{
-        let reqModel = await deviceService.deviceModel({sn:item.sn});
+        let reqModel = await deviceModelService.getDeviceModelBySn({sn:item.sn});
         item.data = reqModel.data;
         console.log("------------",item);
     });

@@ -3,10 +3,12 @@ package com.lm.admin.service.device;
 import com.lm.admin.entity.bo.device.DeviceBo;
 import com.lm.admin.entity.bo.device.DeviceIdentifierAndNameDataBo;
 import com.lm.admin.entity.bo.device.DeviceModelAndNewDataBo;
+import com.lm.admin.entity.bo.device.DeviceSelectBo;
 import com.lm.admin.entity.dto.device.DeviceAuthDto;
 import com.lm.admin.entity.dto.device.DeviceNewDataDto;
 import com.lm.admin.entity.vo.device.DevicePageVo;
 import com.lm.admin.utils.mybiats.Pager;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Map;
@@ -66,4 +68,25 @@ public interface IDeviceService {
      */
     List<DeviceBo> getDevicesByGroupingId(Long gid);
 
+    /**
+     * 返回设备sn和设备名称列表
+     * @return
+     */
+    List<DeviceSelectBo> getDeviceSnName();
+
+    /**
+     * 根据设备sn码查询到设备上报数 如果sn为null就查询全部的数据
+     * @param sn
+     * @return
+     */
+    Long getDeviceDataUpCount(String sn);
+
+    /**
+     * 根据设备sn码查询到当天设备上报数 如果sn为null就查询全部的数据
+     * @param sn
+     * @return
+     */
+    Long getThisDayDeviceDataUpCount(String sn);
+
+    Integer getDeviceCount();
 }

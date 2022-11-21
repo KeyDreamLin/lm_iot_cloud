@@ -64,4 +64,19 @@ public interface DeviceStrategyMapper {
      * @return
      */
     int updateDeviceStrategy(@Param("dS") DeviceStrategyUpdateVo deviceStrategyUpdateVo);
+
+    /**
+     * 平台设备策略总数
+     * @return
+     */
+    Integer findDeviceStrategyAllCount();
+
+    /**
+     * 平台策略启用的数量
+     * @return
+     */
+    Integer findOpenDeviceStrategyCount();
+
+
+
 }

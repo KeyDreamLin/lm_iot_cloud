@@ -49,5 +49,15 @@
         WHERE
             id = #{dS.id}
     </update>
+    
+    <!-- 平台设备策略总数 -->
+    <select id="findDeviceStrategyAllCount" resultType="java.lang.Integer">
+        SELECT count(1) FROM lm_device_strategy
+    </select>
+
+    <!-- 平台策略启用的数量 -->
+    <select id="findOpenDeviceStrategyCount" resultType="java.lang.Integer">
+        SELECT count(1) FROM lm_device_strategy where `status` = 1
+    </select>
 
 </mapper>

@@ -70,5 +70,16 @@ public interface DeviceDataMapper {
      */
     DeviceCmdData getDeviceCmdDataByCmdId(@Param("cmdID") String cmdID);
 
+    /**
+     * 获取设备上报了多少条数据
+     * @param sn
+     * @return
+     */
+    Long findDeviceDataUpCount(@Param("sn")String sn);
 
+    /**
+     * 获取设备今天上报了多少条数据
+     * @return
+     */
+    Long findThisDayDeviceDataUpCount(@Param("sn")String sn);
 }

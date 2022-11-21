@@ -9,4 +9,12 @@
             SELECT device_id FROM `lm_grouping_owner_device`  as lb WHERE lb.grouping_device_id = #{grouping_device_id}
         )
     </select>
+
+    <select id="findDeviceModelAllCount" resultType="java.lang.Integer">
+        SELECT count(1) FROM lm_device_model
+    </select>
+    <select id="findThisDayNewDeviceModelCount" resultType="java.lang.Integer">
+        SELECT count(1) FROM lm_device_model WHERE to_days(create_time) = to_days(now());
+    </select>
+
 </mapper>

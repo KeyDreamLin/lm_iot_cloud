@@ -88,7 +88,7 @@ const routes = [
     {
         // 后续可以动态生成这个地址 跟根据数据库 再说啦
         path: "/",
-        meta: { title: "管理页面" },
+        meta: { title: "管理页面" ,Lname: '/'},
         name: "WebManage",
         component: () =>
             import('@/views/WebManage.vue'),
@@ -101,6 +101,14 @@ const routes = [
         name: "AdminLogin",
         component: () =>
             import('@/views/AdminLogin.vue'),
+    },
+    {
+        // 后续可以动态生成这个地址 跟根据数据库 再说啦
+        path: "/test",
+        meta: { title: "LmTest" },
+        name: "LmTest",
+        component: () =>
+            import('@/views/test/LmTest.vue'),
     },
     {
         // 后续可以动态生成这个地址 跟根据数据库 再说啦

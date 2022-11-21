@@ -32,4 +32,26 @@
     <delete id="delDeiceCmd">
         delete FROM lm_device_cmd_data where nts= #{dcd.nts};
     </delete>
+    <select id="findDeviceDataUpCount" resultType="java.lang.Long">
+        Select
+               count(*)
+        from lm_device_data
+        <where>
+            <if test="sn!=null">
+                `sn` = #{sn}
+            </if>
+        </where>
+    </select>
+    <!-- 查询当前设备上报数  不加sn就查询全部的 `ts` >= today() and `ts` <= today()+24h -->
+    <select id="findThisDayDeviceDataUpCount" resultType="java.lang.Long">
+        select
+               count(*)
+        from
+             lm_device_data
+        where
+            `ts` &gt;= today() and `ts` &lt;= today()+24h
+            <if test="sn!=null">
+                and  sn=#{sn}
+            </if>
+    </select>
 </mapper>

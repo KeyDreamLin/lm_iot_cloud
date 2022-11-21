@@ -28,4 +28,9 @@
             SELECT lgd.device_id from lm_grouping_owner_device as lgd where lgd.grouping_device_id = #{groupingId}
         )
     </select>
+
+    <select id="findDeviceSnName" resultType="com.lm.admin.entity.bo.device.DeviceSelectBo">
+        SELECT `sn`,`name` from lm_device
+    </select>
+
 </mapper>

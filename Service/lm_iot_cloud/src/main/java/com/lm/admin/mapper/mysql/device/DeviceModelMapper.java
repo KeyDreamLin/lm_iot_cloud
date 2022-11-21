@@ -25,4 +25,17 @@ public interface DeviceModelMapper {
      * @return
      */
     List<DeviceModel> findDeviceGroupingModelByGid(@Param("grouping_device_id") Long grouping_device_id);
+
+    /**
+     * 查询有多少条物模型数据
+     * @return
+     */
+    Integer findDeviceModelAllCount();
+
+    /**
+     * 查询今天新增了多少条物模型数据
+     * @return
+     */
+    Integer findThisDayNewDeviceModelCount();
+
 }

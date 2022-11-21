@@ -91,6 +91,26 @@ public class DeviceStrategyServiceImpl implements IDeviceStrategyService {
     }
 
     /**
+     * 平台设备策略总数
+     *
+     * @return
+     */
+    @Override
+    public Integer getDeviceStrategyAllCount() {
+        return deviceStrategyMapper.findDeviceStrategyAllCount();
+    }
+
+    /**
+     * 平台策略启用的数量
+     *
+     * @return
+     */
+    @Override
+    public Integer getOpenDeviceStrategyCount() {
+        return deviceStrategyMapper.findOpenDeviceStrategyCount();
+    }
+
+    /**
      * 添加一条策略信息
      * @param deviceStrategySaveVo
      * @return

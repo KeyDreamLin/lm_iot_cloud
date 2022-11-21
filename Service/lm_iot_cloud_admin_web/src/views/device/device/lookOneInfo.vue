@@ -181,7 +181,7 @@ const getDeviceNewDataVal = (async ()=>{
 });
 // 返回上一页
 const looktgEvent = (()=>{
-    router.push("/device/info/list");
+    router.go(-1)
 });
 
 // 获取设备是否在线

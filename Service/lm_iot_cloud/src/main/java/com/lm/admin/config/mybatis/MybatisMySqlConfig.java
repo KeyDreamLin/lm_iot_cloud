@@ -4,6 +4,9 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import com.lm.admin.config.mybatis.interceptorconfig.MyBatisTableFieldHandler;
 import com.lm.admin.config.mybatis.interceptorconfig.MyBatisTableIdHandler;
+import org.apache.ibatis.logging.log4j2.Log4j2Impl;
+import org.apache.ibatis.logging.slf4j.Slf4jImpl;
+import org.apache.ibatis.logging.stdout.StdOutImpl;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -56,7 +59,8 @@ public class MybatisMySqlConfig {
     public DataSourceTransactionManager mysqlTransactionManager() {
         return new DataSourceTransactionManager(mysqlDataSource());
     }
-    // 等等在试试mp https://blog.csdn.net/qq_41389354/article/details/112008695
+
+
     @Bean(name = "mysqlSqlSessionFactory")
     public SqlSessionFactory mysqlSqlSessionFactory(@Qualifier("mysqlDataSource") DataSource clusterDataSource)
             throws Exception {
@@ -73,7 +77,7 @@ public class MybatisMySqlConfig {
         //此处创建一个Configuration 注意包不要引错了
         org.apache.ibatis.session.Configuration configuration=new org.apache.ibatis.session.Configuration();
         //配置日志实现 需要再开
-//        configuration.setLogImpl(StdOutImpl.class);
+        configuration.setLogImpl(Slf4jImpl.class );
         //此处可以添加其他mybatis配置 例如转驼峰命名
         configuration.setMapUnderscoreToCamelCase(true);
 

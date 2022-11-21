@@ -2,6 +2,7 @@ package com.lm.admin.controller.device_api.devicemodel;
 
 import com.lm.admin.controller.device_api.DeviceBaseController;
 import com.lm.admin.entity.bo.device.DeviceModelAndNewDataBo;
+import com.lm.admin.entity.bo.devicemodel.DeviceModelSelectBo;
 import com.lm.admin.entity.vo.devicemodel.DeviceModelVo;
 import com.lm.admin.service.devicemodel.IDeviceModelService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +32,29 @@ public class DeviceModelController extends DeviceBaseController {
      * @return
      */
     @PostMapping("/devicemodel")
-    public List<DeviceModelAndNewDataBo> getDeviceModel(@RequestBody DeviceModelVo deviceModelVo){
+    public List<DeviceModelAndNewDataBo> getDeviceModelBySn(@RequestBody DeviceModelVo deviceModelVo){
         return deviceModelService.getDeiceModelBySn(deviceModelVo.getSn());
     }
+
+    /**
+     * 根据设备sn查询到物模型的数据名称和标识符
+     * @param deviceModelVo
+     * @return
+     */
+    @PostMapping("/devicemodel/select")
+    public List<DeviceModelSelectBo> getDeviceModelSelectData(@RequestBody DeviceModelVo deviceModelVo){
+        return deviceModelService.getDeviceModelSelectBySn(deviceModelVo.getSn());
+    }
+
+    @PostMapping("/devicemodel/allcount")
+    public Integer getDeviceModelAllCount(){
+        return deviceModelService.getDeviceModelAllCount();
+    }
+
+    @PostMapping("/devicemodel/thisdaycount")
+    public Integer getThisDayNewDeviceModelCount(){
+        return deviceModelService.getThisDayNewDeviceModelCount();
+    }
+
+
 }

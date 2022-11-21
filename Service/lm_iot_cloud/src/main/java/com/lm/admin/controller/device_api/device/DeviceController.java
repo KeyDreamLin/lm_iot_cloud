@@ -2,20 +2,26 @@ package com.lm.admin.controller.device_api.device;
 
 import com.lm.admin.common.r.DeviceResultEnum;
 import com.lm.admin.controller.device_api.DeviceBaseController;
+import com.lm.admin.entity.bo.device.DeviceSelectBo;
 import com.lm.admin.entity.vo.device.DeviceCmdVo;
 import com.lm.admin.entity.bo.device.DeviceBo;
 import com.lm.admin.entity.bo.device.DeviceModelAndNewDataBo;
+import com.lm.admin.entity.vo.device.DeviceIdSnVo;
 import com.lm.admin.entity.vo.device.DevicePageVo;
 import com.lm.admin.service.device.IDeviceService;
 import com.lm.admin.utils.LmAssert;
 import com.lm.admin.utils.mybiats.Pager;
 import com.lm.cloud.tcp.service.utils.DeviceCmdUtils;
 import com.lm.cloud.tcp.service.utils.RedisDeviceUtils;
+import com.lm.common.redis.devicekey.CloudRedisKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 设备信息接口
@@ -28,7 +34,9 @@ import java.util.List;
 public class DeviceController extends DeviceBaseController {
     @Autowired
     private IDeviceService deviceService;
-
+    // 按照名字去匹配 不能用Autowired因为用类型匹配的
+    @Resource(name = "fastjson2RedisTemplate")
+    private RedisTemplate redisTemplate;  // 操作Redis
     /**
      * 获取该设备的最新数据
      * path : /api/device/newData/{sn}
@@ -99,5 +107,34 @@ public class DeviceController extends DeviceBaseController {
         // 请求设备命令
         DeviceCmdUtils.requestCmd(deviceCmdVo);
         return "命令发送成功!";
+    }
+
+    /**
+     * 获取设备sn和设备名称列表
+     * @return
+     */
+    @PostMapping("/snname")
+    public List<DeviceSelectBo> getSnName(){
+        return deviceService.getDeviceSnName();
+    }
+
+    @PostMapping("/allupcount")
+    public Long getDeviceDataUpCount(@RequestBody DeviceIdSnVo deviceIdSnVo){
+        return deviceService.getDeviceDataUpCount(deviceIdSnVo.getSn());
+    }
+
+    @PostMapping("/thisdayupcount")
+    public Long getThisDayDeviceDataUpCount(@RequestBody DeviceIdSnVo deviceIdSnVo){
+        return deviceService.getThisDayDeviceDataUpCount(deviceIdSnVo.getSn());
+    }
+
+    @PostMapping("/devicecount")
+    public Integer getDeviceCount(){
+        return  deviceService.getDeviceCount();
+    }
+    @PostMapping("/deviceupcount")
+    public Integer getDeviceUpCount(){
+        Set<String> keys = redisTemplate.keys(CloudRedisKey.DeviceSnToChannelIdKey + "*");
+        return keys.size();
     }
 }

@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Configuration
-public class FastJsonConfiguration {
+public class FastJson2Configuration {
 
     @Bean
     public HttpMessageConverters customConverters() {

@@ -5,7 +5,7 @@
         <div class="lm_strategy_header">
 
             <div class="lm_strategy_header_left">
-                <el-button type="success">添加规则</el-button>
+                <el-button @click="addStrteagyInfoEvent" type="success">添加规则</el-button>
             </div>
             <div class="lm_strategy_header_right">
                 <el-input v-model="keyword" placeholder="请输入规则名称">
@@ -63,9 +63,12 @@
             </el-table>
         </div>
     </div>
+    <lm-device-strteagy-info-dialog :is-upadate="false" ref="strteagyDialogRef"></lm-device-strteagy-info-dialog>
 </template>
 
+
 <script setup>
+import LmDeviceStrteagyInfoDialog from '@/components/device/devicestrtegy/LmDeviceStrteagyInfoDialog.vue';
 // 策略服务类
 import deviceStrategyService from '@/services/devicestrategy/DeviceStrategyService';
 import { onMounted, ref } from 'vue';
@@ -93,9 +96,17 @@ const getStrategyPage = ( async ()=>{
 const examineEvent=((thisRowId)=>{
     router.push("/device/strategy/examine?id="+thisRowId);
 });
+// 添加策略信息 打开dialog
+const addStrteagyInfoEvent = (()=>{
+    strteagyDialogRef.value.open();
+});
 onMounted(()=>{
     getStrategyPage();
 });
+
+
+const strteagyDialogRef = ref(null);
+
 </script>
 
 <style scoped>

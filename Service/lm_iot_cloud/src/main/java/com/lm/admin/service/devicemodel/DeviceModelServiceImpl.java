@@ -2,6 +2,7 @@ package com.lm.admin.service.devicemodel;
 
 
 import com.lm.admin.entity.bo.device.DeviceModelAndNewDataBo;
+import com.lm.admin.entity.bo.devicemodel.DeviceModelSelectBo;
 import com.lm.admin.mapper.mysql.device.DeviceModelMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -34,7 +35,45 @@ public class DeviceModelServiceImpl implements IDeviceModelService {
             BeanUtils.copyProperties(item, deviceModelAndNewDataBo);
             listBo.add(deviceModelAndNewDataBo);
         });
-
         return listBo;
     }
+
+    /**
+     * 给策略下拉框中的标识符传递数据
+     *
+     * @param sn
+     * @return
+     */
+    @Override
+    public List<DeviceModelSelectBo> getDeviceModelSelectBySn(String sn) {
+        List<DeviceModelSelectBo> listBo = new ArrayList<>();
+        deviceModelDataMapper.findDeviceModelBySn(sn).forEach(item->{
+            DeviceModelSelectBo deviceModelSelectBo = new DeviceModelSelectBo();
+            BeanUtils.copyProperties(item, deviceModelSelectBo);
+            listBo.add(deviceModelSelectBo);
+        });
+        return listBo;
+    }
+
+    /**
+     * 查询有多少条物模型数据
+     *
+     * @return
+     */
+    @Override
+    public Integer getDeviceModelAllCount() {
+        return deviceModelDataMapper.findDeviceModelAllCount();
+    }
+
+    /**
+     * 查询今天新增了多少条物模型数据
+     *
+     * @return
+     */
+    @Override
+    public Integer getThisDayNewDeviceModelCount() {
+        return deviceModelDataMapper.findThisDayNewDeviceModelCount();
+    }
+
+
 }

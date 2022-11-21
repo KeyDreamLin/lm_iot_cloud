@@ -15,12 +15,16 @@
 
 }
 /* 将这个页面的按钮文字都设置为白色 */
-.lm_strategy_child_box :deep(.el-button ){
+.lm_strategy_child_box :deep(.el-button--cancel){
+    color: #000;
+    background-color: #f4f4f4;
+    border:none;
+}
+
+.lm_strategy_child_box :deep(.el-button--info ){
     margin-top: 1px;
     color: #fff;
     border:none;
-}
-.lm_strategy_child_box :deep(.el-button--info ){
     background-color:#a162f7;
 }
 .lm_strategy_child_box:deep(.el-switch.is-checked .el-switch__core ){
@@ -37,6 +41,9 @@
 .lm_strategy_child_box:deep(.el-input-number){
     width: inherit;
     line-height: inherit;
+}
+.lm_strategy_child_box:deep(.el-select){
+    margin-right: 8px;
 }
 
 

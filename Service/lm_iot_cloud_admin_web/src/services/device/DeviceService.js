@@ -9,10 +9,6 @@ export default {
         let temp = lm_request.post("/page",params);
         return temp;
     },
-    deviceModel(params={}){
-        let temp = lm_request.post("/devicemodel",params);
-        return temp;
-    },
     getNewData(sn){
         console.log("snsnsnsnnsns",sn);
         let temp = lm_request.post(`/newdata/${sn}`);
@@ -43,4 +39,51 @@ export default {
         let temp = lm_request.post(`/cmd`,params);
         return temp;
     },
+    /**
+     * 获取设备sn和设备name
+     * @returns 
+     */
+    snname(){
+        let temp = lm_request.post("/snname");
+        return temp;
+    },
+    /**
+     * 查询出平台的设备全部上报数 如果sn为null就查询全部的数据
+     * @param {*} params 
+     * @returns 
+     */
+    getDeviceDataUpCount(params={sn:null}){
+        let temp = lm_request.post("/allupcount",params);
+        return temp;
+    },
+    /**
+     * 查询出今天平台的设备全部上报数 如果sn为null就查询全部的数据
+     * @param {*} params 
+     * @returns 
+     */
+    getThisDayDeviceDataUpCount(params={sn:null}){
+        let temp = lm_request.post("/thisdayupcount",params);
+        return temp;
+    },
+    /**
+     * 查询平台有多少个数据
+     * @param {*} params 
+     * @returns 
+     */
+    getDeviceCount(){
+        let temp = lm_request.post("/devicecount");
+        return temp;
+    },
+    /**
+     * 平台设备在线数
+     * @param {*} params 
+     * @returns 
+     */
+    getDeviceUpCount(){
+        let temp = lm_request.post("/deviceupcount");
+        return temp;
+    },
+    
+    
+    
 }

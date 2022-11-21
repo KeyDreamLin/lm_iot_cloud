@@ -1,5 +1,6 @@
 package com.lm.admin.mapper.mysql.device;
 
+import com.lm.admin.entity.bo.device.DeviceSelectBo;
 import com.lm.admin.entity.dto.device.DeviceAuthDto;
 import com.lm.admin.entity.pojo.device.Device;
 import org.apache.ibatis.annotations.Mapper;
@@ -47,4 +48,5 @@ public interface DeviceMapper {
      */
     List<Device> findDevicesByGroupingId(@Param("groupingId") Long groupingId);
 
+    List<DeviceSelectBo> findDeviceSnName();
 }

@@ -1,10 +1,7 @@
 package com.lm.admin.service.device;
 
 
-import com.lm.admin.entity.bo.device.DeviceBo;
-import com.lm.admin.entity.bo.device.DeviceDataTdBo;
-import com.lm.admin.entity.bo.device.DeviceIdentifierAndNameDataBo;
-import com.lm.admin.entity.bo.device.DeviceModelAndNewDataBo;
+import com.lm.admin.entity.bo.device.*;
 import com.lm.admin.entity.dto.device.DeviceAuthDto;
 import com.lm.admin.entity.dto.device.DeviceNewDataDto;
 import com.lm.admin.entity.pojo.device.Device;
@@ -310,6 +307,43 @@ public class DeviceServiceImpl implements IDeviceService {
             deviceBoList.add(deviceBo);
         });
         return deviceBoList;
+    }
+
+    /**
+     * 返回设备sn和设备名称列表
+     *
+     * @return
+     */
+    @Override
+    public List<DeviceSelectBo> getDeviceSnName() {
+        return deviceMapper.findDeviceSnName();
+    }
+
+    /**
+     * 根据设备sn码查询设备上报数 可以null
+     *
+     * @param sn
+     * @return
+     */
+    @Override
+    public Long getDeviceDataUpCount(String sn) {
+        return deviceDataMapper.findDeviceDataUpCount(sn);
+    }
+
+    /**
+     * 根据设备sn码查询到当天设备上报数 如果sn为null就查询全部的数据
+     *
+     * @param sn
+     * @return
+     */
+    @Override
+    public Long getThisDayDeviceDataUpCount(String sn) {
+        return deviceDataMapper.findThisDayDeviceDataUpCount(sn);
+    }
+
+    @Override
+    public Integer getDeviceCount() {
+        return deviceMapper.findDeviceCount();
     }
 
     /**

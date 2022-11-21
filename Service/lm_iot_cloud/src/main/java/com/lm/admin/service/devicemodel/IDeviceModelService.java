@@ -1,6 +1,7 @@
 package com.lm.admin.service.devicemodel;
 
 import com.lm.admin.entity.bo.device.DeviceModelAndNewDataBo;
+import com.lm.admin.entity.bo.devicemodel.DeviceModelSelectBo;
 
 import java.util.List;
 
@@ -19,5 +20,23 @@ public interface IDeviceModelService {
      */
     List<DeviceModelAndNewDataBo> getDeiceModelBySn(String sn);
 
+    /**
+     * 给策略下拉框中的标识符传递数据
+     * @param sn
+     * @return
+     */
+    List<DeviceModelSelectBo> getDeviceModelSelectBySn(String sn);
 
+
+    /**
+     * 查询有多少条物模型数据
+     * @return
+     */
+    Integer getDeviceModelAllCount();
+
+    /**
+     * 查询今天新增了多少条物模型数据
+     * @return
+     */
+    Integer getThisDayNewDeviceModelCount();
 }

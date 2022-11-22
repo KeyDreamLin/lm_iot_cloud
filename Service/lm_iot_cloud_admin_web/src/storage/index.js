@@ -1,7 +1,7 @@
 import { createStore } from 'vuex'
 // 持久化管理信息
 import VuexPersistence from 'vuex-persist'
-import user from '@/stroe/modules/user'
+import user from '@/storage/modules/user'
 
 // 本地缓存vuex管理信息
 // 为什么要适应vuex-persist组件，因为vuex数据库如果不持久化有一个bug

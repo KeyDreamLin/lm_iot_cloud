@@ -3,7 +3,9 @@ package com.lm.admin.entity.pojo.device;
 import java.util.Date;
 
 import com.lm.admin.config.mybatis.annotation.FieldFill;
+import com.lm.admin.config.mybatis.annotation.IdType;
 import com.lm.admin.config.mybatis.annotation.TableField;
+import com.lm.admin.config.mybatis.annotation.TableId;
 import lombok.*;
 
 /**
@@ -18,6 +20,7 @@ import lombok.*;
 public class Device implements java.io.Serializable  {
 
     // 主键
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
     // 设备名称

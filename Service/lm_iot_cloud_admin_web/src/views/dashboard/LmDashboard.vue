@@ -22,7 +22,6 @@ import LmHello from '@/components/dashboard/LmHello.vue';
 import LmOrder from '@/components/dashboard/LmOrder.vue';
 import LmChartBar from '@/components/dashboard/LmChartBar.vue';
 
-import stroe from '@/stroe';
 </script>
 
 <style scoped>

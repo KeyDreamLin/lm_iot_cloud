@@ -1,7 +1,6 @@
 // 请求工具类
 import axios from 'axios'
-// // 状态管理
-// import store from '@/store';
+import storage from '@/storage';
 // 路由管理 
 import router from '@/router';
 // import errorCode from '@/utils/errorCode';
@@ -11,12 +10,15 @@ import router from '@/router';
 // create an axios instance
 const lm_request_admin = axios.create({
     baseURL: "/api/device",
-    timeout: 5000,
-    isToken: true, // 是否需要带token请求
+    timeout: 5000
 })
 
 // 添加请求拦截器
 lm_request_admin.interceptors.request.use((config) => {
+    // 设备请求所有请求都必须携带jwt和用户id、角色信息
+    config.headers['token_Jj'] = storage.getters["user/getTokenJj"];
+    config.headers['user_id'] = storage.getters["user/getUserId"];
+    config.headers['user_code'] = storage.getters["user/getRoleCode"];
     return config
 }, error => {
     console.log("server request error-->", error) // for debug

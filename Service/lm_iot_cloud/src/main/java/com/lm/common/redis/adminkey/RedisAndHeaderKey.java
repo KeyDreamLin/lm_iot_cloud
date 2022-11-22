@@ -2,11 +2,11 @@ package com.lm.common.redis.adminkey;
 
 public interface RedisAndHeaderKey {
     // 用于获取header请求头中的token_jwt  用于登录校验接口使用
-    String HEADER_TOKEN_JJ = "token_jj";
-    // 用于获取header请求头中的token_user_id 用于接口校验和下线使用
-    String HEADER_TOKEN_USER_ID = "token_user_id";
-    // 用于获取header请求头中的token_uuid 用于校验下线使用
-    String HEADER_TOKEN_UUID = "token_uuid";
+    String HEADER_TOKEN_JJ = "token_Jj";
+    // 用于获取header请求头中的user_id 用于接口校验和下线使用
+    String HEADER_USER_ID = "user_id";
+    // 获取请求头的user_code
+    String HEADER_USER_ROLE_CODE = "user_code";
 
     // 设置验证码的key
     String REDIS_CODE_UUID_KEY = "lm:code:";

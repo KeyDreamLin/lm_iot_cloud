@@ -9,11 +9,11 @@
                 class="userImg_box"
                     shape="square" size="default" 
                     style="background: #e7e9ff; border-radius: 10px;"
-                    :src="stroe.getters['user/getUserAvatar']" 
+                    :src="storage.getters['user/getUserAvatar']" 
                 />
                 <div class="userNanme_box">
                     <span class="userName_vla">
-                        {{stroe.getters["user/getUserName"]}}
+                        {{storage.getters["user/getUserName"]}}
                     </span>
                 </div>
                 <el-dropdown class="userIcon_box">
@@ -38,7 +38,7 @@
 <script setup>
 // 状态管理
 import { ref , onMounted, computed } from 'vue'
-import stroe from '@/stroe';
+import storage from '@/storage';
 // 用于获取当前路由的状态和地址
 import { useRoute } from 'vue-router';
 // 用于获取当前路由的状态和地址

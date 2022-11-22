@@ -6,6 +6,7 @@ export default {
      * @returns 
      */
     code() {
+        console.log("???????????");
         let temp = lm_request.post("/captcha");
         return temp;
     }

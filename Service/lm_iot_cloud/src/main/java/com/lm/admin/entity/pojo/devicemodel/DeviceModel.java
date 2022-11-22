@@ -1,7 +1,9 @@
 package com.lm.admin.entity.pojo.devicemodel;
 
 import com.lm.admin.config.mybatis.annotation.FieldFill;
+import com.lm.admin.config.mybatis.annotation.IdType;
 import com.lm.admin.config.mybatis.annotation.TableField;
+import com.lm.admin.config.mybatis.annotation.TableId;
 import lombok.*;
 
 import java.io.Serializable;
@@ -18,6 +20,7 @@ import java.util.Date;
 public class DeviceModel implements Serializable {
 
     // 主键 雪花
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
     // 对应的设备sn

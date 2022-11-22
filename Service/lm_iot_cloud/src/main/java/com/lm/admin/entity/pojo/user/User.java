@@ -1,41 +1,43 @@
-package com.lm.admin.entity.pojo.adminuser;
+package com.lm.admin.entity.pojo.user;
 
 import com.lm.admin.config.mybatis.annotation.FieldFill;
+import com.lm.admin.config.mybatis.annotation.IdType;
 import com.lm.admin.config.mybatis.annotation.TableField;
+import com.lm.admin.config.mybatis.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 系统管理员
+ * 用户信息 - mysql
  * @author Lm
- * @since 2022-10-02
+ * @date 2022/11/21 15:15
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminUser implements Serializable {
+public class User implements java.io.Serializable {
 
-    //主键
+    // 主键
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
-    //名称、姓名
+    // 名称、姓名
     private String username;
 
-    //账号
+    // 账号
     private String account;
 
-    //密码
-    private String password;
-
-    // 头像
+    // 头像url
     private String avatar;
 
+    // 密码
+    private String password;
+
     // 发布状态 0 禁用 1未禁用
-    private Integer status;
+    private Integer	status;
 
     // 创建时间
     @TableField(fill = FieldFill.INSERT)
@@ -44,4 +46,5 @@ public class AdminUser implements Serializable {
     // 更新时间
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
+
 }

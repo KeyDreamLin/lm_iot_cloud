@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lm.admin.mapper.mysql.roles.RolesMapper">
+    <!-- 根据用户id查询出对应的role信息 -->
+    <select id="findRolesByUserId" resultType="com.lm.admin.entity.pojo.roles.Roles">
+        SELECT
+            r.*
+        FROM
+            lm_roles as r ,lm_user as u
+        INNER JOIN
+            lm_user_roles as ur
+        WHERE
+            r.id = ur.role_id and
+            u.id = ur.user_id and
+            u.id = #{u_id}
+    </select>
+</mapper>

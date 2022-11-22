@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.lm.admin.common.ex.lthrow.UserExceptionThrow;
-import com.lm.admin.common.r.AdminUserResultEnum;
+import com.lm.admin.common.r.UserResultEnum;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -23,15 +23,17 @@ public class JwtConfig {
     //jwt私钥
     private static final String KEY = "wenhaoccc";
     //指定作者
-    private static final String AUTHOR = "lmm";
+    private static final String AUTHOR = "lm";
     //指定token的key
-    private static final String LM_USER_ID = "lm_user_id";
+    private static final String LM_USER_ID = "user_id";
     //1秒
     private static final  Long ONE_SECOND = 1000L;
     //1分钟
     private static final Long ONE_MINUTE = ONE_SECOND * 60;
-    //token 30分钟过期
-    private static final Long TOKEN_EXPIRE_TIME = ONE_MINUTE * 30;
+    //1小时
+    private static final Long ONE_HOUR = ONE_MINUTE * 60;
+    //token 10小时过期
+    private static final Long TOKEN_EXPIRE_TIME = ONE_HOUR * 10;
 
     /**
      * 生成秘钥
@@ -92,7 +94,7 @@ public class JwtConfig {
             DecodedJWT jwt = verifier.verify(token);
             return jwt.getClaim(LM_USER_ID).asLong();
         }catch (Exception exception){
-            throw new UserExceptionThrow(AdminUserResultEnum.USER_TOKEN_ERROR);
+            throw new UserExceptionThrow(UserResultEnum.USER_TOKEN_ERROR);
         }
     }
 
@@ -113,7 +115,7 @@ public class JwtConfig {
             DecodedJWT jwt = verifier.verify(token);
             return jwt.getIssuedAt();
         } catch (Exception ex) {
-            throw new UserExceptionThrow(AdminUserResultEnum.USER_TOKEN_ERROR);
+            throw new UserExceptionThrow(UserResultEnum.USER_TOKEN_ERROR);
         }
     }
 
@@ -134,7 +136,7 @@ public class JwtConfig {
             DecodedJWT jwt = verifier.verify(token);
             return jwt.getIssuedAt();
         } catch (Exception ex) {
-            throw new UserExceptionThrow(AdminUserResultEnum.USER_TOKEN_ERROR);
+            throw new UserExceptionThrow(UserResultEnum.USER_TOKEN_ERROR);
         }
     }
 }

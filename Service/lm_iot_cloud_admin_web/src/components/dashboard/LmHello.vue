@@ -18,7 +18,7 @@
 
 <script setup>
 // 状态管理
-import stroe from '@/stroe';
+import storage from '@/storage';
 
 
 let getTimeState = () => {

@@ -1,7 +1,9 @@
 package com.lm.admin.entity.pojo.devicegrouping;
 
 import com.lm.admin.config.mybatis.annotation.FieldFill;
+import com.lm.admin.config.mybatis.annotation.IdType;
 import com.lm.admin.config.mybatis.annotation.TableField;
+import com.lm.admin.config.mybatis.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class DeviceGrouping implements java.io.Serializable  {
     // 分组主键id
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
     // 分组名称

@@ -1,4 +1,4 @@
-package com.lm.admin.entity.pojo.devicestrategy;
+package com.lm.admin.entity.pojo.roles;
 
 import com.lm.admin.config.mybatis.annotation.FieldFill;
 import com.lm.admin.config.mybatis.annotation.IdType;
@@ -8,34 +8,35 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 设备策略 - mysql
+ * 角色信息 mysql
  * @author Lm
- * @date 2022/11/6 15:02
+ * @date 2022/11/22 8:14
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeviceStrategy implements Serializable {
-    // 策略id
+public class Roles implements java.io.Serializable {
+
+    // 主键
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
-    // 策略名称
-    private String name;
-    // 策略描述
-    private String describe;
-    // 触发条件表达式字符串
-    private String triggerStr;
-    // 执行动作字符串
-    private String actionStr;
-    // 是否启用 0 不启用 1 启用
-    private Integer status;
+
+    // 角色代号
+    private String roleCode;
+
+    // 角色名称
+    private String roleName;
+
+    // 	发布状态 0 禁用 1未禁用
+    private Integer	status;
+
     // 创建时间
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
+
     // 更新时间
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;

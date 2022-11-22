@@ -17,6 +17,11 @@ const lm_request_user = axios.create({
 
 // 添加请求拦截器
 lm_request_user.interceptors.request.use((config) => {
+    if(config.isToken == true){
+        config.headers['token_Jj'] = storage.getters["user/getTokenJj"];
+        config.headers['user_id'] = storage.getters["user/getUserId"];
+        config.headers['user_code'] = storage.getters["user/getRoleCode"];
+    }
     return config
 }, error => {
     console.log("server request error-->", error) // for debug
@@ -25,9 +30,19 @@ lm_request_user.interceptors.request.use((config) => {
 
 // 添加响应拦截器
 lm_request_user.interceptors.response.use((response) => {
-    // let res_data = response.data;
-    return Promise.reject(response);
-    // return response;
+    let res_data = response.data;
+
+    // 判断一下是否是object类型 
+    // 因为后端如果直接发string的话JSON就会被序列化为string而不是object
+    if (typeof res_data === "string") {
+        res_data = JSON.parse(res_data);
+    }
+
+    if(res_data.code == 200){
+        return (res_data);
+    }
+    return Promise.reject(res_data);
+
 }, function (err) {
     return err;
 });

@@ -11,8 +11,8 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import 'virtual:windi.css'
 // 注册路由
 import router from '@/router'
-// 导入状态管理
-import stroe from '@/stroe/index' //默认使用Session
+// 导入状态存储
+import storage from '@/storage/index' //默认使用Session
 
 // 自定义组件导入
 import LmUi from '@/components/install.js'
@@ -30,13 +30,13 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.use(router)
 
 // 注册状态管理
-app.use(stroe)
+app.use(storage)
 
 // 注册自定义组件
 app.use(LmUi)
 
 
 // 屏蔽警告信息
-app.config.warnHandler = () => null;
+// app.config.warnHandler = () => null;
 
 app.mount('#app')

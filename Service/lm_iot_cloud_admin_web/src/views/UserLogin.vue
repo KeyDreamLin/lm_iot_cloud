@@ -29,19 +29,19 @@
                     label-position="top"
                     style="width: 100%"
                     size="large"
-
                 >
                     <transition name="Fade" >
                         <el-form-item label="用户名"  v-if="is_signUp">
-                            <el-input placeholder="请输入用户名"/>
+                            <el-input  placeholder="请输入用户名"/>
                         </el-form-item>
                     </transition>
                     <el-form-item label="账号">
-                        <el-input placeholder="请输入账号"/>
+                        <el-input v-model="viewData.account" placeholder="请输入账号"/>
                     </el-form-item>
 
                     <el-form-item label="密码">
                         <el-input 
+                            v-model="viewData.password"
                             type="password" 
                             show-password placeholder="请输入密码"
                         />
@@ -54,7 +54,17 @@
                             />
                         </el-form-item>
                     </transition>
-
+                    <el-form-item label="验证码" class="lm-form_wrapper"  >
+                        <el-input 
+                            v-model="viewData.code" 
+                            placeholder="请输入验证码"
+                            @keydown.enter = "login_or_sign_in_event"
+                        >
+                            <template #suffix>
+                                <img @click="newCodeEvent" class="code" :src="codeImg"/>
+                            </template>
+                        </el-input>
+                    </el-form-item>
                 </el-form>
             </div>
             <!-- 登录等功能按钮盒子 -->
@@ -68,17 +78,71 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import router from '@/router';
+import { onMounted, ref } from 'vue';
+import codeService from '@/services/common/code/CodeService.js';
+import userService from '@/services/user/UserService';
+import storage from '@/storage';
 // 是否是注册状态
 const is_signUp = ref(false);
+// 验证码图片
+const codeImg = ref(null);
 // 切换登录或者注册
 const switch_signUp_event = () => {
     is_signUp.value = !is_signUp.value;
 }
 // 注册或者登录事件
-const login_or_sign_in_event = () => {
-    alert(is_signUp ? "注册状态" : "登录状态" );
+const login_or_sign_in_event = async () => {
+    // alert(is_signUp.value ? "注册状态" : "登录状态" );
+    if(is_signUp.value == false){
+        login();
+    }
+    else if(is_signUp.value == true){
+        signup();
+    }
 }
+const login = (async ()=>{
+    let {username,doublePassword,...loginData} = viewData.value;
+
+    try{
+        let serverReponse = await storage.dispatch("user/toLogin",loginData);
+        console.log("服务器回调:登录成功信息--------->",serverReponse);
+        // 登录成功就跳转到后台
+        router.push("/");
+    }catch(err){
+        console.log("服务器回调:登录异常信息--------->",err);
+        // 登录失败就要刷新一次验证码 当然不刷后端也做处理了 同一个UUID返回异常
+        newCodeEvent();
+   }finally{
+       
+    }
+});
+const signup = (()=>{
+
+});
+// view数据 界面的数据
+const viewData = ref({
+    account:"xiaoma",  // 账号
+    username:"",   // 用户名   - 注册
+    password:"wenhao",  // 密码
+    doublePassword:"" ,  // 重复输入密码 - 注册
+    code:"",  // 验证码
+    codeuuid:"", 
+});
+
+// 生成一个新的验证码
+const newCodeEvent = async () =>{
+    console.log("服务器回调:验证码uuid--------->");
+    let serverReponseCode = await codeService.code();
+    viewData.value.codeuuid = serverReponseCode.data.codeuuid;
+    codeImg.value = serverReponseCode.data.img;
+    console.log("服务器回调:验证码uuid--------->",viewData.value);
+}
+onMounted( async()=>{
+    // 生成验证码
+    await newCodeEvent();
+});
+
 </script>
 <style scoped>
 
@@ -217,5 +281,16 @@ const login_or_sign_in_event = () => {
     color: rgba(255, 250, 247, 1);
     text-align: left;
     vertical-align: top;
+}
+
+
+.lm-form_wrapper :deep(.el-input__wrapper){
+    padding-right: 0;
+}
+/* 验证码 */
+.code{
+   height: 38px;
+   border-radius: 0 8px 8px 0;
+   padding-right: .5px;
 }
 </style>

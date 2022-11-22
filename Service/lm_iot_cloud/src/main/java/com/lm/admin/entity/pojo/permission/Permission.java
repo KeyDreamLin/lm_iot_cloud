@@ -2,7 +2,9 @@ package com.lm.admin.entity.pojo.permission;
 
 import com.alibaba.fastjson2.annotation.JSONField;
 import com.lm.admin.config.mybatis.annotation.FieldFill;
+import com.lm.admin.config.mybatis.annotation.IdType;
 import com.lm.admin.config.mybatis.annotation.TableField;
+import com.lm.admin.config.mybatis.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +22,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Permission implements java.io.Serializable {
 
-     // 主键
+    // 主键
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
      // 菜单名词

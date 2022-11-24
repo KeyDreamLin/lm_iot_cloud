@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lm.admin.mapper.mysql.device.RoleUserDeviceMapper">
+    <!-- 根据设备sn码查询到设备信息 -->
+    <select id="findDeviceBySn" resultType="com.lm.admin.entity.pojo.device.Device">
+        SELECT
+            *
+        from
+            lm_device as d
+                INNER JOIN
+            lm_user_owner_device as uod
+        where
+            d.id = uod.device_id and
+            uod.user_id = #{uid} and
+            d.sn = #{sn}
+    </select>
+
+    <!-- 查询所有设备数量 -->
+    <select id="findDeviceCount" resultType="java.lang.Integer">
+        SELECT
+            count(1)
+        from
+            lm_device as d
+                INNER JOIN
+            lm_user_owner_device as uod
+        where
+            d.id = uod.device_id and
+            uod.user_id = #{uid}
+    </select>
+    <!-- 查询所有设备 -->
+     <select id="findDeiceList" resultType="com.lm.admin.entity.pojo.device.Device">
+        SELECT
+            *
+        from
+            lm_device as d
+                INNER JOIN
+            lm_user_owner_device as uod
+        where
+            d.id = uod.device_id and
+            uod.user_id = #{uid}
+    </select>
+    <!-- 根据设备分组id查询到对应的设备信息列表 -->
+    <select id="findDevicesByGroupingId"  resultType="com.lm.admin.entity.pojo.device.Device">
+        SELECT ld.*  from `lm_device` as ld WHERE ld.id in(
+            SELECT lgd.device_id from lm_grouping_owner_device as lgd where lgd.grouping_device_id = #{groupingId}
+        )
+    </select>
+
+    <select id="findDeviceSnName" resultType="com.lm.admin.entity.bo.device.DeviceSelectBo">
+        SELECT
+               `sn`,`name`
+        from
+             lm_device as d
+        INNER JOIN
+                 lm_user_owner_device as uod
+        where
+              d.id = uod.device_id and
+              uod.user_id = #{uid}
+    </select>
+
+</mapper>

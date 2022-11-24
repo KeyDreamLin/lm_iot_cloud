@@ -3,6 +3,7 @@ package com.lm.cloud.tcp.service;
 import com.alibaba.fastjson2.JSON;
 import com.lm.admin.entity.dto.device.DeviceNewDataDto;
 import com.lm.admin.service.device.DeviceServiceImpl;
+import com.lm.admin.service.devicedata.DeviceDataServiceImpl;
 import com.lm.admin.utils.LmAssert;
 import com.lm.cloud.common.auth.DeviceAuth;
 import com.lm.admin.entity.dto.device.DeviceAllDataDto;
@@ -36,8 +37,12 @@ import org.springframework.stereotype.Component;
 public class MessageHandler extends SimpleChannelInboundHandler<String>   {
     @Autowired
     private DeviceAuth deviceAuth;
+
     @Autowired
     private DeviceServiceImpl deviceService;
+    @Autowired
+    private DeviceDataServiceImpl deviceDataService;
+
     @Autowired
     private StringRedisTemplate redisTemplate;  // 操作Redis
 
@@ -85,10 +90,10 @@ public class MessageHandler extends SimpleChannelInboundHandler<String>   {
                     // log.info("序列化后--->>>>{}", deviceDataUpRo);
                     group.submit(()->{
                         // 保存数据 放到tdengine
-                        int a = deviceService.saveDeviceData(dbr_SnByChannelId,deviceDataUpRo.getData());
+                        int a = deviceDataService.saveDeviceData(dbr_SnByChannelId,deviceDataUpRo.getData());
                     });
                     // 保存数据到redis
-                    boolean b = deviceService.saveDeviceDataRedis(deviceDataUpRo);
+                    boolean b = deviceDataService.saveDeviceDataRedis(deviceDataUpRo);
                     if(b){
                         // 接收数据成功
                         ctx.writeAndFlush(JSON.toJSONString(CloudR.Response(CloudDevicePushAckEnum.DATA_PUSH_ACK_SUCCESS)));

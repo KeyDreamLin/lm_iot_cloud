@@ -33,33 +33,10 @@ public interface IDeviceService {
     DeviceBo getDeviceBoBySn(String sn);
 
     /**
-     * 保存设备数据
-     * @param sn sn码
-     * @param dataMap 设备数据集合
+     * 查询全部设备
      * @return
      */
-    int saveDeviceData(String sn, Map<String, String> dataMap);
-
-    /**
-     * 保存设备最新数据使用redis
-     *
-     * @param deviceNewDataDto
-     * @return
-     */
-    boolean saveDeviceDataRedis(DeviceNewDataDto deviceNewDataDto);
-
-    // 获取设备最新数据 td
-    List<DeviceIdentifierAndNameDataBo> getDeviceNewData(String sn);
-
-    // 获取设备最新数据 redis
-    List<DeviceModelAndNewDataBo> getDeviceNewDataRedis(String sn);
-
-    /**
-     * 分页查询
-     * @param devicePageVo 分页对象
-     * @return
-     */
-    Pager<DeviceBo> getDevicePager(DevicePageVo devicePageVo);
+    List<DeviceBo> getDeviceList();
 
     /**
      * 根据设备分组id查询到对应的设备信息列表
@@ -74,19 +51,7 @@ public interface IDeviceService {
      */
     List<DeviceSelectBo> getDeviceSnName();
 
-    /**
-     * 根据设备sn码查询到设备上报数 如果sn为null就查询全部的数据
-     * @param sn
-     * @return
-     */
-    Long getDeviceDataUpCount(String sn);
 
-    /**
-     * 根据设备sn码查询到当天设备上报数 如果sn为null就查询全部的数据
-     * @param sn
-     * @return
-     */
-    Long getThisDayDeviceDataUpCount(String sn);
 
     Integer getDeviceCount();
 }

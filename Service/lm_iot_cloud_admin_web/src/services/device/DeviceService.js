@@ -5,10 +5,24 @@ export default {
      * 获取设备 信息 分页 查询指定设备
      * @returns 
      */
-    listPage(params={}) {
-        let temp = lm_request.post("/page",params);
+    list(params={}) {
+        let temp = lm_request.post("/list",params);
         return temp;
     },
+    /**
+     * 根据sn查询出对应的设备信息
+     * @param {*} sn 
+     * @returns 
+     */
+    getInfoBySn(sn=""){
+        let temp = lm_request.post(`/queryById/${sn}`);
+        return temp;
+    },
+    /**
+     * 获取最新的设备数据
+     * @param {*} sn 
+     * @returns 
+     */
     getNewData(sn){
         console.log("snsnsnsnnsns",sn);
         let temp = lm_request.post(`/newdata/${sn}`);

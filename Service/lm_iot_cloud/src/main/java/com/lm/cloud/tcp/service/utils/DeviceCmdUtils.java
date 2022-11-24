@@ -7,7 +7,7 @@ import com.lm.admin.entity.dto.device.DeviceAllDataDto;
 import com.lm.admin.entity.pojo.devicecmddata.DeviceCmdData;
 import com.lm.admin.mapper.tdengine.DeviceDataMapper;
 import com.lm.admin.utils.LmAssert;
-import com.lm.admin.utils.SnowflakeIdWorker;
+import com.lm.admin.utils.SnowflakeIdUtils;
 import com.lm.cloud.common.r.CloudR;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,7 @@ public class DeviceCmdUtils {
         // 封装日记数据 用于保存命令日记
         DeviceCmdData db_deviceCmdData = new DeviceCmdData();
         db_deviceCmdData.setNts(System.currentTimeMillis());
-        db_deviceCmdData.setCmdID(SnowflakeIdWorker.getDeviceId().toString());
+        db_deviceCmdData.setCmdID(SnowflakeIdUtils.getId().toString());
         db_deviceCmdData.setData(deviceCmdVo.getData().toString());
         db_deviceCmdData.setApitag(deviceCmdVo.getIdentifier());
         // 默认的状态是设备未响应

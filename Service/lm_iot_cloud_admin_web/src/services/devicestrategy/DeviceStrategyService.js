@@ -5,7 +5,7 @@ export default {
      * @returns 
      */
     page(params={}) {
-        let temp = lm_request.post("/devicestrategy/page",params);
+        let temp = lm_request.post("/devicestrategy/list");
         return temp;
     },
     getInfoById(sid=-1){

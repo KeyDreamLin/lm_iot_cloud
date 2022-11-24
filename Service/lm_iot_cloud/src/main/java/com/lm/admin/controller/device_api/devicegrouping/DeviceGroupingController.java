@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * 设备分组接口
  * api:/api/device/***
@@ -25,14 +27,13 @@ public class DeviceGroupingController extends DeviceBaseController {
 
 
     /**
-     * 分页查询设备分组列表
-     * path: /api/device/devicegroupingpage
-     * @param pager
-     * @return 分页数据
+     * 分分组列表
+     * path: /api/device/devicegrouping/list
+     * @return 分组列表
      */
-    @PostMapping("/devicegroupingpage")
-    public Pager<DeviceGrouping> deviceGroupingPage(@RequestBody DeviceGroupingPageVo pager){
-        return deviceGroupingService.getDeviceGroupingPager(pager);
+    @PostMapping("/devicegrouping/list")
+    public List<DeviceGrouping> deviceGroupingList(){
+        return deviceGroupingService.getDeviceGroupingList();
     }
 
 }

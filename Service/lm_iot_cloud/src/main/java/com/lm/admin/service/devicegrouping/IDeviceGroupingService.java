@@ -18,11 +18,10 @@ import java.util.Map;
 */
 public interface IDeviceGroupingService {
     /**
-     * 分页查询
-     * @param deviceGroupingPageVo 分页对象
+     * 查询全部分组列表
      * @return
      */
-    Pager<DeviceGrouping> getDeviceGroupingPager(DeviceGroupingPageVo deviceGroupingPageVo);
+    List<DeviceGrouping> getDeviceGroupingList();
 
 
 }

@@ -65,3 +65,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+Service/lm_iot_cloud/src/main/resources/application-pro.yml
+Service/lm_iot_cloud/src/main/resources/application-test.yml

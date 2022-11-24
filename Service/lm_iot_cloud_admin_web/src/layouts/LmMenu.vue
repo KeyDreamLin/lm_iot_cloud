@@ -54,8 +54,8 @@
 </template>
 
 <script setup>
-import { ref , onMounted, computed } from 'vue'
-import permissionService from '@/services/common/permission/PermissionService'
+import { ref , onActivated, computed, onMounted } from 'vue'
+import permissionService from '@/services/permission/PermissionService.js'
 // 用于路由对象 对路由进行操作
 import { useRouter } from 'vue-router';
 // 用于获取当前路由的状态和地址
@@ -85,7 +85,6 @@ const selectMenuEvent = (indexPath) =>{
 }
 
 onMounted(()=>{
-    console.log(route);
     initMenu();
 });
 </script>

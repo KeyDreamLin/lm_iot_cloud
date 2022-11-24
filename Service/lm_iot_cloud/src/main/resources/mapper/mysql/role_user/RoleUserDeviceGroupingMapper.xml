@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lm.admin.mapper.mysql.devicegrouping.RoleUserDeviceGroupingMapper">
+    <select id="findDeviceGroupingCount" resultType="java.lang.Integer">
+        SELECT count(1) FROM lm_device_grouping
+    </select>
+    <select id="findDeviceGroupingList" resultType="com.lm.admin.entity.pojo.devicegrouping.DeviceGrouping">
+        select *
+        from
+             lm_device_grouping as dg   -- 设备分组
+        INNER JOIN
+             lm_user_owner_device_grouping as uodg -- 用户拥有设备分组中间表
+        where
+            uodg.user_id = #{uid} and   -- 查询出用户拥有的设备分组
+            uodg.grouping_device_id = dg.id
+
+    </select>
+</mapper>

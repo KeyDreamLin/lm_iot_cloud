@@ -2,6 +2,7 @@ package com.lm.admin.config.mybatis;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
+import com.lm.admin.config.mybatis.interceptorconfig.MyBatisSelectHandler;
 import com.lm.admin.config.mybatis.interceptorconfig.MyBatisTableFieldHandler;
 import com.lm.admin.config.mybatis.interceptorconfig.MyBatisTableIdHandler;
 import org.apache.ibatis.logging.log4j2.Log4j2Impl;
@@ -15,10 +16,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @MapperScan(basePackages = MybatisMySqlConfig.PACKAGE, sqlSessionFactoryRef = "mysqlSqlSessionFactory")
@@ -28,6 +35,9 @@ public class MybatisMySqlConfig {
     private MyBatisTableFieldHandler myBatisCommonFieldHandler;
     @Autowired //拦截数据库的主键 修改
     private MyBatisTableIdHandler myBatisTableIdHandler;
+
+    @Autowired
+    private MyBatisSelectHandler myBatisSelectHandler;
 
     // 精确到 cluster 目录，以便跟其他数据源隔离
     static final String PACKAGE = "com.lm.admin.mapper.mysql";
@@ -67,11 +77,10 @@ public class MybatisMySqlConfig {
         final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         sessionFactory.setDataSource(clusterDataSource);
         // mapper xml扫描
-        sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver()
-                .getResources(MybatisMySqlConfig.MAPPER_LOCATION));
+        sessionFactory.setMapperLocations(resolveMapperLocations());
 
         // 自定义数据源需要重新设置一次插件  拦截器
-        sessionFactory.setPlugins(myBatisCommonFieldHandler,myBatisTableIdHandler);
+        sessionFactory.setPlugins(myBatisCommonFieldHandler,myBatisTableIdHandler,myBatisSelectHandler);
 
 
         //此处创建一个Configuration 注意包不要引错了
@@ -88,5 +97,27 @@ public class MybatisMySqlConfig {
 
     }
 
-
+    /**
+     * 扫描多个mapper.xml路径
+     * @return
+     */
+    public Resource[] resolveMapperLocations() {
+        ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
+        List<String> mapperLocations = new ArrayList<>();
+        mapperLocations.add("classpath*:mapper/mysql/*.xml");
+        mapperLocations.add("classpath*:mapper/mysql/role_admin/*.xml");
+        mapperLocations.add("classpath*:mapper/mysql/role_user/*.xml");
+        List<Resource> resources = new ArrayList();
+        if (mapperLocations != null) {
+            for (String mapperLocation : mapperLocations) {
+                try {
+                    Resource[] mappers = resourceResolver.getResources(mapperLocation);
+                    resources.addAll(Arrays.asList(mappers));
+                } catch (IOException e) {
+                    // ignore
+                }
+            }
+        }
+        return resources.toArray(new Resource[resources.size()]);
+    }
 }

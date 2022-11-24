@@ -1,7 +1,7 @@
-package com.lm.admin.mapper.mysql.device;
+package com.lm.admin.mapper.mysql.devicestrategy;
 
 import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyInfoBo;
-import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListPageBo;
+import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListBo;
 import com.lm.admin.entity.dto.devicestrategy.DeviceStrategyDto;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyPageVo;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategySaveVo;
@@ -16,8 +16,7 @@ import java.util.List;
  * @author Lm
  * @date 2022/11/6 15:02
  */
-@Mapper
-public interface DeviceStrategyMapper {
+public interface BaseDeviceStrategyMapper {
     /**
      * 查询所有策略 用于定时任务的
      * @return
@@ -33,16 +32,9 @@ public interface DeviceStrategyMapper {
 
     /**
      * 策略 分页 模糊 查询
-     * @param pageIndex
-     * @param pageSize
-     * @param keyword
      * @return List<DeviceStrategyListPageBo>
      */
-    List<DeviceStrategyListPageBo> findDeviceStrategyPage(
-        @Param("pageIndex") Integer pageIndex ,
-        @Param("pageSize") Integer pageSize,
-        @Param("keyword") String keyword
-    );
+    List<DeviceStrategyListBo> findDeviceStrategyList(@Param("uid") Long uid);
 
     /**
      * 根据策略id查询策略信息

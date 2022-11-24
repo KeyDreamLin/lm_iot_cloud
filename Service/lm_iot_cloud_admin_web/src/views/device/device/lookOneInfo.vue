@@ -145,8 +145,8 @@ const deviceValDatas = ref([]);
 const pathDeviceSn = computed(()=> route.query.sn);
 // 获取设备信息
 const getDeviceInfo = (async ()=>{
-    let responseDeviceInfo = await deviceService.listPage({"keyword":pathDeviceSn.value});
-    deviceInfoData.value = responseDeviceInfo.data.records[0];
+    let responseDeviceInfo = await deviceService.getInfoBySn(pathDeviceSn.value);
+    deviceInfoData.value = responseDeviceInfo.data;
     console.log("device_lookOneInfo-getDeviceInfo---->",deviceInfoData.value);
 });
 

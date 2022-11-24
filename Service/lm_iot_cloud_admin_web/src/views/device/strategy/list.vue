@@ -89,7 +89,7 @@ const getStrategyPage = ( async ()=>{
     let responseData = await deviceStrategyService.page({});
     // 服务器原始数据
     console.log("------>>>>",responseData);
-    table_strategy_data.value = responseData.data.records;
+    table_strategy_data.value = responseData.data;
     console.log("------",table_strategy_data.value);
 });
 // 查看策略详细信息

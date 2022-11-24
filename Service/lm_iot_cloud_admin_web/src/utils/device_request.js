@@ -17,8 +17,6 @@ const lm_request_admin = axios.create({
 lm_request_admin.interceptors.request.use((config) => {
     // 设备请求所有请求都必须携带jwt和用户id、角色信息
     config.headers['token_Jj'] = storage.getters["user/getTokenJj"];
-    config.headers['user_id'] = storage.getters["user/getUserId"];
-    config.headers['user_code'] = storage.getters["user/getRoleCode"];
     return config
 }, error => {
     console.log("server request error-->", error) // for debug

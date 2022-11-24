@@ -8,7 +8,9 @@ import com.lm.admin.entity.bo.device.DeviceBo;
 import com.lm.admin.entity.bo.device.DeviceModelAndNewDataBo;
 import com.lm.admin.entity.vo.device.DeviceIdSnVo;
 import com.lm.admin.entity.vo.device.DevicePageVo;
+import com.lm.admin.service.device.DeviceServiceImpl;
 import com.lm.admin.service.device.IDeviceService;
+import com.lm.admin.service.devicedata.DeviceDataServiceImpl;
 import com.lm.admin.utils.LmAssert;
 import com.lm.admin.utils.mybiats.Pager;
 import com.lm.cloud.tcp.service.utils.DeviceCmdUtils;
@@ -33,7 +35,10 @@ import java.util.Set;
 @RestController
 public class DeviceController extends DeviceBaseController {
     @Autowired
-    private IDeviceService deviceService;
+    private DeviceServiceImpl deviceService;
+    @Autowired
+    private DeviceDataServiceImpl deviceDataService;
+
     // 按照名字去匹配 不能用Autowired因为用类型匹配的
     @Resource(name = "fastjson2RedisTemplate")
     private RedisTemplate redisTemplate;  // 操作Redis
@@ -45,7 +50,7 @@ public class DeviceController extends DeviceBaseController {
     @PostMapping("/newdata/{sn}")
     public List<DeviceModelAndNewDataBo> newData(@PathVariable("sn") String sn){
 //        log.info("----->{}",sn);
-        return deviceService.getDeviceNewDataRedis(sn);
+        return deviceDataService.getDeviceNewDataRedis(sn);
     }
 
     /**
@@ -70,16 +75,23 @@ public class DeviceController extends DeviceBaseController {
     }
     /**
      * 分页查询设备列表
-     * path: /api/device/page
-     * @param pager
+     * path: /api/device/list
      * @return 分页数据
      */
-    @PostMapping("/page")
-    public Pager<DeviceBo> listPage(@RequestBody DevicePageVo pager){
-        return deviceService.getDevicePager(pager);
+    @PostMapping("/list")
+    public List<DeviceBo> list(){
+        return deviceService.getDeviceList();
     }
 
-
+    /**
+     * 根据设备sn查询到设备信息
+     * @param sn
+     * @return
+     */
+    @PostMapping("/queryById/{sn}")
+    public DeviceBo getDeviceById(@PathVariable("sn") String sn){
+        return deviceService.getDeviceBoBySn(sn);
+    }
 
     /**
      * 根据设备分组id查询到设备的信息列表
@@ -120,12 +132,12 @@ public class DeviceController extends DeviceBaseController {
 
     @PostMapping("/allupcount")
     public Long getDeviceDataUpCount(@RequestBody DeviceIdSnVo deviceIdSnVo){
-        return deviceService.getDeviceDataUpCount(deviceIdSnVo.getSn());
+        return deviceDataService.getDeviceDataUpCount(deviceIdSnVo.getSn());
     }
 
     @PostMapping("/thisdayupcount")
     public Long getThisDayDeviceDataUpCount(@RequestBody DeviceIdSnVo deviceIdSnVo){
-        return deviceService.getThisDayDeviceDataUpCount(deviceIdSnVo.getSn());
+        return deviceDataService.getThisDayDeviceDataUpCount(deviceIdSnVo.getSn());
     }
 
     @PostMapping("/devicecount")

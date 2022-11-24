@@ -1,27 +1,23 @@
 package com.lm.admin.mapper.mysql.device;
 
 import com.lm.admin.entity.bo.device.DeviceSelectBo;
-import com.lm.admin.entity.dto.device.DeviceAuthDto;
 import com.lm.admin.entity.pojo.device.Device;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 /**
- * 设备信息Mapper
- *
+ * 设备信息的一个父接口
  * @author Lm
- * @since 2022-09-23
+ * @date 2022/11/22 20:32
  */
-@Mapper
-public interface DeviceMapper {
+public interface BaseDeviceMapper {
     /**
      * 根据sn查询设备信息
      * @param sn
      * @return
      */
-    Device findDeviceBySn(@Param("sn") String sn);
+    Device findDeviceBySn(@Param("uid") Long uid, @Param("sn") String sn);
 
     /**
      * 查询全部的设备数量
@@ -30,16 +26,10 @@ public interface DeviceMapper {
     Integer findDeviceCount();
 
     /**
-     * 分页查询
-     * @param pageIndex 当前页数
-     * @param pageSize  当前页数有多少条
+     * 查詢所有设备
      * @return
      */
-    List<Device> findDeicePage(
-            @Param("pageIndex") Integer pageIndex ,
-            @Param("pageSize") Integer pageSize,
-            @Param("keyword") String keyword
-    );
+    List<Device> findDeiceList(@Param("uid") Long uid);
 
     /**
      * 根据设备分组id查询到对应的设备信息列表
@@ -48,5 +38,6 @@ public interface DeviceMapper {
      */
     List<Device> findDevicesByGroupingId(@Param("groupingId") Long groupingId);
 
-    List<DeviceSelectBo> findDeviceSnName();
+    List<DeviceSelectBo> findDeviceSnName(@Param("uid") Long uid);
+
 }

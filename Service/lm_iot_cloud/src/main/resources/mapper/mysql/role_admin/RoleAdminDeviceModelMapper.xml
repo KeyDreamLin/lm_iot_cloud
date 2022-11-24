@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lm.admin.mapper.mysql.device.DeviceModelMapper">
+<mapper namespace="com.lm.admin.mapper.mysql.devicemodel.RoleAdminDeviceModelMapper">
+    <!-- 根据sn查询到指定设备 -->
     <select id="findDeviceModelBySn" resultType="com.lm.admin.entity.pojo.devicemodel.DeviceModel">
         SELECT * FROM lm_device_model where sn = #{sn}
     </select>
+    <!-- 根据设备分组查询到对应的设备下的物模型数据 -->
     <select id="findDeviceGroupingModelByGid" resultType="com.lm.admin.entity.pojo.devicemodel.DeviceModel">
         SELECT * FROM `lm_device_model` as la WHERE la.device_id in(
             SELECT device_id FROM `lm_grouping_owner_device`  as lb WHERE lb.grouping_device_id = #{grouping_device_id}

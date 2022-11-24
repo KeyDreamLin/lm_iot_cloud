@@ -52,8 +52,7 @@ const routes_children = [
     },
     {
         path: '/device/grouping',
-        name: "/device/grouping",
-        meta: { title: '设备分组' },
+        meta: { title: '设备分组',Lname : "/device/grouping" },
         component : deviceGroupingList,
     },
     {

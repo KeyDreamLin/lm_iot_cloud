@@ -1,7 +1,7 @@
 // 请求工具类
 import axios from 'axios'
 // // 状态管理
-// import store from '@/store';
+import storage from '@/storage';
 // 路由管理 
 import router from '@/router';
 // import errorCode from '@/utils/errorCode';
@@ -19,9 +19,9 @@ const lm_request_user = axios.create({
 lm_request_user.interceptors.request.use((config) => {
     if(config.isToken == true){
         config.headers['token_Jj'] = storage.getters["user/getTokenJj"];
-        config.headers['user_id'] = storage.getters["user/getUserId"];
-        config.headers['user_code'] = storage.getters["user/getRoleCode"];
+        // console.log("yes token");
     }
+    // console.log("no token");
     return config
 }, error => {
     console.log("server request error-->", error) // for debug

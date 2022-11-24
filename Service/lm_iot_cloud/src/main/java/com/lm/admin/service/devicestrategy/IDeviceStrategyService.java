@@ -1,7 +1,7 @@
 package com.lm.admin.service.devicestrategy;
 
 import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyInfoBo;
-import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListPageBo;
+import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListBo;
 import com.lm.admin.entity.dto.devicestrategy.DeviceStrategyDto;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyPageVo;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategySaveVo;
@@ -24,11 +24,10 @@ public interface IDeviceStrategyService {
      */
     List<DeviceStrategyDto> getAllDeviceStrategyDto();
     /**
-     * 策略 分页 模糊 查询
-     * @param deviceStrategyPageVo
+     * 策略 查询列表
      * @return
      */
-    Pager<DeviceStrategyListPageBo> getDeviceStrategyPage(DeviceStrategyPageVo deviceStrategyPageVo);
+    List<DeviceStrategyListBo>  getDeviceStrategyList();
 
     /**
      * 根据策略id查询策略信息

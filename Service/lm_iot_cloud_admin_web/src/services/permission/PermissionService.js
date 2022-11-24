@@ -1,4 +1,4 @@
-import lm_request from '@/utils/common_request.js'
+import lm_request from '@/utils/user_request.js'
 export default {
 
     /**

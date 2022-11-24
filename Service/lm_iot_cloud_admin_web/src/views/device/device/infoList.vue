@@ -83,8 +83,8 @@ const { toClipboard } = useClipboard();
 const deviceData = ref([]);
 // 分页查询设备信息
 const pageDeive = async ()  =>{
-    const deviceResponse = await deviceService.listPage({pageSize:20});
-    deviceData.value = deviceResponse.data.records;
+    const deviceResponse = await deviceService.list();
+    deviceData.value = deviceResponse.data  ;
     console.log(deviceData.value);
 }
 // 设备离线的状态点击tag标签可以复制鉴权数据

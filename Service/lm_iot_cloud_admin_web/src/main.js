@@ -37,6 +37,6 @@ app.use(LmUi)
 
 
 // 屏蔽警告信息
-// app.config.warnHandler = () => null;
+app.config.warnHandler = () => null;
 
 app.mount('#app')

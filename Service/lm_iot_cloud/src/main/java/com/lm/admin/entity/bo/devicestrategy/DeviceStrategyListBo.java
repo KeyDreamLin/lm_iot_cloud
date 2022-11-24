@@ -15,7 +15,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeviceStrategyListPageBo implements Serializable {
+public class DeviceStrategyListBo implements Serializable {
     // 策略id
     private Long id;
     // 策略名称

@@ -2,7 +2,7 @@ package com.lm.admin.controller.device_api.devicestrategy;
 
 import com.lm.admin.controller.device_api.DeviceBaseController;
 import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyInfoBo;
-import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListPageBo;
+import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListBo;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyPageVo;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategySaveVo;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyUpdateVo;
@@ -11,6 +11,8 @@ import com.lm.admin.utils.mybiats.Pager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * api:/api/device/***
@@ -24,14 +26,13 @@ public class DeviceStrategyController extends DeviceBaseController {
     private DeviceStrategyServiceImpl deviceStrategyService;
 
     /**
-     * 策略 分页 模糊 查询
-     * api: /api/device/devicestrategy/page
-     * @param deviceStrategyPageVo
+     * 获取策略列表 全部
+     * api: /api/device/devicestrategy/list
      * @return
      */
-    @PostMapping("/devicestrategy/page")
-    public Pager<DeviceStrategyListPageBo> page(@RequestBody DeviceStrategyPageVo deviceStrategyPageVo){
-        return deviceStrategyService.getDeviceStrategyPage(deviceStrategyPageVo);
+    @PostMapping("/devicestrategy/list")
+    public List<DeviceStrategyListBo> list(){
+        return deviceStrategyService.getDeviceStrategyList();
     }
 
     /**

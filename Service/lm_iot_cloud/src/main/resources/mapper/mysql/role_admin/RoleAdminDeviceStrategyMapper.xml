@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lm.admin.mapper.mysql.devicestrategy.RoleAdminDeviceStrategyMapper">
+    <select id="findAllDeviceStrategyDto" resultType="com.lm.admin.entity.dto.devicestrategy.DeviceStrategyDto">
+        SELECT `id`,`trigger_str`,`action_str`,`status`FROM `lm_device_strategy`
+    </select>
+    <!-- 查询所有策略数量 -->
+    <select id="findDeviceStrategyCount" resultType="java.lang.Integer">
+        SELECT count(1) FROM `lm_device_strategy`
+    </select>
+
+    <!-- 策略 查询列表 -->
+    <select id="findDeviceStrategyList" resultType="com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListBo">
+        select
+            `id`,`name`,`describe`,`status`,`create_time`
+        from
+            `lm_device_strategy`
+    </select>
+
+    <select id="findDeviceStrategyById" resultType="com.lm.admin.entity.bo.devicestrategy.DeviceStrategyInfoBo">
+        select * from lm_device_strategy where id= #{Sid}
+    </select>
+
+    <!-- 新建一条策略信息 不带表达式 -->
+    <insert id="addDeviceStrategy" >
+        INSERT INTO
+            lm_device_strategy (`id`,`name`,`describe`,`create_time`,`update_time`)
+        VALUES
+               (#{dS.id},#{dS.name},#{dS.describe},#{dS.createTime},#{dS.updateTime})
+    </insert>
+    <!-- 更新策略信息 -->
+    <update id="updateDeviceStrategy" >
+        UPDATE lm_device_strategy
+            <trim prefix="set" suffixOverrides=",">
+                <if test="dS.name!=null">`name`=#{dS.name},</if>
+                <if test="dS.describe!=null">`describe`=#{dS.describe},</if>
+                <if test="dS.triggerStr!=null">`trigger_str`=#{dS.triggerStr},</if>
+                <if test="dS.actionStr!=null">`action_str`=#{dS.actionStr},</if>
+                <if test="dS.status!=null">`status`=#{dS.status},</if>
+                <if test="dS.updateTime!=null">`update_time`=#{dS.updateTime},</if>
+            </trim>
+
+        WHERE
+            id = #{dS.id}
+    </update>
+    
+    <!-- 平台设备策略总数 -->
+    <select id="findDeviceStrategyAllCount" resultType="java.lang.Integer">
+        SELECT count(1) FROM lm_device_strategy
+    </select>
+
+    <!-- 平台策略启用的数量 -->
+    <select id="findOpenDeviceStrategyCount" resultType="java.lang.Integer">
+        SELECT count(1) FROM lm_device_strategy where `status` = 1
+    </select>
+
+</mapper>

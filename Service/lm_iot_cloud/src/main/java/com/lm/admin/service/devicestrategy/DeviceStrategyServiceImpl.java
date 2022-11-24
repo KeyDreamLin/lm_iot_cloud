@@ -1,18 +1,22 @@
 package com.lm.admin.service.devicestrategy;
 
+import com.lm.admin.common.ex.lthrow.ValidatorExceptionThrow;
+import com.lm.admin.common.r.UserResultEnum;
 import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyInfoBo;
-import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListPageBo;
+import com.lm.admin.entity.bo.devicestrategy.DeviceStrategyListBo;
 import com.lm.admin.entity.dto.devicestrategy.DeviceStrategyDto;
-import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyPageVo;
+import com.lm.admin.entity.dto.user.UserHeader;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategySaveVo;
 import com.lm.admin.entity.vo.devicestrategy.DeviceStrategyUpdateVo;
-import com.lm.admin.mapper.mysql.device.DeviceStrategyMapper;
-import com.lm.admin.utils.mybiats.Pager;
+import com.lm.admin.mapper.mysql.devicemodel.BaseDeviceModelMapper;
+import com.lm.admin.mapper.mysql.devicestrategy.BaseDeviceStrategyMapper;
+import com.lm.admin.mapper.mysql.devicestrategy.RoleAdminDeviceStrategyMapper;
+import com.lm.admin.mapper.mysql.devicestrategy.RoleUserDeviceStrategyMapper;
+import com.lm.admin.utils.lmthreadlocal.RoleThreadLocal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,46 +28,43 @@ import java.util.List;
 @Slf4j
 public class DeviceStrategyServiceImpl implements IDeviceStrategyService {
     @Autowired
-    private DeviceStrategyMapper deviceStrategyMapper;
+    private RoleAdminDeviceStrategyMapper roleAdminDeviceStrategyMapper;
 
-    @Override
-    public List<DeviceStrategyDto> getAllDeviceStrategyDto() {
-        return deviceStrategyMapper.findAllDeviceStrategyDto();
+    @Autowired
+    private RoleUserDeviceStrategyMapper roleUserDeviceStrategyMapper;
+
+    private UserHeader userHeader;
+
+    // 根据角色判断使用那个mapper 普通用户的会查询中间表
+    private BaseDeviceStrategyMapper getBaseDeviceStrategyMapper(){
+        userHeader = RoleThreadLocal.get();
+        if(userHeader.getUserRoleCode()!=null && userHeader.getUserRoleCode().equals("CLOUD_USER")){
+            return roleUserDeviceStrategyMapper;
+        }
+        else if(userHeader.getUserRoleCode()!=null && userHeader.getUserRoleCode().equals("CLOUD_ADMIN")){
+            return roleAdminDeviceStrategyMapper;
+        }
+        // 如果不是管理员又不是普通用户的情况下 抛出 权限异常
+        throw new ValidatorExceptionThrow(UserResultEnum.USER_ROLE_EXCEPTION);
     }
 
     /**
-     * 策略 分页 模糊 查询
-     * @param deviceStrategyPageVo
+     * 这个给自动任务用的 所有直接赋予最高权限
+     * 策略 查询列表
      * @return
      */
     @Override
-    public Pager<DeviceStrategyListPageBo> getDeviceStrategyPage(DeviceStrategyPageVo deviceStrategyPageVo) {
-        Pager<DeviceStrategyListPageBo> pager = new Pager<>();
-        // 先查询总条数
-        pager.setTotalCount(deviceStrategyMapper.findDeviceStrategyCount());
-        // 然后运算出总页数
-        // 运算出总页数 总条数除以当前页条数 算出总页数
-        if(pager.getTotalCount() % deviceStrategyPageVo.getPageSize() ==0)
-            //如果总数据量刚好被当前页面大小整除，那就可以直接相除算出页数
-            pager.setTotalPageNum(pager.getTotalCount() / deviceStrategyPageVo.getPageSize());
-        else {
-            //如果总数据量不能被当前页面大小整除，那就相除后再加上1，这样能保证
-            //多余的数据页面会显示出来
-            pager.setTotalPageNum(pager.getTotalCount() / deviceStrategyPageVo.getPageSize()+1);
-        }
+    public List<DeviceStrategyDto> getAllDeviceStrategyDto() {
+        return roleAdminDeviceStrategyMapper.findAllDeviceStrategyDto();
+    }
 
-        pager.setPageIndex(deviceStrategyPageVo.getPageIndex());
-        pager.setPageSize(deviceStrategyPageVo.getPageSize());
-
-        // 查询
-        List<DeviceStrategyListPageBo> db_deicePage = deviceStrategyMapper.findDeviceStrategyPage(
-                ((pager.getPageIndex() - 1) * pager.getPageSize()),
-                pager.getPageSize(),
-                deviceStrategyPageVo.getKeyword()
-        );
-
-        pager.setRecords(db_deicePage);
-        return pager;
+    /**
+     * 策略 查询列表
+     * @return
+     */
+    @Override
+    public List<DeviceStrategyListBo> getDeviceStrategyList() {
+        return getBaseDeviceStrategyMapper().findDeviceStrategyList(userHeader.getUserId());
     }
 
     /**
@@ -73,9 +74,8 @@ public class DeviceStrategyServiceImpl implements IDeviceStrategyService {
      */
     @Override
     public DeviceStrategyInfoBo getDeviceStrategyById(Long Sid) {
-        return deviceStrategyMapper.findDeviceStrategyById(Sid);
+        return getBaseDeviceStrategyMapper().findDeviceStrategyById(Sid);
     }
-
 
     /**
      * 更新策略的信息
@@ -87,7 +87,7 @@ public class DeviceStrategyServiceImpl implements IDeviceStrategyService {
         if(deviceStrategyUpdateVo==null){
             return -1;
         }
-        return deviceStrategyMapper.updateDeviceStrategy(deviceStrategyUpdateVo);
+        return getBaseDeviceStrategyMapper().updateDeviceStrategy(deviceStrategyUpdateVo);
     }
 
     /**
@@ -97,7 +97,7 @@ public class DeviceStrategyServiceImpl implements IDeviceStrategyService {
      */
     @Override
     public Integer getDeviceStrategyAllCount() {
-        return deviceStrategyMapper.findDeviceStrategyAllCount();
+        return getBaseDeviceStrategyMapper().findDeviceStrategyAllCount();
     }
 
     /**
@@ -107,7 +107,7 @@ public class DeviceStrategyServiceImpl implements IDeviceStrategyService {
      */
     @Override
     public Integer getOpenDeviceStrategyCount() {
-        return deviceStrategyMapper.findOpenDeviceStrategyCount();
+        return getBaseDeviceStrategyMapper().findOpenDeviceStrategyCount();
     }
 
     /**
@@ -120,7 +120,7 @@ public class DeviceStrategyServiceImpl implements IDeviceStrategyService {
         if(deviceStrategySaveVo==null){
             return -1;
         }
-        return deviceStrategyMapper.addDeviceStrategy(deviceStrategySaveVo);
+        return getBaseDeviceStrategyMapper().addDeviceStrategy(deviceStrategySaveVo);
     }
 
 

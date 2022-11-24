@@ -1,23 +1,25 @@
-package com.lm.admin.mapper.mysql.device;
+package com.lm.admin.mapper.mysql.devicemodel;
 
 import com.lm.admin.entity.pojo.devicemodel.DeviceModel;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+
 /**
- * 设备模型数据Mapper
+ *
+ * 设备模型数据Mapper 父接口
  * @author Lm
- * @since 2022-10-02
+ * @since 2022-11-24
  */
-@Mapper
-public interface DeviceModelMapper {
+public interface BaseDeviceModelMapper {
     /**
      * 根据sn查询到指定设备
+     * @param uid  管理员查询的时候可以随意赋值
      * @param sn
      * @return
      */
-    List<DeviceModel> findDeviceModelBySn(@Param("sn") String sn);
+    List<DeviceModel> findDeviceModelBySn(@Param("uid") Long uid, @Param("sn") String sn);
 
     /**
      * 根据设备分组查询到对应的设备下的物模型数据

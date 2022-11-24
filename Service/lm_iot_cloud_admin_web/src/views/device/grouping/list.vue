@@ -51,7 +51,7 @@ const deviceGrouping = ref([]);
 const LmDeviceGroupingInfoRef = ref(null);
 const pageInit = async () => {
     let serReqGrouping = await deviceGroupingService.deviceGroupingPage();
-    deviceGrouping.value = serReqGrouping.data.records;
+    deviceGrouping.value = serReqGrouping.data;
     console.log("--------------------------------------------",serReqGrouping);
 }
 onMounted(()=>{

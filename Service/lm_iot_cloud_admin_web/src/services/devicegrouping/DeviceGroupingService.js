@@ -5,7 +5,7 @@ export default {
      * @returns 
      */
     deviceGroupingPage(params={}) {
-        let temp = lm_request.post("/devicegroupingpage",params);
+        let temp = lm_request.post("/devicegrouping/list");
         return temp;
     },
 

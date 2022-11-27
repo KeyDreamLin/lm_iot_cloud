@@ -6,6 +6,7 @@ import com.lm.admin.common.r.UserResultEnum;
 import com.lm.admin.entity.bo.device.DeviceModelAndNewDataBo;
 import com.lm.admin.entity.bo.devicemodel.DeviceModelSelectBo;
 import com.lm.admin.entity.dto.user.UserHeader;
+import com.lm.admin.entity.vo.devicemodel.DeviceModelUpdateSaveVo;
 import com.lm.admin.mapper.mysql.device.BaseDeviceMapper;
 import com.lm.admin.mapper.mysql.devicemodel.BaseDeviceModelMapper;
 import com.lm.admin.mapper.mysql.devicemodel.RoleAdminDeviceModelMapper;
@@ -99,6 +100,47 @@ public class DeviceModelServiceImpl implements IDeviceModelService {
     @Override
     public Integer getThisDayNewDeviceModelCount() {
         return getBaseDeviceModelMapper().findThisDayNewDeviceModelCount();
+    }
+
+
+    /**
+     * 添加一条物模型数据
+     * @param deviceModelUpdateSaveVo
+     * @return
+     */
+    @Override
+    public int addDeviceModel(DeviceModelUpdateSaveVo deviceModelUpdateSaveVo) {
+        return getBaseDeviceModelMapper().addDeviceModel(deviceModelUpdateSaveVo);
+    }
+
+    /**
+     * 修改一条物模型数据
+     * @param deviceModelUpdateSaveVo
+     * @return
+     */
+    @Override
+    public int updateDeviceModel(DeviceModelUpdateSaveVo deviceModelUpdateSaveVo) {
+        return getBaseDeviceModelMapper().updateDeviceModel(deviceModelUpdateSaveVo);
+    }
+
+    /**
+     * 根据id删除一条物模型数据
+     * @param mid
+     * @return
+     */
+    @Override
+    public int delDeviceModelById(Long mid) {
+        return getBaseDeviceModelMapper().delDeviceModelById(mid);
+    }
+
+    /**
+     * 根据设备id删除一条或者多条物模型数据  不提供给http
+     * @param did 设备id
+     * @return
+     */
+    @Override
+    public int delDeviceModelByDeviceId(Long did) {
+        return getBaseDeviceModelMapper().delDeviceModelByDeviceId(did);
     }
 
 

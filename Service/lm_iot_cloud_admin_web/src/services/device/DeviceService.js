@@ -45,6 +45,39 @@ export default {
         return temp;
     },
     /**
+     * 添加一个设备
+     * @param {*} params 
+     * @returns 
+     */
+    addDevice(Iname){
+        console.log("add");
+        let params = {
+            name:""
+        }
+        console.log("add---",Iname);
+        params.name = Iname;
+        let temp = lm_request.post("/add",params);
+        return temp;
+    },
+    /**
+     * 修改设备信息
+     * @param {*} Iname 
+     * @returns 
+     */
+    updateDevice(params={}){
+        let temp = lm_request.post("/upd",params);
+        return temp;
+    },
+    /**
+     * 根据设备id删除一个设备 连带物模型数据一起删除
+     * @param {设备id} did 
+     * @returns 
+     */
+    delDevice(did){
+        let temp = lm_request.post(`/del/${did}`);
+        return temp;
+    },
+    /**
      * 发送命令到设备
      * @param {*} 
      * @returns 

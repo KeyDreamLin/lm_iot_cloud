@@ -2,6 +2,8 @@ package com.lm.admin.service.devicemodel;
 
 import com.lm.admin.entity.bo.device.DeviceModelAndNewDataBo;
 import com.lm.admin.entity.bo.devicemodel.DeviceModelSelectBo;
+import com.lm.admin.entity.vo.devicemodel.DeviceModelUpdateSaveVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -39,4 +41,35 @@ public interface IDeviceModelService {
      * @return
      */
     Integer getThisDayNewDeviceModelCount();
+
+    /**
+     * 添加一条物模型数据
+     * @param deviceModelUpdateSaveVo
+     * @return
+     */
+    int addDeviceModel(DeviceModelUpdateSaveVo deviceModelUpdateSaveVo);
+
+
+    /**
+     * 修改一条物模型数据
+     * @param deviceModelUpdateSaveVo
+     * @return
+     */
+    int updateDeviceModel(DeviceModelUpdateSaveVo deviceModelUpdateSaveVo);
+
+
+    /**
+     * 根据id删除一条物模型数据
+     * @param mid
+     * @return
+     */
+    int delDeviceModelById(Long mid);
+
+    /**
+     * 根据设备id删除一条或者多条物模型数据  不提供给http
+     * @param did 设备id
+     * @return
+     */
+    int delDeviceModelByDeviceId(Long did);
+
 }

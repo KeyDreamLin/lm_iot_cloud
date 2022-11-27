@@ -1,6 +1,9 @@
 <template>
     <!-- 设备信息列表 -->
     <div>
+       <div class="mb-2">
+            <el-button type="success" @click="OpenDeviceDiaLogEvent()">添加设备</el-button>
+       </div>
        <el-row :gutter="20" >
             <template v-for="(deviceinfo,index) in deviceData">
                 <el-col :md="24" :lg="6" :xl="4" class="mb-5">
@@ -50,7 +53,7 @@
                                     <el-icon class="ml-auto lm-cursor-pointer"><Search /></el-icon>
                                 </el-tooltip>
                                 <el-tooltip content="删除设备" effect="light">
-                                    <el-icon class="lm-cursor-pointer ml-3"><Delete /></el-icon>
+                                    <el-icon class="lm-cursor-pointer ml-3" @click="delDeviceEvent(deviceinfo)"><Delete /></el-icon>
                                 </el-tooltip>
                             </div>
                         </el-card>
@@ -58,12 +61,17 @@
                 </el-col> 
             </template>
        </el-row>
-</div> 
+    </div> 
+    <lm-device-update-save-dialog ref="deivceDialogRef"></lm-device-update-save-dialog>
 </template>
 <script setup>
-import lmDeviceInfo from '@/components/device/LmDeviceInfo.vue'
+import lmDeviceUpdateSaveDialog from '@/components/device/LmDeviceUpdateSaveDialog.vue';
 
+
+
+// 设备服务类
 import deviceService from '@/services/device/DeviceService';
+import { LmMessageConfirm, LmMessageError, LmMessageSuccess } from '@/utils';
 import { onMounted, ref } from 'vue';
 // 复制工具
 import useClipboard from 'vue-clipboard3';
@@ -76,17 +84,27 @@ import { useRoute } from 'vue-router';
 const router = useRouter();
 // 用于获取当前路由的状态和地址
 const route = useRoute();
+// 这个用于复制的一个类
 const { toClipboard } = useClipboard();
-
+// 添加设备框
+const deivceDialogRef = ref(null);
 
 // 设备数据列表
 const deviceData = ref([]);
-// 分页查询设备信息
-const pageDeive = async ()  =>{
+// 查询设备信息
+const listDeive = async ()  =>{
+    // 获取设备信息列表
     const deviceResponse = await deviceService.list();
-    deviceData.value = deviceResponse.data  ;
+    deviceData.value = deviceResponse.data;
     console.log(deviceData.value);
 }
+// 打开设备对话框
+const OpenDeviceDiaLogEvent = (()=>{
+    console.log("+++++++++++++++++++++");
+    deivceDialogRef.value.open();
+});
+
+
 // 设备离线的状态点击tag标签可以复制鉴权数据
 const clickTag = async (deviceinfo) =>{
     let authJson = {
@@ -100,8 +118,24 @@ const clickTag = async (deviceinfo) =>{
 const clickInfo = async (deviceinfo ,isSn) =>{
     await toClipboard(isSn? deviceinfo.sn:deviceinfo.secretKey);
 }
+
+//删除设备事件
+const delDeviceEvent = (async(thisDeviceinfo)=>{
+    console.log("设备删除事件-->",thisDeviceinfo);
+    let ret =  await LmMessageConfirm("是否删除该设备！","删除警告");
+    if(ret == true){
+        try {
+            await deviceService.delDevice(thisDeviceinfo.id);
+            LmMessageSuccess("删除设备成功!");   
+            // 删除完毕后查询查询一次
+            await listDeive(); 
+        } catch (error) {
+            LmMessageError(error.msg);
+        }
+    }
+});
 onMounted(()=>{
-    pageDeive();
+    listDeive();
 });
 
 

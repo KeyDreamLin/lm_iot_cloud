@@ -47,10 +47,10 @@ public class MybatisTDengineConfig {
         return dataSource;
     }
 
-    @Bean(name = "tdengineTransactionManager")
-    public DataSourceTransactionManager clusterTransactionManager() {
-        return new DataSourceTransactionManager(clusterDataSource());
-    }
+//    @Bean(name = "tdengineTransactionManager")
+//    public DataSourceTransactionManager clusterTransactionManager() {
+//        return new DataSourceTransactionManager(clusterDataSource());
+//    }
     @Bean(name = "tdengineSqlSessionFactory")
     public SqlSessionFactory clusterSqlSessionFactory(@Qualifier("tdengineDataSource") DataSource clusterDataSource)
             throws Exception {

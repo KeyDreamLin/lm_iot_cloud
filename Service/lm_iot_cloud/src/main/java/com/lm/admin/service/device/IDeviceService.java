@@ -7,6 +7,8 @@ import com.lm.admin.entity.bo.device.DeviceSelectBo;
 import com.lm.admin.entity.dto.device.DeviceAuthDto;
 import com.lm.admin.entity.dto.device.DeviceNewDataDto;
 import com.lm.admin.entity.vo.device.DevicePageVo;
+import com.lm.admin.entity.vo.device.DeviceSaveVo;
+import com.lm.admin.entity.vo.device.DeviceUpdateVo;
 import com.lm.admin.utils.mybiats.Pager;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -51,7 +53,30 @@ public interface IDeviceService {
      */
     List<DeviceSelectBo> getDeviceSnName();
 
-
-
+    /**
+     * 查询所有设备数量
+     * @return
+     */
     Integer getDeviceCount();
+
+    /**
+     * 添加一个设备
+     * @param deviceSaveVo
+     * @return
+     */
+    int addDevice(DeviceSaveVo deviceSaveVo);
+
+    /**
+     * 修改一个设备信息
+     * @param deviceUpdateVo
+     * @return
+     */
+    int updateDevice(DeviceUpdateVo deviceUpdateVo);
+
+    /**
+     * 根据设备id删除设备信息
+     * @param id
+     * @return
+     */
+    int delDeviceById(Long id);
 }

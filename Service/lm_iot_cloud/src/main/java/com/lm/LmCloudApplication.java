@@ -6,8 +6,11 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
 @SpringBootApplication
 @RequiredArgsConstructor
+@EnableTransactionManagement
 public class LmCloudApplication implements ApplicationRunner {
 
     private final TcpServer tcpServer;

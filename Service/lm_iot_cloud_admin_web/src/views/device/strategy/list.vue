@@ -51,12 +51,12 @@
                         <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round @click="examineEvent(scope.row.id)">查看</el-tag>
                         <template v-if="scope.row.status==1">
                             <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>停止</el-tag>
-                            <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>触发</el-tag>
+                            <!-- <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>触发</el-tag> -->
                         </template>
                         <template v-if="scope.row.status==0">
                             <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>启动</el-tag>
                         </template>
-                        <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>日记</el-tag>
+                        <!-- <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>日记</el-tag> -->
                         <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>删除</el-tag>
                     </template>
                 </el-table-column>

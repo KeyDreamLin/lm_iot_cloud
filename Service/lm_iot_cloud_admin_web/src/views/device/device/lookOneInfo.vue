@@ -23,10 +23,11 @@
             </div>
             <!-- 头部右边 -->
             <div class="lm_device_header_right_box">
-                <el-button type="info" @click="looktgEvent">编辑设备</el-button>
-                <el-button type="info" @click="looktgEvent">历史数据</el-button>
+                <el-button type="info" @click="OpenDeviceModelDialogEvent(false,null)">添加物模型</el-button>
+                <el-button type="info" @click="OpenDeviceDiaLogEvent(deviceInfoData)">编辑设备</el-button>
+                <!-- <el-button type="info" @click="looktgEvent">历史数据</el-button>
                 <el-button type="info" @click="looktgEvent">历史命令</el-button>
-                <el-button type="info" @click="looktgEvent">历史在线</el-button>
+                <el-button type="info" @click="looktgEvent">历史在线</el-button> -->
             </div>
         </div>
         <!-- 设备信息数据展示区域 -->
@@ -73,15 +74,34 @@
                                         </div>
                                         <!-- 按钮 查看数据 编辑物模型 -->
                                         <div class="lm-data-header-but_box">
-                                            <el-icon><Search /></el-icon>
-                                            <el-icon class="ml-3"><Edit /></el-icon>
+                                            <!-- 查看数据按钮 -->
+                                            <el-icon  class="ml-3 cursorPointer"><Search /></el-icon>
+                                          
+                                            <!-- 修改按钮 -->
+                                            <el-icon 
+                                                @click="OpenDeviceModelDialogEvent(true,deviceValData)"
+                                                class="ml-3 cursorPointer"
+                                             >
+                                                <Edit />
+                                            </el-icon>
+
+                                            <!-- 删除物模型数据 -->
+                                            <el-icon @click="delDeviceModelEvent(deviceValData)" class="ml-3 cursorPointer"><Delete /></el-icon>
+
                                         </div>
                                     </div>
                                     <!-- 设备数据的值 -->
                                     <div class="lm-card-value_box">
                                         <template v-if="deviceValData.modelType==0">
                                             <span class="lm-card-value">
-                                                {{deviceValData.val}}
+                                                <!-- 如果是bool的话 就获取dataSpece的值 0的别名和1的别名 如果不是bool就直接展示 -->
+                                                {{
+                                                deviceValData.dataType=='bool' 
+                                                ? 
+                                                deviceValData.dataSpecs[deviceValData.val].name
+                                                :
+                                                deviceValData.val
+                                                }}
                                             </span>
                                             <span class="lm-card-unit">{{deviceValData.unit}}</span>
                                         </template>
@@ -123,10 +143,19 @@
             </div>
         </div>
     </div>
+    <lm-device-update-save-dialog :is-upadate="true" ref="deviceDialogRef"></lm-device-update-save-dialog>
+    <lm-device-model-update-save-dialog ref="deviceModelDialogRef"></lm-device-model-update-save-dialog>
 </template>
 <script setup>
+// 更新、添加物模型数据
+import LmDeviceModelUpdateSaveDialog from '@/components/device/LmDeviceModelUpdateSaveDialog.vue';
+// 设备更新信息
+import LmDeviceUpdateSaveDialog from '@/components/device/LmDeviceUpdateSaveDialog.vue';
+
 // 用于路由对象 对路由进行操作
 import deviceService from '@/services/device/DeviceService';
+import deviceModelService from '@/services/devicemodel/DeviceModelService';
+import { LmMessageConfirm, LmMessageError, LmMessageSuccess } from '@/utils';
 import { computed } from '@vue/reactivity';
 import { onActivated, onBeforeMount, onBeforeUnmount, onDeactivated, onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -143,11 +172,59 @@ const deviceInfoData = ref({});
 const deviceValDatas = ref([]);
 // 路径中的设备sn码
 const pathDeviceSn = computed(()=> route.query.sn);
+// 
+const deviceDialogRef = ref(null);
+// 
+const deviceModelDialogRef = ref(null);
+// 打开修改设备对话框
+const OpenDeviceDiaLogEvent = ((thisDeviceInfoData)=>{
+    deviceDialogRef.value.open(thisDeviceInfoData);
+});
+// 打开物模型设备对话框
+const OpenDeviceModelDialogEvent = ( async(isupdata,thisDeviceModel)=>{
+    // 深度拷贝 不然对话框修改物模型数据的时候就会渲染到物模型数据那边 
+    let {...deviceInfoCopy} = deviceInfoData.value;
+    console.log("打开物模型框",thisDeviceModel);
+    if(thisDeviceModel==null){
+        deviceModelDialogRef.value.open(isupdata,null,deviceInfoCopy);
+        return;
+    }
+    let {...thisDeviceModelCopy} = thisDeviceModel;
+    // 对于对象中的对象使用json转字符串再转对象 实现深度拷贝 使用对象解构对于对象中的对象好像没用
+    thisDeviceModelCopy.dataSpecs = await JSON.parse(JSON.stringify(thisDeviceModel.dataSpecs));
+    // 传入是否更新物模型数据 当前选中的物模型数据   当前设备信息
+    deviceModelDialogRef.value.open(isupdata,thisDeviceModelCopy,deviceInfoCopy);
+
+});
 // 获取设备信息
 const getDeviceInfo = (async ()=>{
-    let responseDeviceInfo = await deviceService.getInfoBySn(pathDeviceSn.value);
-    deviceInfoData.value = responseDeviceInfo.data;
-    console.log("device_lookOneInfo-getDeviceInfo---->",deviceInfoData.value);
+    try {
+        let responseDeviceInfo = await deviceService.getInfoBySn(pathDeviceSn.value);
+        deviceInfoData.value = responseDeviceInfo.data;
+        console.log("device_lookOneInfo-getDeviceInfo获取设备信息---->",deviceInfoData.value);
+    } catch (error) {
+        console.log("获取设备信息异常--->",error);
+        LmMessageError(error.msg);
+    }
+  
+});
+// 删除一条物模型数据
+const delDeviceModelEvent = (async (thisDeviceModel)=>{
+    let ret = await LmMessageConfirm("你确定要删除吗？","删除警告")
+    if(ret == true){
+        try {
+            await deviceModelService.delDeviceModel(thisDeviceModel.id);
+            LmMessageSuccess("删除成功！");
+           
+        } catch (error) {
+            console.log("删除一条物模型数据服务器报错--->",error);
+            LmMessageError("删除失败！");
+        }
+    }
+    await getDeviceInfo();
+    await getDeviceNewDataVal();
+    await getIsOnline();
+    console.log("删除一条物模型数据--->",thisDeviceModel);
 });
 
 // 获取最新的数据--设备最新数据就包含物模型的数据了
@@ -211,6 +288,7 @@ const SwitchCmdEvent = async (thisModelData) => {
         identifier:thisModelData.identifier,
         data: thisModelData.val,
     }
+    // 发送命令
     let Cmdresponse = await deviceService.cmd(cmdData);
     console.log("cmd----------------",Cmdresponse);
 }
@@ -228,6 +306,7 @@ onActivated(()=>{
     readDeviceIsOnLineTime = setInterval(getIsOnline, 1 * 1000);
     console.log("ddddddddddddddddddddddddddddd");
 });
+
 onDeactivated(() => {
     switchReadDeviceNewValTime.value = false;
     clearInterval(readDeviceIsOnLineTime);
@@ -351,5 +430,13 @@ onDeactivated(() => {
 .lm-card-date-value{
     font-size: 14px;
     color: #999;
+}
+.cursorPointer{
+    /* 设置小手样式 */
+cursor:pointer;
+}
+.cursorPointer:hover{
+    color: #a162f7;
+
 }
 </style>

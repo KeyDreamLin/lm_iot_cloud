@@ -1,11 +1,13 @@
 package com.lm;
 
 import com.lm.admin.entity.bo.device.DeviceSelectBo;
+import com.lm.admin.entity.vo.device.DeviceSaveVo;
 import com.lm.admin.mapper.mysql.device.BaseDeviceMapper;
 import com.lm.admin.mapper.mysql.device.RoleAdminDeviceMapper;
 import com.lm.admin.mapper.mysql.device.RoleUserDeviceMapper;
 import com.lm.admin.mapper.mysql.permission.PermissionMapper;
 import com.lm.admin.mapper.tdengine.DeviceDataMapper;
+import com.lm.admin.service.device.DeviceServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -35,11 +37,19 @@ class LmCloudApplicationTests {
     @Autowired
     private RoleAdminDeviceMapper roleAdminDeviceMapper;
 
+    @Autowired
+    private DeviceServiceImpl deviceService;
+
 
 
     @Test
     public void contextLoads() {
-        BaseDeviceMapper  testB = null;
+        DeviceSaveVo deviceSaveVo = new DeviceSaveVo();
+        deviceSaveVo.setName("testCr");
+        deviceSaveVo.setSn("testCr");
+        deviceSaveVo.setSecretKey("testCr");
+
+        deviceService.addDevice(deviceSaveVo);
 //        testB = roleAdminDeviceMapper;
 //        final Integer deviceCount = testB.findDeviceCount();
 //        testB = roleUserDeviceMapper;

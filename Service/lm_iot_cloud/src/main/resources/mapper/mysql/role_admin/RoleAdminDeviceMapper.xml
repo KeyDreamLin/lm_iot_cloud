@@ -25,4 +25,34 @@
         SELECT `sn`,`name` from lm_device
     </select>
 
+
+    <!-- 添加一个设备 -->
+    <insert id="addDevice" parameterType="com.lm.admin.entity.vo.device.DeviceSaveVo">
+        INSERT INTO
+            lm_device (`id`,`name`,`sn`,`secret_key`,`create_time`,`update_time`)
+        VALUES
+            (#{ds.id},#{ds.name},#{ds.sn},#{ds.secretKey},#{ds.createTime},#{ds.updateTime})
+        <!-- 指定结果类型resultType，keyProperty是属性，自动返回到属性id中，order是次序，after是指获取id是在于插入后 -->
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <!-- 修改应一个设备信息 -->
+    <update id="updateDevice" parameterType="com.lm.admin.entity.vo.device.DeviceUpdateVo">
+        UPDATE
+            lm_device
+        <trim prefix="set" suffixOverrides=",">
+            <if test="du.name!=null">`name`=#{du.name},</if>
+            <if test="du.status!=null">`status`=#{du.status},</if>
+            <if test="du.localAddress!=null">`local_address`=#{du.localAddress},</if>
+            <if test="du.updateTime==null">`update_time`=#{du.updateTime},</if>
+        </trim>
+        WHERE `id` = #{du.id}
+    </update>
+
+    <!-- 根据设备id删除设备 -->
+    <delete id="delDeviceById">
+        DELETE FROM lm_device WHERE id = #{id}
+    </delete>
+
 </mapper>

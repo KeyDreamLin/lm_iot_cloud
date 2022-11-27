@@ -1,5 +1,5 @@
 <template>
-    <!-- 设备详细信息 -->
+    <!-- 设备详细信息 废弃 -->
     <!-- before-close关闭方法前的回调 用于确认是否关闭 -->
     <div class="lm-dialog-main">
         <el-dialog

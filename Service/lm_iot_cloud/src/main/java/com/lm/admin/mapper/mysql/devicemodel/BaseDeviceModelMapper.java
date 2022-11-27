@@ -1,6 +1,7 @@
 package com.lm.admin.mapper.mysql.devicemodel;
 
 import com.lm.admin.entity.pojo.devicemodel.DeviceModel;
+import com.lm.admin.entity.vo.devicemodel.DeviceModelUpdateSaveVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -39,5 +40,34 @@ public interface BaseDeviceModelMapper {
      * @return
      */
     Integer findThisDayNewDeviceModelCount();
+
+    /**
+     * 添加一条物模型数据
+     * @param deviceModelUpdateSaveVo
+     * @return
+     */
+    int addDeviceModel(@Param("dm") DeviceModelUpdateSaveVo deviceModelUpdateSaveVo);
+
+    /**
+     * 修改一条物模型数据
+     * @param deviceModelUpdateSaveVo
+     * @return
+     */
+    int updateDeviceModel(@Param("dm") DeviceModelUpdateSaveVo deviceModelUpdateSaveVo);
+
+
+    /**
+     * 根据id删除一条物模型数据
+     * @param mid
+     * @return
+     */
+    int delDeviceModelById(@Param("dmid")Long mid);
+
+    /**
+     * 根据设备id删除一条或者多条物模型数据
+     * @param did
+     * @return
+     */
+    int delDeviceModelByDeviceId(@Param("did")Long did);
 
 }

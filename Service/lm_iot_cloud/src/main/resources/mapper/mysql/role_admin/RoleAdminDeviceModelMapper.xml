@@ -19,4 +19,62 @@
         SELECT count(1) FROM lm_device_model WHERE to_days(create_time) = to_days(now());
     </select>
 
+    <!-- 插入一条物模型数据 -->
+    <insert id="addDeviceModel">
+        INSERT INTO lm_device_model (
+            `id`,
+            `device_id`,
+            `sn`,
+            `icon`,
+            `name`,
+            `unit`,
+            `identifier`,
+            `data_type`,
+            `data_specs`,
+            `model_type`,
+            `create_time`,
+            `update_time`
+        )
+        VALUES(
+            #{dm.id},
+            #{dm.deviceId},
+            #{dm.sn},
+            #{dm.icon},
+            #{dm.name},
+            #{dm.unit},
+            #{dm.identifier},
+            #{dm.dataType},
+            #{dm.dataSpecs},
+            #{dm.modelType},
+            #{dm.createTime},
+            #{dm.updateTime}
+        )
+    </insert>
+
+    <!-- 更新一条物模型数据 -->
+    <update id="updateDeviceModel">
+        UPDATE
+            lm_device_model
+        SET
+            `icon` = #{dm.icon} ,
+            `name` = #{dm.name} ,
+            `unit` = #{dm.unit} ,
+            `data_type` = #{dm.dataType} ,
+            `data_specs` = #{dm.dataSpecs} ,
+            `model_type` = #{dm.modelType} ,
+            `update_time` = #{dm.updateTime}
+        WHERE
+              `id`= #{dm.id}
+    </update>
+
+    <!-- 根据id删除一条物模型数据 -->
+    <delete id="delDeviceModelById">
+        DELETE FROM lm_device_model WHERE id = #{dmid}
+    </delete>
+
+    <!-- 根据设备id删除一条或者多条物模型数据  不公开给http接口 -->
+    <delete id="delDeviceModelByDeviceId">
+        DELETE FROM lm_device_model WHERE device_id = #{did}
+    </delete>
+
 </mapper>

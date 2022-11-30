@@ -32,6 +32,14 @@ export default {
         return temp;
     },
     /**
+     * 删除一条策略信息 根据策略id
+     * @param {*} strategyId 策略id
+     */
+    delDeviceStrategy(strategyId){
+        let temp  = lm_request.post(`/devicestrategy/del/${strategyId}`);
+        return temp;
+    },
+    /**
      * 获取平台设备策略总数
      * @returns 
      */

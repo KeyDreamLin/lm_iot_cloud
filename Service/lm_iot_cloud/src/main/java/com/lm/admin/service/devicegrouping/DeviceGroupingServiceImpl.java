@@ -6,15 +6,18 @@ import com.lm.admin.common.r.UserResultEnum;
 import com.lm.admin.entity.dto.user.UserHeader;
 import com.lm.admin.entity.pojo.devicegrouping.DeviceGrouping;
 import com.lm.admin.entity.vo.devicegrouping.DeviceGroupingPageVo;
+import com.lm.admin.entity.vo.devicegrouping.DeviceGroupingUpdateAndSaveVo;
 import com.lm.admin.mapper.mysql.device.BaseDeviceMapper;
 import com.lm.admin.mapper.mysql.devicegrouping.BaseDeviceGroupingMapper;
 import com.lm.admin.mapper.mysql.devicegrouping.RoleAdminDeviceGroupingMapper;
 import com.lm.admin.mapper.mysql.devicegrouping.RoleUserDeviceGroupingMapper;
+import com.lm.admin.mapper.mysql.owner.OwnerMapper;
 import com.lm.admin.utils.lmthreadlocal.RoleThreadLocal;
 import com.lm.admin.utils.mybiats.Pager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,6 +35,9 @@ public class DeviceGroupingServiceImpl implements IDeviceGroupingService {
 
     @Autowired
     private RoleUserDeviceGroupingMapper roleUserDeviceGroupingMapper;
+
+    @Autowired
+    private OwnerMapper ownerMapper;
 
     private UserHeader userHeader;
 
@@ -56,6 +62,84 @@ public class DeviceGroupingServiceImpl implements IDeviceGroupingService {
     @Override
     public List<DeviceGrouping> getDeviceGroupingList() {
         return getBaseDeviceMapper().findDeviceGroupingList(userHeader.getUserId());
+    }
+
+    /**
+     * 添加一个设备 分组
+     * @param deviceGrouping
+     * @return
+     */
+    @Override
+    @Transactional // 事务  多数据表操作记得开事务啊！！！！！！
+    public Integer addDeviceGrouping(DeviceGroupingUpdateAndSaveVo deviceGrouping) {
+        // 添加一个设备
+        int retRow =  getBaseDeviceMapper().addDeviceGrouping(deviceGrouping);
+        userHeader = RoleThreadLocal.get();
+        // 管理员可以直接传用户id过来 然后添加分组
+        // 普通用户请求头会自带的
+        if(userHeader.getUserRoleCode()!=null && userHeader.getUserRoleCode().equals("CLOUD_USER")){
+            // 添加设备分组 用户id 分组id   添加用户 拥有 分组表
+            ownerMapper.addUserOwnerGrouping(userHeader.getUserId(), deviceGrouping.getId());;
+        }
+        else if(userHeader.getUserRoleCode()!=null && userHeader.getUserRoleCode().equals("CLOUD_ADMIN")){
+            // 添加设备分组 用户id 分组id   添加用户 拥有 分组表
+            ownerMapper.addUserOwnerGrouping(deviceGrouping.getUserId(), deviceGrouping.getId());
+        }
+
+        return retRow;
+    }
+
+    /**
+     * 修改设备分组信息 并 修改分组拥有的设备
+     *
+     * @param deviceGrouping
+     * @return
+     */
+    @Override
+    @Transactional // 事务
+    public Integer updDeviceGrouping(DeviceGroupingUpdateAndSaveVo deviceGrouping) {
+        // 修改分组信息
+        getBaseDeviceMapper().updDeviceGrouping(deviceGrouping);
+        // 先删除分组拥有的设备
+        ownerMapper.delGroupingByGid(deviceGrouping.getId());
+        // 添加分组拥有的设备
+        int row = ownerMapper.addGroupingOwnerDevices(deviceGrouping.getId(),deviceGrouping.getDeviceIds());
+        return row;
+    }
+
+    /**
+     * 删除一个设备分组
+     * @param groupingId 分组id
+     * @return
+     */
+    @Override
+    @Transactional // 事务
+    public Integer delDeviceGrouping(Long groupingId) {
+        // 删除设备分组信息
+        int row =  getBaseDeviceMapper().delDeviceGrouping(groupingId);
+        // 删除设备分组拥有设备的中间表数据
+        ownerMapper.delGroupingByGid(groupingId);
+        return row;
+    }
+
+    /**
+     * 查询设备分组拥有的设备
+     * @param groupingId 设备分组id
+     * @return
+     */
+    @Override
+    public List<Long> getGroupingOwnerDeviceById(Long groupingId) {
+        return ownerMapper.findGroupingOwnerDeviceById(groupingId);
+    }
+
+    /**
+     * 根据分组id查询到分组
+     * @param groupingId 分组id
+     * @return
+     */
+    @Override
+    public DeviceGrouping getDeviceGroupingById(Long groupingId) {
+        return getBaseDeviceMapper().findDeviceGroupingByGid(userHeader.getUserId(),groupingId);
     }
 
 }

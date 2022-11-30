@@ -11,8 +11,34 @@
         INNER JOIN
              lm_user_owner_device_grouping as uodg -- 用户拥有设备分组中间表
         where
-            uodg.user_id = #{uid} and   -- 查询出用户拥有的设备分组
-            uodg.grouping_device_id = dg.id
-
+            uodg.user_id = #{user_id} and   -- 查询出用户拥有的设备分组
+            uodg.grouping_id = dg.id
     </select>
+
+    <!--添加一个设备分组-->
+    <insert id="addDeviceGrouping">
+        INSERT INTO lm_device_grouping (`id`,`name`,`create_time`,`update_time`) VALUES(#{dg.id},#{dg.name},#{dg.createTime},#{dg.updateTime})
+    </insert>
+
+    <!-- 修改设备分组信息 -->
+    <update id="updDeviceGrouping">
+        UPDATE lm_device_grouping SET `name`= #{dg.name} WHERE `id`= #{dg.id}
+    </update>
+    <!-- 删除设备分组信息 -->
+    <delete id="delDeviceGrouping">
+        DELETE FROM lm_device_grouping WHERE id = #{grouping_id}
+    </delete>
+    <!-- 根据分组id查询分组信息 -->
+    <select id="findDeviceGroupingByGid" resultType="com.lm.admin.entity.pojo.devicegrouping.DeviceGrouping">
+        select *
+        from
+            lm_device_grouping as dg   -- 设备分组
+                INNER JOIN
+            lm_user_owner_device_grouping as uodg -- 用户拥有设备分组中间表
+        where
+            uodg.user_id = #{user_id} and   -- 查询出用户拥有的设备分组
+            uodg.grouping_id = dg.id and
+            dg.id = #{grouping_id}
+    </select>
+
 </mapper>

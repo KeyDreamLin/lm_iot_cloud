@@ -40,7 +40,7 @@ public interface BaseDeviceMapper {
      */
     List<Device> findDevicesByGroupingId(@Param("groupingId") Long groupingId);
 
-    List<DeviceSelectBo> findDeviceSnName(@Param("uid") Long uid);
+    List<DeviceSelectBo> findDeviceIdSnName(@Param("uid") Long uid);
 
     /**
      * 添加一个设备

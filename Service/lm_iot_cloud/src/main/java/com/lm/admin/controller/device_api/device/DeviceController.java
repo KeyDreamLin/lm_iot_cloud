@@ -160,7 +160,7 @@ public class DeviceController extends DeviceBaseController {
      */
     @PostMapping("/snname")
     public List<DeviceSelectBo> getSnName(){
-        return deviceService.getDeviceSnName();
+        return deviceService.getDeviceIdSnName();
     }
 
     @PostMapping("/allupcount")

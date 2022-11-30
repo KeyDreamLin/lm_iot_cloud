@@ -42,13 +42,13 @@
     <!-- 根据设备分组id查询到对应的设备信息列表 -->
     <select id="findDevicesByGroupingId"  resultType="com.lm.admin.entity.pojo.device.Device">
         SELECT ld.*  from `lm_device` as ld WHERE ld.id in(
-            SELECT lgd.device_id from lm_grouping_owner_device as lgd where lgd.grouping_device_id = #{groupingId}
+            SELECT lgd.device_id from lm_grouping_owner_device as lgd where lgd.grouping_id = #{groupingId}
         )
     </select>
 
-    <select id="findDeviceSnName" resultType="com.lm.admin.entity.bo.device.DeviceSelectBo">
+    <select id="findDeviceIdSnName" resultType="com.lm.admin.entity.bo.device.DeviceSelectBo">
         SELECT
-               `sn`,`name`
+               `id`,`sn`,`name`
         from
              lm_device as d
         INNER JOIN

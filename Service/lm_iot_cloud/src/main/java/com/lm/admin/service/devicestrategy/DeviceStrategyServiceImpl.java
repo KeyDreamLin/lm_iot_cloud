@@ -12,10 +12,12 @@ import com.lm.admin.mapper.mysql.devicemodel.BaseDeviceModelMapper;
 import com.lm.admin.mapper.mysql.devicestrategy.BaseDeviceStrategyMapper;
 import com.lm.admin.mapper.mysql.devicestrategy.RoleAdminDeviceStrategyMapper;
 import com.lm.admin.mapper.mysql.devicestrategy.RoleUserDeviceStrategyMapper;
+import com.lm.admin.mapper.mysql.owner.OwnerMapper;
 import com.lm.admin.utils.lmthreadlocal.RoleThreadLocal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,6 +34,9 @@ public class DeviceStrategyServiceImpl implements IDeviceStrategyService {
 
     @Autowired
     private RoleUserDeviceStrategyMapper roleUserDeviceStrategyMapper;
+
+    @Autowired
+    private OwnerMapper ownerMapper;
 
     private UserHeader userHeader;
 
@@ -78,6 +83,20 @@ public class DeviceStrategyServiceImpl implements IDeviceStrategyService {
     }
 
     /**
+     * 删除一条策略信息 根据策略id
+     *
+     * @param strategyId 策略id
+     * @return
+     */
+    @Override
+    @Transactional // 事务
+    public Integer delDeviceStrategy(Long strategyId) {
+        int row = getBaseDeviceStrategyMapper().delDeviceStrategy(strategyId);
+        ownerMapper.delUserOwnerStrategyBySid(strategyId);
+        return row;
+    }
+
+    /**
      * 更新策略的信息
      * @param deviceStrategyUpdateVo
      * @return
@@ -116,11 +135,21 @@ public class DeviceStrategyServiceImpl implements IDeviceStrategyService {
      * @return
      */
     @Override
+    @Transactional
     public int addDeviceStrategy(DeviceStrategySaveVo deviceStrategySaveVo) {
         if(deviceStrategySaveVo==null){
             return -1;
         }
-        return getBaseDeviceStrategyMapper().addDeviceStrategy(deviceStrategySaveVo);
+        int row = getBaseDeviceStrategyMapper().addDeviceStrategy(deviceStrategySaveVo);
+        // 管理员可以直接传用户id过来 然后添加分组
+        // 普通用户请求头会自带的
+        if(userHeader.getUserRoleCode()!=null && userHeader.getUserRoleCode().equals("CLOUD_USER")){
+            ownerMapper.addUserOwnerStrategy(userHeader.getUserId(), deviceStrategySaveVo.getId());
+        }
+        else if(userHeader.getUserRoleCode()!=null && userHeader.getUserRoleCode().equals("CLOUD_ADMIN")){
+            ownerMapper.addUserOwnerStrategy(deviceStrategySaveVo.getUserId(), deviceStrategySaveVo.getId());
+        }
+        return row;
     }
 
 

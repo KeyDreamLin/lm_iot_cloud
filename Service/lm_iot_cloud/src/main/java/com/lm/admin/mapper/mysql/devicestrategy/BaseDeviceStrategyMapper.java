@@ -51,6 +51,13 @@ public interface BaseDeviceStrategyMapper {
     int addDeviceStrategy(@Param("dS") DeviceStrategySaveVo deviceStrategySaveVo);
 
     /**
+     * 删除一条策略信息
+     * @param strategyId
+     * @return
+     */
+    Integer delDeviceStrategy(@Param("strategy_id") Long strategyId);
+
+    /**
      * 更新策略信息
      * @param deviceStrategyUpdateVo
      * @return

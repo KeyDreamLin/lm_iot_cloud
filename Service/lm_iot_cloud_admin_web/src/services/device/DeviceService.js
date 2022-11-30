@@ -87,10 +87,10 @@ export default {
         return temp;
     },
     /**
-     * 获取设备sn和设备name
+     * 获取设备id和设备sn和设备name
      * @returns 
      */
-    snname(){
+    idsnname(){
         let temp = lm_request.post("/snname");
         return temp;
     },

@@ -11,7 +11,11 @@ import deviceLookOneInfo from '@/views/device/device/lookOneInfo.vue'
 
 import deviceModelList from '@/views/device/model/list.vue'
 
+// ------------------- 设备分组 -------------------
+import deviceGroupingChildPage from '@/views/device/grouping/childPage.vue'
 import deviceGroupingList from '@/views/device/grouping/list.vue'
+import deviceGroupingLookOneInfo from '@/views/device/grouping/lookOneInfo.vue'
+// ------------------- 设备分组 -------------------
 
 // ------------------- 策略 -------------------
 import deviceStrategyChildPage from '@/views/device/strategy/childPage.vue'
@@ -52,8 +56,20 @@ const routes_children = [
     },
     {
         path: '/device/grouping',
-        meta: { title: '设备分组',Lname : "/device/grouping" },
-        component : deviceGroupingList,
+        meta: { title: '设备分组',Lname : "/device/grouping/list" },
+        component : deviceGroupingChildPage,
+        children:[
+            {
+                path: '/device/grouping/list',
+                meta: { title: '设备分组', Lname: '/device/grouping/list'},
+                component : deviceGroupingList,
+            },
+            {
+                path: '/device/grouping/lookOneInfo',
+                meta: { title: '设备分组详情', Lname: '/device/grouping/list'},
+                component : deviceGroupingLookOneInfo,
+            },
+        ]
     },
     {
         path: '/device/strategy',

@@ -19,7 +19,7 @@
                 </template>
             </div>
             <div class="mt-2 ml-auto w-max">
-                <el-button @click="update_add_event" type="info">确定</el-button>
+                <el-button @click="update_add_event" :disabled="isPressBut" :loading="isPressBut"  type="info">确定</el-button>
                 <el-button @click="close" type="cancel">取消</el-button>
             </div>
         </el-dialog>
@@ -34,7 +34,8 @@ import { update } from 'lodash';
 import { ref } from 'vue';
 // 用于获取当前路由的状态和地址
 import { useRouter } from 'vue-router';
-
+// 是否按下
+const isPressBut = ref(false);
 // 用于路由对象 对路由进行操作
 const router = useRouter();
 
@@ -85,6 +86,11 @@ defineExpose({
     open,close
 })
 const update_add_event = (async ()=>{
+    if(deviceInfo.value.name.length<=0){
+        LmMessageError("请输入设备名称！");
+        return;
+    }
+    isPressBut.value = true;
     // 判断空
     try {
         let temp = null;
@@ -101,6 +107,7 @@ const update_add_event = (async ()=>{
     } catch (error) {
         LmMessageError("操作失败！");
     }
+    isPressBut.value = false;
 });
 </script>
 

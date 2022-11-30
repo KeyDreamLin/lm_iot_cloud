@@ -18,7 +18,7 @@
                 INNER JOIN lm_user_owner_device_strategy as uods
         WHERE
             uods.user_id = #{uid} and
-            ds.id = uods.device_strategy_id
+            ds.id = uods.strategy_id
     </select>
 
     <select id="findDeviceStrategyById" resultType="com.lm.admin.entity.bo.devicestrategy.DeviceStrategyInfoBo">
@@ -32,6 +32,9 @@
         VALUES
                (#{dS.id},#{dS.name},#{dS.describe},#{dS.createTime},#{dS.updateTime})
     </insert>
+    <delete id="delDeviceStrategy">
+        DELETE FROM lm_device_strategy WHERE id = #{strategy_id}
+    </delete>
     <!-- 更新策略信息 -->
     <update id="updateDeviceStrategy" >
         UPDATE lm_device_strategy

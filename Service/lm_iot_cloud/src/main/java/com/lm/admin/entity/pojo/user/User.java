@@ -47,4 +47,7 @@ public class User implements java.io.Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
+    private void setT(){
+
+    }
 }

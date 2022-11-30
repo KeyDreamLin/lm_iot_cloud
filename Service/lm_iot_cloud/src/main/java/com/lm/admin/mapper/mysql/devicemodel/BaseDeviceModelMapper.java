@@ -70,4 +70,5 @@ public interface BaseDeviceModelMapper {
      */
     int delDeviceModelByDeviceId(@Param("did")Long did);
 
+
 }

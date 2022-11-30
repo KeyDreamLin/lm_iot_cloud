@@ -24,7 +24,7 @@
                 />
             </div>
             <div class="mt-2 ml-auto w-max">
-                <el-button @click="update_add_event" type="info">确定</el-button>
+                <el-button @click="update_add_event"  :disabled="isPressBut" :loading="isPressBut"  type="info">确定</el-button>
                 <el-button @click="close" type="cancel">取消</el-button>
             </div>
         </el-dialog>
@@ -40,7 +40,8 @@ import { useRouter } from 'vue-router';
 
 // 用于路由对象 对路由进行操作
 const router = useRouter();
-
+// 是否按下
+const isPressBut = ref(false);
 const isShowDialog = ref(false);
 const strteagy = ref({
     id:0,
@@ -84,6 +85,7 @@ const update_add_event = (async ()=>{
         LmMessageError("请输入规则名称！");
         return;
     }
+    isPressBut.value = true;
     try {
         let temp = null;
         if(props.isUpadate == true){
@@ -109,6 +111,7 @@ const update_add_event = (async ()=>{
     } catch (error) {
         LmMessageError("操作失败！");
     }
+    isPressBut.value = false;
 });
 </script>
 

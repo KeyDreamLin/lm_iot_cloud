@@ -6,6 +6,7 @@ import com.lm.admin.entity.dto.device.DeviceAuthDto;
 import com.lm.admin.entity.pojo.devicegrouping.DeviceGrouping;
 import com.lm.admin.entity.vo.device.DevicePageVo;
 import com.lm.admin.entity.vo.devicegrouping.DeviceGroupingPageVo;
+import com.lm.admin.entity.vo.devicegrouping.DeviceGroupingUpdateAndSaveVo;
 import com.lm.admin.utils.mybiats.Pager;
 
 import java.util.List;
@@ -23,5 +24,38 @@ public interface IDeviceGroupingService {
      */
     List<DeviceGrouping> getDeviceGroupingList();
 
+    /**
+     * 添加一个设备分组
+     * @param deviceGrouping
+     * @return
+     */
+    Integer addDeviceGrouping(DeviceGroupingUpdateAndSaveVo deviceGrouping);
 
+    /**
+     * 修改设备分组信息 并 修改分组拥有的设备
+     * @param deviceGrouping
+     * @return
+     */
+    Integer updDeviceGrouping(DeviceGroupingUpdateAndSaveVo deviceGrouping);
+
+    /**
+     * 删除一个设备分组
+     * @param groupingId 分组id
+     * @return
+     */
+    Integer delDeviceGrouping(Long groupingId);
+    /**
+     * 查询设备分组拥有的设备
+     * @param groupingId  设备分组id
+     * @return
+     */
+    List<Long> getGroupingOwnerDeviceById(Long groupingId);
+
+
+    /**
+     * 根据分组id查询到分组
+     * @param groupingId  分组id
+     * @return
+     */
+    DeviceGrouping getDeviceGroupingById(Long groupingId);
 }

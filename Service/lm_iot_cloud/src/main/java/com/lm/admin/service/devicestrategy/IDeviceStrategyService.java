@@ -36,6 +36,12 @@ public interface IDeviceStrategyService {
      */
     DeviceStrategyInfoBo getDeviceStrategyById(Long Sid);
 
+    /**
+     * 删除一条策略信息 根据策略id
+     * @param strategyId 策略id
+     * @return
+     */
+    Integer delDeviceStrategy(Long strategyId);
 
     /**
      * 添加一条策略信息

@@ -8,25 +8,22 @@ import com.lm.admin.entity.bo.device.*;
 import com.lm.admin.entity.dto.device.DeviceAuthDto;
 import com.lm.admin.entity.dto.user.UserHeader;
 import com.lm.admin.entity.pojo.device.Device;
-import com.lm.admin.entity.vo.device.DevicePageVo;
 import com.lm.admin.entity.vo.device.DeviceSaveVo;
 import com.lm.admin.entity.vo.device.DeviceUpdateVo;
 import com.lm.admin.mapper.mysql.device.BaseDeviceMapper;
 import com.lm.admin.mapper.mysql.device.RoleAdminDeviceMapper;
 import com.lm.admin.mapper.mysql.device.RoleUserDeviceMapper;
-import com.lm.admin.mapper.mysql.userowner.UserOwnerMapper;
+import com.lm.admin.mapper.mysql.owner.OwnerMapper;
 import com.lm.admin.service.devicemodel.DeviceModelServiceImpl;
 import com.lm.admin.utils.LmAssert;
 import com.lm.admin.utils.SnowflakeIdUtils;
 import com.lm.admin.utils.lmthreadlocal.RoleThreadLocal;
-import com.lm.admin.utils.mybiats.Pager;
 import com.lm.admin.utils.pwd.MD5Util;
 import com.lm.cloud.tcp.service.utils.RedisDeviceUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
@@ -59,7 +56,7 @@ public class DeviceServiceImpl implements IDeviceService {
 
     // 用户中间表mapper
     @Autowired
-    private UserOwnerMapper userOwnerMapper;
+    private OwnerMapper ownerMapper;
 
 
     private UserHeader userHeader;
@@ -160,8 +157,8 @@ public class DeviceServiceImpl implements IDeviceService {
      * @return
      */
     @Override
-    public List<DeviceSelectBo> getDeviceSnName() {
-        return getBaseDeviceMapper().findDeviceSnName(userHeader.getUserId());
+    public List<DeviceSelectBo> getDeviceIdSnName() {
+        return getBaseDeviceMapper().findDeviceIdSnName(userHeader.getUserId());
     }
 
 
@@ -187,7 +184,7 @@ public class DeviceServiceImpl implements IDeviceService {
         getBaseDeviceMapper().addDevice(deviceSaveVo);
         log.info("插入后的值--->{}",deviceSaveVo);
         // 然后将 用户id 和 设备id 一起插入到 用户拥有设备中间 表
-        userOwnerMapper.addUserOwnerDevice(userHeader.getUserId(), deviceSaveVo.getId());
+        ownerMapper.addUserOwnerDevice(userHeader.getUserId(), deviceSaveVo.getId());
         return 0;
     }
 
@@ -213,6 +210,10 @@ public class DeviceServiceImpl implements IDeviceService {
         int delRow = getBaseDeviceMapper().delDeviceById(id);
         // 然后再删除设备物模型数据
         deviceModelService.delDeviceModelByDeviceId(id);
+        // 再删除用户 拥有 设备 表
+        ownerMapper.delUserOwnerDeviceByDid(id);
+        // 删除分组中的设备
+        ownerMapper.delGroupingByDid(id);
         return delRow;
     }
 

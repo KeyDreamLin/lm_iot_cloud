@@ -69,6 +69,15 @@ public class DeviceStrategyController extends DeviceBaseController {
     }
 
     /**
+     * 删除一条策略信息 根据策略id
+     * @param strategyId 策略id
+     * @return
+     */
+    @PostMapping("/devicestrategy/del/{strategyId}")
+    public int delDeviceStrategy(@PathVariable Long strategyId){
+        return deviceStrategyService.delDeviceStrategy(strategyId);
+    }
+    /**
      * 平台设备策略总数
      * api: /api/device/devicestrategy/allcount
      * @return

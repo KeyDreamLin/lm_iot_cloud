@@ -48,10 +48,10 @@ public interface IDeviceService {
     List<DeviceBo> getDevicesByGroupingId(Long gid);
 
     /**
-     * 返回设备sn和设备名称列表
+     * 返回设备id设备sn和设备名称列表
      * @return
      */
-    List<DeviceSelectBo> getDeviceSnName();
+    List<DeviceSelectBo> getDeviceIdSnName();
 
     /**
      * 查询所有设备数量

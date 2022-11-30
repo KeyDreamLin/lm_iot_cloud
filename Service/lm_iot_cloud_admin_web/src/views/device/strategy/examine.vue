@@ -187,7 +187,7 @@ const upadteOpenEvetn = (()=>{
 });
 // 获取设备sn和设备名称
 const getDeviceSnNameData = ( async()=>{
-    let temp =  await deviceService.snname();
+    let temp =  await deviceService.idsnname();
     temp =  temp.data;
     return temp;
 });

@@ -1,4 +1,4 @@
-package com.lm.admin.entity.vo.devicestrategy;
+package com.lm.admin.entity.vo.devicegrouping;
 
 import com.lm.admin.config.mybatis.annotation.FieldFill;
 import com.lm.admin.config.mybatis.annotation.IdType;
@@ -8,28 +8,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.Date;
-
+import java.util.List;
 
 /**
- * 设备策略 用于保存策略信息 - mysql
+ * 设备分组 更新和添加
  * @author Lm
- * @date 2022/11/16 16:03
+ * @date 2022/11/28 15:31
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeviceStrategySaveVo implements Serializable {
-    // 策略id
+public class DeviceGroupingUpdateAndSaveVo  implements java.io.Serializable  {
+    // 分组主键id
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
-    // 策略名称
+    // 分组名称
     private String name;
-
-    // 策略描述
-    private String describe;
 
     // 创建时间
     @TableField(fill = FieldFill.INSERT)
@@ -39,7 +35,10 @@ public class DeviceStrategySaveVo implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
+
     // 用户id 用于管理员添加分组的  管理员授权给用户的
     private Long userId;
 
+    // 设备分组拥有的设备列表   前端修改后的设备分组列表 拥有的设备
+    private List<Long> deviceIds;
 }

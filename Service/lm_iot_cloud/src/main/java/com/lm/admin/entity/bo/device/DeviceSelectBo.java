@@ -14,6 +14,8 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeviceSelectBo implements java.io.Serializable  {
+    // 设备id
+    private Long id;
     // 设备名称
     private String name;
     // 设备唯一号 可以自动生成 也可以手写

@@ -5,10 +5,10 @@
         <div class="lm_grouping_header">
             <div class="lm_grouping_header_left">
                 <!-- 删除分组、添加分组 -->
-                <el-button type="success">添加分组</el-button>
+                <el-button type="success" @click="openAddDgEvent()">添加分组</el-button>
             </div>
             <!-- 搜索框 -->
-            <div class="lm_grouping_header_right">
+            <!-- <div class="lm_grouping_header_right">
                 <el-input v-model="keyword" placeholder="请输入分组名称关键词...">
                     <template #prefix>
                     </template>
@@ -18,7 +18,7 @@
                         </div>
                     </template>
                 </el-input>
-            </div>
+            </div> -->
         </div>
         <!-- 分组数据盒子 -->
         <div class="lm_grouping_data_box">
@@ -38,17 +38,27 @@
             </el-table>
         </div>
     </div>
-    <lm-device-grouping-info ref="LmDeviceGroupingInfoRef">
 
-    </lm-device-grouping-info> 
+    <lm-device-grouping-update-save-dialog :is-upadate="false" ref="dgDialogRef"></lm-device-grouping-update-save-dialog>
 </template>
 
 <script setup>
+// 设备分组 添加修改 框
+import lmDeviceGroupingUpdateSaveDialog from '@/components/device/LmDeviceGroupingUpdateSaveDialog.vue';
 import deviceGroupingService from '@/services/devicegrouping/DeviceGroupingService';
-import LmDeviceGroupingInfo from '@/components/device/LmDeviceGroupingInfo.vue';
+import { LmMessageConfirm, LmMessageError, LmMessageSuccess } from '@/utils';
 import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+// 用于获取当前路由的状态和地址
+import { useRoute } from 'vue-router';
+// 用于路由对象 对路由进行操作
+const router = useRouter();
+// 用于获取当前路由的状态和地址
+const route = useRoute();
+// 服务器返回的设备分组列表
 const deviceGrouping = ref([]);
-const LmDeviceGroupingInfoRef = ref(null);
+// 设备分组添加框ref
+const dgDialogRef = ref(null);
 const pageInit = async () => {
     let serReqGrouping = await deviceGroupingService.deviceGroupingPage();
     deviceGrouping.value = serReqGrouping.data;
@@ -60,12 +70,28 @@ onMounted(()=>{
 // 查看分组数据
 const lookGroupingButEvent = (Rrow) => {
     // console.log(Rrow);
-    LmDeviceGroupingInfoRef.value.open(Rrow);
+    router.push("/device/grouping/lookOneInfo?id="+Rrow.id);
+
 }
 // 删除分组数据
-const delGroupingButEvent = (Rrow) => {
-    // console.log(Rrow);
+const delGroupingButEvent = async (Rrow) => {
+    let isdel = await LmMessageConfirm("是否删除设备分组!","删除警告");
+    if(isdel == true){
+        try {
+            let ret = await deviceGroupingService.delDeviceGrouping(Rrow.id);
+            console.log("删除设备分组-->",ret);
+            await pageInit();  
+            LmMessageSuccess("删除设备分组成功！");
+        } catch (error) {
+            LmMessageError(error.msg);
+        }
+     
+    }
 }
+// 添加分组
+const openAddDgEvent = (()=>{
+    dgDialogRef.value.open();
+});
 </script>
 
 <style scoped>

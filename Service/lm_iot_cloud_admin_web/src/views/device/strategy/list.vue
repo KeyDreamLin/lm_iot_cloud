@@ -7,7 +7,7 @@
             <div class="lm_strategy_header_left">
                 <el-button @click="addStrteagyInfoEvent" type="success">添加规则</el-button>
             </div>
-            <div class="lm_strategy_header_right">
+            <!-- <div class="lm_strategy_header_right">
                 <el-input v-model="keyword" placeholder="请输入规则名称">
                     <template #prefix>
                     </template>
@@ -17,7 +17,7 @@
                         </div>
                     </template>
                 </el-input>
-            </div>
+            </div> -->
 
         </div>
         <!-- 策略列表展示 -->
@@ -57,7 +57,7 @@
                             <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>启动</el-tag>
                         </template>
                         <!-- <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>日记</el-tag> -->
-                        <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>删除</el-tag>
+                        <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" @click="delStrategyEvent(scope.row)" round>删除</el-tag>
                     </template>
                 </el-table-column>
             </el-table>
@@ -71,6 +71,7 @@
 import LmDeviceStrteagyInfoDialog from '@/components/device/devicestrtegy/LmDeviceStrteagyInfoDialog.vue';
 // 策略服务类
 import deviceStrategyService from '@/services/devicestrategy/DeviceStrategyService';
+import { LmMessageConfirm, LmMessageError, LmMessageSuccess } from '@/utils';
 import { onMounted, ref } from 'vue';
 // 用于路由对象 对路由进行操作
 import { useRouter } from 'vue-router';
@@ -95,6 +96,22 @@ const getStrategyPage = ( async ()=>{
 // 查看策略详细信息
 const examineEvent=((thisRowId)=>{
     router.push("/device/strategy/examine?id="+thisRowId);
+});
+// 删除策略信息
+const delStrategyEvent = (async (row)=>{
+    let msgret = await LmMessageConfirm("是否删除策略信息","删除警告");
+    if(msgret == true){
+        try {
+            // 删除设备策略服务
+            let ret = await deviceStrategyService.delDeviceStrategy(row.id);
+            console.log("删除策略信息-->",row);
+            LmMessageSuccess("删除策略成功！");
+            await getStrategyPage();
+        } catch (error) {
+            LmMessageError(error.msg);
+        }
+   
+    }
 });
 // 添加策略信息 打开dialog
 const addStrteagyInfoEvent = (()=>{

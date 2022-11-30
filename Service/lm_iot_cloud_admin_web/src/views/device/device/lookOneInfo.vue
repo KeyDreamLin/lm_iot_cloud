@@ -238,7 +238,11 @@ const getDeviceNewDataVal = (async ()=>{
     deviceValDatas.value.forEach(valItem => {
         // 首先处理dataSpecs 字符串转为json
         if (typeof valItem.dataSpecs === "string" && valItem.dataSpecs.length>0 ) {
-            valItem.dataSpecs = JSON.parse(valItem.dataSpecs);
+            try{
+                valItem.dataSpecs = JSON.parse(valItem.dataSpecs);
+            }catch(err){
+
+            }
         }
 
         // 然后在处理val 和 ts 的空数据
@@ -308,6 +312,7 @@ onActivated(()=>{
 });
 
 onDeactivated(() => {
+    console.log("关闭");
     switchReadDeviceNewValTime.value = false;
     clearInterval(readDeviceIsOnLineTime);
     clearInterval(readDeviceNewValTime);

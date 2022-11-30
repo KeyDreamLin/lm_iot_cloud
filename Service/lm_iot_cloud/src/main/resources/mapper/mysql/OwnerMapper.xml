@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lm.admin.mapper.mysql.owner.OwnerMapper">
+    <!-- 用户拥有设备表 -->
+    <!-- 根据设备id删除 -->
+    <delete id="delUserOwnerDeviceByDid">
+        DELETE FROM lm_user_owner_device where device_id = #{device_id}
+    </delete>
+    <!-- 根据用户id删除 -->
+    <delete id="delUserOwnerDeviceByUid">
+        DELETE FROM lm_user_owner_device where user_id = #{user_id}
+    </delete>
+    <!-- 添加一条记录-->
+    <insert id="addUserOwnerDevice" >
+        INSERT INTO lm_user_owner_device VALUES(#{user_id}, #{device_id})
+    </insert>
+    <!-- END -->
+
+    <!-- 用户拥有设备分组表 -->
+    <!-- 根据设备分组id删除 -->
+    <insert id="delUserOwnerGroupingByGid">
+        DELETE FROM lm_user_owner_device_grouping WHERE grouping_id = #{grouping_id}
+    </insert>
+    <!-- 根据用户id删除 -->
+    <insert id="delUserOwnerGroupingByUid">
+        DELETE FROM lm_user_owner_device_grouping WHERE user_id = #{user_id}
+    </insert>
+    <!-- 添加一条记录 -->
+    <insert id="addUserOwnerGrouping">
+        INSERT INTO lm_user_owner_device_grouping VALUE (#{user_id},#{grouping_id})
+    </insert>
+    <!-- END -->
+
+    <!-- 用户拥有设备策略表 -->
+    <!-- 根据设备策略id删除 -->
+    <delete id="delUserOwnerStrategyBySid">
+        DELETE FROM lm_user_owner_device_strategy WHERE strategy_id = #{strategy_id}
+    </delete>
+    <!-- 根据用户id删除 -->
+    <delete id="delUserOwnerStrategyUid">
+        DELETE FROM lm_user_owner_device_strategy WHERE user_id = #{user_id}
+    </delete>
+    <!-- 添加一条记录 -->
+    <insert id="addUserOwnerStrategy">
+        INSERT INTO lm_user_owner_device_strategy VALUE (#{user_id},#{strategy_id})
+    </insert>
+    <!-- END -->
+
+    <!-- 分组拥有设备表 -->
+    <!-- 根据设备id删除 -->
+    <delete id="delGroupingByDid">
+        DELETE FROM lm_grouping_owner_device where device_id = #{device_id}
+    </delete>
+    <!-- 根据分组id删除 -->
+    <delete id="delGroupingByGid">
+        DELETE FROM lm_grouping_owner_device where grouping_id = #{grouping_id}
+    </delete>
+    <!-- 添加一条设备加入分组 -->
+    <insert id="addGroupingOwnerDevice">
+        INSERT INTO lm_grouping_owner_device VALUE (#{grouping_id},#{device_id})
+    </insert>
+    <!-- 添加多个设备加入分组 -->
+    <insert id="addGroupingOwnerDevices">
+        INSERT INTO lm_grouping_owner_device VALUE
+        <foreach collection="device_id_s"  item="deviceId" separator="," index="index">
+            (#{grouping_id},#{deviceId})
+        </foreach>
+    </insert>
+    <!-- 查询设备分组拥有的设备id  根据分组id -->
+    <select id="findGroupingOwnerDeviceById" resultType="java.lang.Long">
+        SELECT `device_id` FROM lm_grouping_owner_device WHERE grouping_id = #{grouping_id}
+    </select>
+    <!-- END -->
+
+</mapper>

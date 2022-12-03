@@ -65,7 +65,13 @@ public class StrategyTask {
         // 规则上下文
         DefaultContext<String, Object> context = new DefaultContext<String, Object>();
         // 2、循环遍历所有的规则
-        deviceStrategyDtos.forEach(dSitem->{
+
+
+        for (DeviceStrategyDto dSitem : deviceStrategyDtos) {
+            if(dSitem.getStatus() == 0){
+                continue;
+            }
+
             // 3、使用正则表达式 获取策略表达式里面{}里面设备和标签的值并查询出最新数据
             matcher = pattern.matcher(dSitem.getTriggerStr());
             // 将正则表达式解析到的数据 传入上下文 ------ 处理策略表达式里面的数据
@@ -151,7 +157,7 @@ public class StrategyTask {
             } catch (Exception e) {
 //                log.error(e.getMessage());
             }
-        });
+        }
     }
 
     // redis任务线程

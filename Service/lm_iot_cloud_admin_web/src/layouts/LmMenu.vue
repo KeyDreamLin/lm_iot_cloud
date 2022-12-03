@@ -18,7 +18,7 @@
                     <!-- 父元素有子元素的 -->
                     <template v-if="menu_root.children.length > 0">
                         <!-- 因为父元素的path是一样的 所以index不能用path用id代替就行 -->
-                        <el-sub-menu :index="menu_root.id +''">
+                        <el-sub-menu :index="menu_root.id +''" v-if="(storage.getters['user/getRoleCode'] == menu_root.code)">
                             <template #title>
                                 <span>{{ menu_root.name }}</span>
                             </template>
@@ -28,7 +28,7 @@
                                 :key="menu_c.id +''"
                             >
                                 <!-- index 用path是方便获取到路由路径后选中对应的项 -->
-                                <el-menu-item :index="menu_c.path" >
+                                <el-menu-item :index="menu_c.path" v-if="(storage.getters['user/getRoleCode'] == menu_c.code)" >
                                     <template #title>
                                         <span>{{ menu_c.name }}</span>
                                     </template>
@@ -40,7 +40,7 @@
                     <!-- 无子元素的父元素 -->
                     <template v-else>
                         <!-- index 用pathname是方便获取到 子路由中的子路由 路径后选中对应的项 -->
-                        <el-menu-item :index="menu_root.path">
+                        <el-menu-item :index="menu_root.path" v-if="(storage.getters['user/getRoleCode']==menu_root.code  || menu_root.name=='仪表盘')" >
                             <template #title>
                                 <span>{{ menu_root.name }}</span>
                             </template>
@@ -48,7 +48,6 @@
                     </template>
                 </template>
             </el-menu> 
-            {{thisPathName}}
         </div>
     </div>
 </template>
@@ -60,6 +59,8 @@ import permissionService from '@/services/permission/PermissionService.js'
 import { useRouter } from 'vue-router';
 // 用于获取当前路由的状态和地址
 import { useRoute } from 'vue-router';
+import storage from '@/storage';
+
 // 用于路由对象 对路由进行操作
 const router = useRouter();
 // 用于获取当前路由的状态和地址

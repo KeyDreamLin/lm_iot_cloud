@@ -11,6 +11,8 @@ import com.lm.admin.entity.vo.user.UserLoginVo;
 import com.lm.admin.service.roles.RolesServiceImpl;
 import com.lm.admin.service.user.UserServiceImpl;
 import com.lm.admin.utils.LmAssert;
+import com.lm.admin.utils.pwd.DesUtils;
+import com.lm.admin.utils.pwd.MD5Util;
 import com.lm.common.redis.adminkey.RedisAndHeaderKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,14 +72,25 @@ public class LoginController extends UserBaseController implements RedisAndHeade
         // 判断验证码是否 输入正确
         LmAssert.isFalseEx(db_codeByUuid.equals(userLoginVo.getCode()),UserResultEnum.USER_INPUT_CODE_ERROR);
 
+        // 前端密码会进行DES加密 然后后端解密DES后Md5加密存入数据库
 
+        // 将前端回调的Des加密 密码 解密
+        userLoginVo.setPassword(DesUtils.decrypt(userLoginVo.getPassword()));
+        // 然后存进数据库的是md5加密
+        userLoginVo.setPassword(MD5Util.strToMd5s(userLoginVo.getPassword()));
 
         // 2、通过账号获取用户的信息 判断账号是否存在、密码是否匹配
         User db_user = userService.getUserByAccount(userLoginVo.getAccount());
         // 如果通过账号查询不出用户信息 null 就抛出异常
         LmAssert.isNotNull(db_user,UserResultEnum.USER_LOGIN_NO_EXIST);
+
         // 判断前端传过来的密码 是否和 数据库查询出来的密码一样
         LmAssert.isFalseEx(db_user.getPassword().equals(userLoginVo.getPassword()),UserResultEnum.USER_LOGIN_NO_EXIST);
+        // 判断账号是否被禁用
+        LmAssert.isFalseEx((db_user.getStatus() == 1) ,UserResultEnum.USER_LOGIN_ACCOUNT_STATE_STOP_USE);
+
+
+
 
         // 3、查询出对应的角色信息
         Roles rolesByUserId = rolesService.getRolesByUserId(db_user.getId());

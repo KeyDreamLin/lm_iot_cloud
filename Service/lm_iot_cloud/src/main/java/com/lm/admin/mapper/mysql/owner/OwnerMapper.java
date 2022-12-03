@@ -12,6 +12,30 @@ import java.util.List;
  */
 @Mapper
 public interface OwnerMapper {
+    // ------------------- 用户拥有角色表 -------------------
+
+    /**
+     * 根据 用户id 删除对应的 用户拥有 角色
+     * @param userId
+     * @return
+     */
+    Integer delUserOwnerRoleByUserId(@Param("user_id")Long userId);
+
+    /**
+     * 根据 用户id 删除对应的 用户拥有 角色
+     * @param roleId 角色id
+     * @return
+     */
+    Integer delUserOwnerRoleByRoleId(@Param("role_id")Long roleId);
+
+    /**
+     * 根据 添加 用户拥有角色
+     * @param userId 用户id
+     * @param roleId 角色id
+     * @return
+     */
+    Integer addUserOwnerRole(@Param("user_id")Long userId,@Param("role_id") Long roleId);
+
     // ------------------- 用户拥有设备表 --------------------
     /**
      * 根据设备id删除 用户 拥有 设备表

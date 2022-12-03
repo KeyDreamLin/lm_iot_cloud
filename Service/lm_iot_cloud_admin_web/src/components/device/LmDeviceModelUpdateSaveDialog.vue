@@ -150,7 +150,8 @@ const open = (async (isupadate,deviceModel,deviceInfo)=>{
 });
 const close = (()=>{
     isShowDialog.value = false;
-    deviceModelInfo.value = deviceModelInfoNull;
+    let{...deviceModelInfoNull_1} = deviceModelInfoNull;
+    deviceModelInfo.value = deviceModelInfoNull_1;
 });
 // select下拉框数据类型变动回调
 const selectDataTypeEvent = ((val)=>{

@@ -9,8 +9,6 @@ import deviceLookOneInfo from '@/views/device/device/lookOneInfo.vue'
 // ------------------- 设备、数据、信息 -------------------
 
 
-import deviceModelList from '@/views/device/model/list.vue'
-
 // ------------------- 设备分组 -------------------
 import deviceGroupingChildPage from '@/views/device/grouping/childPage.vue'
 import deviceGroupingList from '@/views/device/grouping/list.vue'
@@ -22,6 +20,12 @@ import deviceStrategyChildPage from '@/views/device/strategy/childPage.vue'
 import deviceStrategyList from '@/views/device/strategy/list.vue'
 import deviceStrategyForm from '@/views/device/strategy/examine.vue'
 // ------------------- 策略 -------------------
+
+// ------------------- 用户管理 -------------------
+import userChildPage from '@/views/user/childPage.vue'
+import userList from '@/views/user/list.vue'
+// ------------------- 用户管理 -------------------
+
 
 // 子路由
 const routes_children = [
@@ -47,12 +51,6 @@ const routes_children = [
                 component : deviceLookOneInfo,
             },
         ]
-    },
-    {
-        path: '/device/model/list',
-        name: "/device/model/list",
-        meta: { title: '物模型管理' },
-        component : deviceModelList,
     },
     {
         path: '/device/grouping',
@@ -87,6 +85,19 @@ const routes_children = [
                 component : deviceStrategyForm,
             }
         ],
+    },
+    {
+        path: '/user',
+        meta: { title: '用户列表' , Lname: '/user/list'},
+        component: userChildPage,
+        children:[
+            {
+                path: '/user/list',
+                meta: { title: '用户列表' , Lname: '/user/list'},
+                component: userList,
+            }
+        ],
+
     },
     {
         path: '/test',

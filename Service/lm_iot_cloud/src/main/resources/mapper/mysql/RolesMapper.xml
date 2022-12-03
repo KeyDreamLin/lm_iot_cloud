@@ -14,4 +14,10 @@
             u.id = ur.user_id and
             u.id = #{u_id}
     </select>
+    <select id="findRolesList" resultType="com.lm.admin.entity.pojo.roles.Roles">
+        SELECT
+            *
+        FROM
+            lm_roles
+    </select>
 </mapper>

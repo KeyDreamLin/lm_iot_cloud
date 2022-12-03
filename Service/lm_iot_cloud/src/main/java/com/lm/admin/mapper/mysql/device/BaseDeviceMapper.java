@@ -25,13 +25,13 @@ public interface BaseDeviceMapper {
      * 查询全部的设备数量
      * @return
      */
-    Integer findDeviceCount();
+    Integer findDeviceCount(@Param("user_id") Long userId);
 
     /**
      * 查詢所有设备
      * @return
      */
-    List<Device> findDeiceList(@Param("uid") Long uid);
+    List<Device> findDeiceList(@Param("user_id") Long uid);
 
     /**
      * 根据设备分组id查询到对应的设备信息列表
@@ -40,7 +40,7 @@ public interface BaseDeviceMapper {
      */
     List<Device> findDevicesByGroupingId(@Param("groupingId") Long groupingId);
 
-    List<DeviceSelectBo> findDeviceIdSnName(@Param("uid") Long uid);
+    List<DeviceSelectBo> findDeviceIdSnName(@Param("user_id") Long uid);
 
     /**
      * 添加一个设备

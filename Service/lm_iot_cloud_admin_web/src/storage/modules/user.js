@@ -21,6 +21,9 @@ export default {
             state.roleCode = serverUserData.roleCode;
             console.log("stroe:用户信息保存---->", state);
         },
+        setToken_Jj(state,jj){
+            state.tokenJj = jj;
+        }
     },
     // 调用的方法dispatch("名称")  通常用于异步查询
     actions: {

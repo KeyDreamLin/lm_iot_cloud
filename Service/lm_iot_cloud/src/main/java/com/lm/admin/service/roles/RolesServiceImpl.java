@@ -5,6 +5,8 @@ import com.lm.admin.mapper.mysql.roles.RolesMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 角色管理服务 实现类
  * @author Lm
@@ -25,4 +27,15 @@ public class RolesServiceImpl implements IRolesService{
     public Roles getRolesByUserId(Long uid) {
         return rolesMapper.findRolesByUserId(uid);
     }
+
+    /**
+     * 查询所有的角色信息
+     * @return
+     */
+    @Override
+    public List<Roles> getRolesList() {
+        return rolesMapper.findRolesList();
+    }
+
+
 }

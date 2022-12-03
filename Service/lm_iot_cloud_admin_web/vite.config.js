@@ -11,6 +11,8 @@ export default defineConfig({
     },
   },
   server: {
+    host:'0.0.0.0' ,//ip地址
+    port: 80, // 设置服务启动端口号
     // 请求代理
     proxy: {
       '/api': {

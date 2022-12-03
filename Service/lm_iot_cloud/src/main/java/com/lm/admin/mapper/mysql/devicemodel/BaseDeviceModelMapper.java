@@ -33,13 +33,13 @@ public interface BaseDeviceModelMapper {
      * 查询有多少条物模型数据
      * @return
      */
-    Integer findDeviceModelAllCount();
+    Integer findDeviceModelAllCount(@Param("user_id") Long userId);
 
     /**
      * 查询今天新增了多少条物模型数据
      * @return
      */
-    Integer findThisDayNewDeviceModelCount();
+    Integer findThisDayNewDeviceModelCount(@Param("user_id") Long userId);
 
     /**
      * 添加一条物模型数据

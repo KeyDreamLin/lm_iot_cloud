@@ -116,7 +116,7 @@ public class DeviceStrategyServiceImpl implements IDeviceStrategyService {
      */
     @Override
     public Integer getDeviceStrategyAllCount() {
-        return getBaseDeviceStrategyMapper().findDeviceStrategyAllCount();
+        return getBaseDeviceStrategyMapper().findDeviceStrategyAllCount(userHeader.getUserId());
     }
 
     /**

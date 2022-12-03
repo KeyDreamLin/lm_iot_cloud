@@ -83,6 +83,9 @@ import { onMounted, ref } from 'vue';
 import codeService from '@/services/common/code/CodeService.js';
 import userService from '@/services/user/UserService';
 import storage from '@/storage';
+import { LmMessageError, LmMessageSuccess } from '@/utils';
+import * as utils from '@/utils/index.js';
+
 // 是否是注册状态
 const is_signUp = ref(false);
 // 验证码图片
@@ -105,10 +108,13 @@ const login = (async ()=>{
     let {username,doublePassword,...loginData} = viewData.value;
 
     try{
+        loginData.password = utils.encryptByDES(loginData.password);
+        
         let serverReponse = await storage.dispatch("user/toLogin",loginData);
         console.log("服务器回调:登录成功信息--------->",serverReponse);
         // 登录成功就跳转到后台
         router.push("/");
+        LmMessageSuccess("登录成功！");
     }catch(err){
         console.log("服务器回调:登录异常信息--------->",err);
         // 登录失败就要刷新一次验证码 当然不刷后端也做处理了 同一个UUID返回异常

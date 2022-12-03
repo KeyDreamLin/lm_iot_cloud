@@ -1,6 +1,6 @@
 package com.lm.admin.config;
 
-import com.lm.admin.filter.TestLm;
+import com.lm.admin.filter.UserAuth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -17,7 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
-    private TestLm testLm;
+    private UserAuth userAuth;
 
     /**
      * 配置 允许跨域
@@ -40,7 +40,7 @@ public class WebConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(testLm).excludePathPatterns("/api/user/login/**","/api/common/captcha");
+        registry.addInterceptor(userAuth).excludePathPatterns("/api/user/login/**","/api/common/captcha");
 
     }
 

@@ -89,7 +89,7 @@ public class DeviceModelServiceImpl implements IDeviceModelService {
      */
     @Override
     public Integer getDeviceModelAllCount() {
-        return getBaseDeviceModelMapper().findDeviceModelAllCount();
+        return getBaseDeviceModelMapper().findDeviceModelAllCount(userHeader.getUserId());
     }
 
     /**
@@ -99,7 +99,7 @@ public class DeviceModelServiceImpl implements IDeviceModelService {
      */
     @Override
     public Integer getThisDayNewDeviceModelCount() {
-        return getBaseDeviceModelMapper().findThisDayNewDeviceModelCount();
+        return getBaseDeviceModelMapper().findThisDayNewDeviceModelCount(userHeader.getUserId());
     }
 
 

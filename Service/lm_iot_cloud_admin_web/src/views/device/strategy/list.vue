@@ -50,11 +50,11 @@
                     <template #default="scope">
                         <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round @click="examineEvent(scope.row.id)">查看</el-tag>
                         <template v-if="scope.row.status==1">
-                            <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>停止</el-tag>
+                            <el-tag class="mx-1 mt-1" color="#b48bf7" @click="updStrategyStatusEvent(scope.row,0)" effect="dark" round>停止</el-tag>
                             <!-- <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>触发</el-tag> -->
                         </template>
                         <template v-if="scope.row.status==0">
-                            <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>启动</el-tag>
+                            <el-tag class="mx-1 mt-1" color="#b48bf7" @click="updStrategyStatusEvent(scope.row,1)" effect="dark" round>启动</el-tag>
                         </template>
                         <!-- <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" round>日记</el-tag> -->
                         <el-tag class="mx-1 mt-1" color="#b48bf7" effect="dark" @click="delStrategyEvent(scope.row)" round>删除</el-tag>
@@ -96,6 +96,21 @@ const getStrategyPage = ( async ()=>{
 // 查看策略详细信息
 const examineEvent=((thisRowId)=>{
     router.push("/device/strategy/examine?id="+thisRowId);
+});
+// 更新策略状态
+const updStrategyStatusEvent = (async (data,status)=>{
+    console.log("更新策略状态------->",data,status);
+    let msgret = await LmMessageConfirm("是否修改策略状态！","更新警告");
+    if(msgret == true){
+        try {
+            data.status = status;
+            let ret = await deviceStrategyService.update(data);
+            LmMessageSuccess("更新策略状态成功!");
+            await getStrategyPage();
+        } catch (error) {
+            LmMessageError(error.msg);
+        }
+    }
 });
 // 删除策略信息
 const delStrategyEvent = (async (row)=>{

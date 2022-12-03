@@ -119,6 +119,8 @@ public class DeviceGroupingServiceImpl implements IDeviceGroupingService {
         int row =  getBaseDeviceMapper().delDeviceGrouping(groupingId);
         // 删除设备分组拥有设备的中间表数据
         ownerMapper.delGroupingByGid(groupingId);
+        // 删除用户拥有的设备分组
+        ownerMapper.delUserOwnerGroupingByGid(groupingId);
         return row;
     }
 

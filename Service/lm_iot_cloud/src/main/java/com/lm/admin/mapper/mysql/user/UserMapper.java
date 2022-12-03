@@ -1,8 +1,13 @@
 package com.lm.admin.mapper.mysql.user;
 
+import com.lm.admin.entity.bo.user.UserRoleBo;
 import com.lm.admin.entity.pojo.user.User;
+import com.lm.admin.entity.vo.user.UserRoleVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.transaction.jta.UserTransactionAdapter;
+
+import java.util.List;
 
 /**
  * 用户管理 Mapper接口
@@ -19,11 +24,27 @@ public interface UserMapper {
      * @dae: 2022/11/21 15:21
      **/
     User findUserByAccount(@Param("account") String account);
-    // 添加Admin用户 根据id
 
-    // 更新Admin用户 根据id
+    /**
+     * 根据id查询用户信息
+     * @param id
+     * @return
+     */
+    UserRoleBo findUserById(@Param("userId") Long id);
 
-    // 保存Admin用户 根据id
+    /**
+     * 获取用户信息和对应的角色信息 列表
+     * @return UserRoleBo
+     */
+    List<UserRoleBo> findUserAndRoleList();
 
-    // 删除Admin用户 根据id
+    /**
+     * 添加一个用户
+     * @param user
+     * @return
+     */
+    Integer addUser(@Param("u") UserRoleVo user);
+
+    Integer updateUser(@Param("u") UserRoleVo user);
+
 }

@@ -68,7 +68,7 @@ public interface BaseDeviceStrategyMapper {
      * 平台设备策略总数
      * @return
      */
-    Integer findDeviceStrategyAllCount();
+    Integer findDeviceStrategyAllCount(@Param("user_id")Long userId);
 
     /**
      * 平台策略启用的数量

@@ -109,7 +109,7 @@ defineExpose({
     open,close
 })
 const update_add_event = (async ()=>{
-    if(deviceGroupingInfo.value.name.length>=0){
+    if(deviceGroupingInfo.value.name.length<=0){
         LmMessageError("请输入分组名称!");        
         return;
     }

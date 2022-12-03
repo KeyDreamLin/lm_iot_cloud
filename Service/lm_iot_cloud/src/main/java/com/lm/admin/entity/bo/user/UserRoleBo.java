@@ -1,4 +1,4 @@
-package com.lm.admin.entity.pojo.user;
+package com.lm.admin.entity.bo.user;
 
 import com.lm.admin.config.mybatis.annotation.FieldFill;
 import com.lm.admin.config.mybatis.annotation.IdType;
@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * 用户信息 - mysql
+ * 用户信息-角色信息 一起查询出来 - mysql
  * @author Lm
- * @date 2022/11/21 15:15
+ * @date 2022/12/03 9:25
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements java.io.Serializable {
+public class UserRoleBo implements java.io.Serializable {
 
     // 主键
     @TableId(type = IdType.ASSIGN_ID)
@@ -46,5 +46,14 @@ public class User implements java.io.Serializable {
     // 更新时间
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
+
+    // 角色id
+    private Long roleId;
+
+    // 角色名称
+    private String roleName;
+
+    // 角色代号
+    private String roleCode;
 
 }

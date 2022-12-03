@@ -21,8 +21,8 @@
         )
     </select>
 
-    <select id="findDeviceSnName" resultType="com.lm.admin.entity.bo.device.DeviceSelectBo">
-        SELECT `sn`,`name` from lm_device
+    <select id="findDeviceIdSnName" resultType="com.lm.admin.entity.bo.device.DeviceSelectBo">
+        SELECT `id`, `sn`,`name` from lm_device
     </select>
 
 

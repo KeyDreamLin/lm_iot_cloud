@@ -3,6 +3,7 @@ package com.lm.admin.controller.device_api.device;
 import com.lm.admin.common.r.DeviceResultEnum;
 import com.lm.admin.controller.device_api.DeviceBaseController;
 import com.lm.admin.entity.bo.device.DeviceSelectBo;
+import com.lm.admin.entity.dto.user.UserHeader;
 import com.lm.admin.entity.vo.device.*;
 import com.lm.admin.entity.bo.device.DeviceBo;
 import com.lm.admin.entity.bo.device.DeviceModelAndNewDataBo;
@@ -10,6 +11,7 @@ import com.lm.admin.service.device.DeviceServiceImpl;
 import com.lm.admin.service.device.IDeviceService;
 import com.lm.admin.service.devicedata.DeviceDataServiceImpl;
 import com.lm.admin.utils.LmAssert;
+import com.lm.admin.utils.lmthreadlocal.RoleThreadLocal;
 import com.lm.admin.utils.mybiats.Pager;
 import com.lm.cloud.tcp.service.utils.DeviceCmdUtils;
 import com.lm.cloud.tcp.service.utils.RedisDeviceUtils;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.websocket.server.PathParam;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -37,6 +40,8 @@ public class DeviceController extends DeviceBaseController {
     private DeviceServiceImpl deviceService;
     @Autowired
     private DeviceDataServiceImpl deviceDataService;
+
+    private UserHeader userHeader;
 
     // 按照名字去匹配 不能用Autowired因为用类型匹配的
     @Resource(name = "fastjson2RedisTemplate")
@@ -177,9 +182,35 @@ public class DeviceController extends DeviceBaseController {
     public Integer getDeviceCount(){
         return  deviceService.getDeviceCount();
     }
+    // 查询设备上线数量
     @PostMapping("/deviceupcount")
     public Integer getDeviceUpCount(){
+        //
         Set<String> keys = redisTemplate.keys(CloudRedisKey.DeviceSnToChannelIdKey + "*");
-        return keys.size();
+        List<String> keyList = new ArrayList<>();
+
+        keys.forEach(item->{
+            String a = item.split(":")[5];
+            keyList.add(a);
+        });
+
+        log.info("---->{}",keyList.toString());
+        userHeader = RoleThreadLocal.get();
+        int isUpCount = 0;
+
+        List<DeviceSelectBo> deviceIdSnNameList = deviceService.getDeviceIdSnName();
+
+        if(userHeader.getUserRoleCode()!=null && userHeader.getUserRoleCode().equals("CLOUD_USER")){
+            for (DeviceSelectBo deviceSelectBo : deviceIdSnNameList) {
+                if(keyList.contains(deviceSelectBo.getSn()) == true){
+                    isUpCount++;
+                }
+            }
+            return isUpCount;
+        }
+        else if(userHeader.getUserRoleCode()!=null && userHeader.getUserRoleCode().equals("CLOUD_ADMIN")){
+            return keys.size();
+        }
+        return 0;
     }
 }

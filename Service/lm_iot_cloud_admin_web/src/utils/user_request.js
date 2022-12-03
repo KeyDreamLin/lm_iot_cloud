@@ -4,6 +4,7 @@ import axios from 'axios'
 import storage from '@/storage';
 // 路由管理 
 import router from '@/router';
+import { LmMessageError } from '.';
 // import errorCode from '@/utils/errorCode';
 // // 导入弹窗工具类
 // import { LmMessageError } from "@/utils/index.js";
@@ -41,6 +42,8 @@ lm_request_user.interceptors.response.use((response) => {
     if(res_data.code == 200){
         return (res_data);
     }
+    
+    LmMessageError(res_data.msg);
     return Promise.reject(res_data);
 
 }, function (err) {

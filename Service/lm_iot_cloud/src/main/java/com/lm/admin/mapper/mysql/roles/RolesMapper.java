@@ -4,6 +4,8 @@ import com.lm.admin.entity.pojo.roles.Roles;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * 角色管理mapper mysql
  * @author Lm
@@ -18,4 +20,9 @@ public interface RolesMapper {
      */
     Roles findRolesByUserId(@Param("u_id") Long uid);
 
+    /**
+     * 查询所有的角色
+     * @return
+     */
+    List<Roles> findRolesList();
 }

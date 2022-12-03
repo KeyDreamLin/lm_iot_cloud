@@ -46,19 +46,33 @@
                 <if test="dS.status!=null">`status`=#{dS.status},</if>
                 <if test="dS.updateTime!=null">`update_time`=#{dS.updateTime},</if>
             </trim>
-
         WHERE
             id = #{dS.id}
     </update>
     
     <!-- 平台设备策略总数 -->
     <select id="findDeviceStrategyAllCount" resultType="java.lang.Integer">
-        SELECT count(1) FROM lm_device_strategy
+        select
+            count(1)
+        from
+            `lm_device_strategy` as ds
+                INNER JOIN lm_user_owner_device_strategy as uods
+        WHERE
+            uods.user_id = #{user_id} and
+            ds.id = uods.strategy_id
     </select>
 
     <!-- 平台策略启用的数量 -->
     <select id="findOpenDeviceStrategyCount" resultType="java.lang.Integer">
-        SELECT count(1) FROM lm_device_strategy where `status` = 1
+        select
+            count(1)
+        from
+            `lm_device_strategy` as ds
+                INNER JOIN lm_user_owner_device_strategy as uods
+        WHERE
+            uods.user_id = #{user_id} and
+            ds.`status` = 1 and
+            ds.id = uods.strategy_id
     </select>
 
 </mapper>

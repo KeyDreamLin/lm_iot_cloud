@@ -162,9 +162,13 @@ public class DeviceServiceImpl implements IDeviceService {
     }
 
 
+    /**
+     * 查询设备数量 普通用户查询自己拥有的设备
+     * @return
+     */
     @Override
     public Integer getDeviceCount() {
-        return getBaseDeviceMapper().findDeviceCount();
+        return getBaseDeviceMapper().findDeviceCount(userHeader.getUserId());
     }
 
     /**

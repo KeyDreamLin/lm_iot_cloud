@@ -28,6 +28,9 @@
         VALUES
                (#{dS.id},#{dS.name},#{dS.describe},#{dS.createTime},#{dS.updateTime})
     </insert>
+    <delete id="delDeviceStrategy">
+        DELETE FROM lm_device_strategy WHERE id = #{strategy_id}
+    </delete>
     <!-- 更新策略信息 -->
     <update id="updateDeviceStrategy" >
         UPDATE lm_device_strategy
@@ -39,7 +42,6 @@
                 <if test="dS.status!=null">`status`=#{dS.status},</if>
                 <if test="dS.updateTime!=null">`update_time`=#{dS.updateTime},</if>
             </trim>
-
         WHERE
             id = #{dS.id}
     </update>

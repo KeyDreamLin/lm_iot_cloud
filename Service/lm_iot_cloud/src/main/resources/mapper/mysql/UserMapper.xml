@@ -9,4 +9,58 @@
         where
             account = #{account} ;
     </select>
+    <select id="findUserById" resultType="com.lm.admin.entity.bo.user.UserRoleBo">
+        select
+            u.* ,ur.role_id,r.role_name,r.role_code
+        from
+            lm_user as u,lm_roles as r
+                             INNER JOIN lm_user_roles as ur
+        WHERE u.`id` = ur.user_id and r.id = ur.role_id and u.`id` = #{userId} ;
+
+    </select>
+    <!-- 查询用户信息和对应的角色信息 -->
+    <select id="findUserAndRoleList" resultType="com.lm.admin.entity.bo.user.UserRoleBo">
+        select
+            u.* ,ur.role_id,r.role_name
+        from
+            lm_user as u,lm_roles as r
+                             INNER JOIN lm_user_roles as ur
+        WHERE u.id = ur.user_id and r.id = ur.role_id
+    </select>
+
+    <!-- 添加一个用户 -->
+    <insert id="addUser" parameterType="com.lm.admin.entity.vo.user.UserRoleVo">
+        INSERT INTO
+            lm_user
+        (
+            `id`,
+            `username`,
+            `account`,
+            `avatar`,
+            `password`,
+            `status`,
+            `create_time`,
+            `update_time`
+        )
+        VALUES
+            (#{u.id},#{u.username},#{u.account},#{u.avatar},#{u.password},#{u.status},#{u.createTime},#{u.updateTime})
+        <!-- 指定结果类型resultType，keyProperty是属性，自动返回到属性id中，order是次序，after是指获取id是在于插入后 -->
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <!-- 修改应一个设备信息 -->
+    <update id="updateUser" parameterType="com.lm.admin.entity.vo.user.UserRoleVo">
+        UPDATE
+        lm_user
+        <trim prefix="set" suffixOverrides=",">
+            <if test="u.username!=null">`username`=#{u.username},</if>
+            <if test="u.account!=null">`account`=#{u.account},</if>
+            <if test="u.avatar!=null">`avatar`=#{u.avatar},</if>
+            <if test="u.password!=null">`password`=#{u.password},</if>
+            <if test="u.status!=null">`status`=#{u.status},</if>
+        </trim>
+        WHERE `id` = #{u.id}
+    </update>
 </mapper>

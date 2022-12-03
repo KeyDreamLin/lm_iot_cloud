@@ -2,6 +2,8 @@ package com.lm.admin.service.roles;
 
 import com.lm.admin.entity.pojo.roles.Roles;
 
+import java.util.List;
+
 /**
  * 角色管理服务 service接口
  * @author Lm
@@ -14,4 +16,10 @@ public interface IRolesService {
      * @return
      */
     Roles getRolesByUserId(Long uid);
+
+    /**
+     * 查询所有的角色信息
+     * @return
+     */
+    List<Roles> getRolesList();
 }

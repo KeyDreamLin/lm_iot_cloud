@@ -25,7 +25,7 @@
             lm_user_owner_device as uod
         where
             d.id = uod.device_id and
-            uod.user_id = #{uid}
+            uod.user_id = #{user_id}
     </select>
     <!-- 查询所有设备 -->
      <select id="findDeiceList" resultType="com.lm.admin.entity.pojo.device.Device">
@@ -37,7 +37,7 @@
             lm_user_owner_device as uod
         where
             d.id = uod.device_id and
-            uod.user_id = #{uid}
+            uod.user_id = #{user_id}
     </select>
     <!-- 根据设备分组id查询到对应的设备信息列表 -->
     <select id="findDevicesByGroupingId"  resultType="com.lm.admin.entity.pojo.device.Device">
@@ -55,7 +55,7 @@
                  lm_user_owner_device as uod
         where
               d.id = uod.device_id and
-              uod.user_id = #{uid}
+              uod.user_id = #{user_id}
     </select>
 
     <!-- 添加一个设备 -->

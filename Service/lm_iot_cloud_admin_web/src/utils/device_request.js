@@ -33,7 +33,14 @@ lm_request_admin.interceptors.response.use((response) => {
     }
     // 如果服务器返回200 就代表成功
     if (res_data.code == 200) {
-        
+        // 更新token_Jj jwt 秘钥
+        if(
+            response.headers.token_jj != undefined && 
+            typeof response.headers.token_jj != undefined
+        ){
+            storage.commit("user/setToken_Jj",response.headers.token_jj); 
+            console.log("-------------updataToken_Jj");
+        }
         return res_data 
     }
     return Promise.reject(res_data);

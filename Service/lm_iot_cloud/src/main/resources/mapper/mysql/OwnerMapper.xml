@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lm.admin.mapper.mysql.owner.OwnerMapper">
+
+
+
+    <!-- 用户拥有角色表 -->
+    <!-- 根据 用户id 删除对应的 用户拥有 角色-->
+    <delete id="delUserOwnerRoleByUserId">
+        DELETE FROM lm_user_roles WHERE user_id = #{user_id}
+    </delete>
+    <!-- 根据 用户id 删除对应的 用户拥有 角色-->
+    <delete id="delUserOwnerRoleByRoleId">
+        DELETE FROM lm_user_roles WHERE role_id = #{role_id}
+    </delete>
+    <!-- 根据 添加 用户拥有角色-->
+    <insert id="addUserOwnerRole">
+        INSERT INTO lm_user_roles VALUES(#{user_id}, #{role_id})
+    </insert>
+
     <!-- 用户拥有设备表 -->
     <!-- 根据设备id删除 -->
     <delete id="delUserOwnerDeviceByDid">

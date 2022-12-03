@@ -33,7 +33,7 @@ public class JwtConfig {
     //1小时
     private static final Long ONE_HOUR = ONE_MINUTE * 60;
     //token 10小时过期
-    private static final Long TOKEN_EXPIRE_TIME = ONE_HOUR * 10;
+    private static final Long TOKEN_EXPIRE_TIME = ONE_HOUR * 18;
 
     /**
      * 生成秘钥

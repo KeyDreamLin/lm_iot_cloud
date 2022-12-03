@@ -3,10 +3,14 @@ package com.lm.admin.filter;
 import com.lm.admin.common.anno.login.IgnoreToken;
 import com.lm.admin.common.r.UserResultEnum;
 import com.lm.admin.config.jwt.JwtConfig;
+import com.lm.admin.entity.bo.user.UserRoleBo;
 import com.lm.admin.entity.dto.user.UserHeader;
 import com.lm.admin.entity.pojo.roles.Roles;
+import com.lm.admin.entity.pojo.user.User;
 import com.lm.admin.mapper.mysql.roles.RolesMapper;
 import com.lm.admin.service.roles.RolesServiceImpl;
+import com.lm.admin.service.user.UserServiceImpl;
+import com.lm.admin.utils.DateTool;
 import com.lm.admin.utils.LmAssert;
 import com.lm.admin.utils.lmthreadlocal.RoleThreadLocal;
 import com.lm.common.redis.adminkey.RedisAndHeaderKey;
@@ -24,18 +28,21 @@ import java.lang.reflect.Method;
 import java.util.Date;
 
 /**
- * 拦截器测试
+ * 拦截器 用户验证
  * @author Lm
  * @date 2022/11/22 9:41
  */
 @Component
 @Slf4j
-public class TestLm implements HandlerInterceptor{
+public class UserAuth implements HandlerInterceptor{
     @Autowired
     private JwtConfig jwtConfig;
 
     @Autowired
     private RolesServiceImpl rolesService;
+
+    @Autowired
+    private UserServiceImpl userService;
 
     //用于在将请求发送到控制器之前执行操作。此方法应返回true，以将响应返回给客户端。
     @Override
@@ -66,6 +73,12 @@ public class TestLm implements HandlerInterceptor{
         // 获取到jwt里面的userId
         Long tokenUserId = jwtConfig.getTokenUserId(token_Jj);
 
+
+        // 检查用户的状态  是否禁用
+        UserRoleBo userById = userService.getUserById(tokenUserId);
+        LmAssert.isFalseEx((userById.getStatus() == 1) ,UserResultEnum.USER_LOGIN_ACCOUNT_STATE_STOP_USE);
+
+
         // 通过jwt解析出来的用户id 查询出对应的角色信息
         Roles rolesByUserId = rolesService.getRolesByUserId(tokenUserId);
 
@@ -76,6 +89,22 @@ public class TestLm implements HandlerInterceptor{
 
         RoleThreadLocal.put(userHeader);
         log.info("jwt-->{}",token_Jj);
+
+
+        // 获取token jwt的签发时间
+        Date signTokenTime = jwtConfig.getTokenIssuedTime(token_Jj);
+        // 获取token使用时间
+        Long UseTokenDateMinute = DateTool.diffReturnMinute(new Date(),signTokenTime);
+        log.info("token jwt的使用时间--->{}",UseTokenDateMinute);
+        //使用时间超过了60分钟，就重新生成一串jwt返回给前端
+        if (UseTokenDateMinute >= 60){
+            // 续期，重新生成一个新的token
+            String newToken = jwtConfig.createToken(Long.valueOf(tokenUserId));
+            log.info("重新生成一个jwt--->{}",newToken);
+            // 通过response的头部输出token,然后前台通过reponse获取
+            response.setHeader("token_Jj", newToken);
+        }
+
         return true;
     }
 

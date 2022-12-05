@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
-import './style.css'
-import App from './App.vue'
+import '@/style.css'
+import App from '@/App.vue'
 
 // element组件导入
 import ElementPlus from 'element-plus'

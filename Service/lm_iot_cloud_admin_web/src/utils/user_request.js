@@ -42,7 +42,9 @@ lm_request_user.interceptors.response.use((response) => {
     if(res_data.code == 200){
         return (res_data);
     }
-    
+    if(res_data.code == 100105){
+        router.push("/login");
+    }
     LmMessageError(res_data.msg);
     return Promise.reject(res_data);
 

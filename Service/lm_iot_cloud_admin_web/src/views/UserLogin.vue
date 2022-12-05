@@ -124,13 +124,13 @@ const login = (async ()=>{
     }
 });
 const signup = (()=>{
-
+    LmMessageError("暂时不开放注册！");
 });
 // view数据 界面的数据
 const viewData = ref({
-    account:"xiaoma",  // 账号
+    account:"",  // 账号
     username:"",   // 用户名   - 注册
-    password:"wenhao",  // 密码
+    password:"",  // 密码
     doublePassword:"" ,  // 重复输入密码 - 注册
     code:"",  // 验证码
     codeuuid:"", 

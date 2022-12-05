@@ -120,22 +120,22 @@ const routes = [
             import('@/views/WebManage.vue'),
         children:routes_children
     },
-    {
-        // 后续可以动态生成这个地址 跟根据数据库 再说啦
-        path: "/asdasdasd",
-        meta: { title: "后台登录" },
-        name: "AdminLogin",
-        component: () =>
-            import('@/views/AdminLogin.vue'),
-    },
-    {
-        // 后续可以动态生成这个地址 跟根据数据库 再说啦
-        path: "/test",
-        meta: { title: "LmTest" },
-        name: "LmTest",
-        component: () =>
-            import('@/views/test/LmTest.vue'),
-    },
+    // {
+    //     // 后续可以动态生成这个地址 跟根据数据库 再说啦
+    //     path: "/asdasdasd",
+    //     meta: { title: "后台登录" },
+    //     name: "AdminLogin",
+    //     component: () =>
+    //         import('@/views/AdminLogin.vue'),
+    // },
+    // {
+    //     // 后续可以动态生成这个地址 跟根据数据库 再说啦
+    //     path: "/test",
+    //     meta: { title: "LmTest" },
+    //     name: "LmTest",
+    //     component: () =>
+    //         import('@/views/test/LmTest.vue'),
+    // },
     {
         // 后续可以动态生成这个地址 跟根据数据库 再说啦
         path: "/login",

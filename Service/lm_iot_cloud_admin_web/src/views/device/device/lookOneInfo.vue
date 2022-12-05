@@ -292,6 +292,8 @@ const SwitchCmdEvent = async (thisModelData) => {
         identifier:thisModelData.identifier,
         data: thisModelData.val,
     }
+    console.log("cmd----------------",cmdData);
+
     // 发送命令
     let Cmdresponse = await deviceService.cmd(cmdData);
     console.log("cmd----------------",Cmdresponse);

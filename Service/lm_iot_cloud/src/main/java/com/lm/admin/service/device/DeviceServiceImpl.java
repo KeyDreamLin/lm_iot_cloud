@@ -84,6 +84,9 @@ public class DeviceServiceImpl implements IDeviceService {
         DeviceAuthDto deviceAuthDto = new DeviceAuthDto();
         // 这里的给netty用的直接赋予最大权限 然后随便填个值
         Device deviceBySn = roleAdminDeviceMapper.findDeviceBySn(0L, sn);
+        if(deviceBySn == null){
+            return null;
+        }
         // TODO 加null
         BeanUtils.copyProperties(deviceBySn,deviceAuthDto);
         return deviceAuthDto;

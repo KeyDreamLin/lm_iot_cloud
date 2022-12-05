@@ -2,7 +2,7 @@
     <div class="lm-hello_box">
         <div class="lm-hello-left_box">
             <div class="lm-hello-title">
-                <span class="lm-title_1">{{getTimeState()}}好 , XiaoMa</span>
+                <span class="lm-title_1">{{getTimeState()}}好 , {{storage.getters["user/getUserName"]}}</span>
                 <!--  -->
                 <div class="lm-title-line"></div>
                 <span class="lm-title_2">人生最精彩的不是成功的那一瞬间，而是回头看，那段漆黑看似没有尽头、苦苦摸索的过程。</span>
@@ -10,7 +10,8 @@
           
         </div>
         <div class="lm-hello-right_box">
-            <el-image class="lm-hello-right-img"  src="src/assets/helloimg/img_1.png" fit="cover" />
+            <el-image class="lm-hello-right-img"  :src="getImageUrl('img_1')" fit="cover" />
+            <!-- <el-image class="lm-hello-right-img"  src="src/assets/helloimg/img_1.png" fit="cover" /> -->
         </div>
     </div>
 </template>
@@ -19,7 +20,9 @@
 <script setup>
 // 状态管理
 import storage from '@/storage';
-
+function getImageUrl(name) {
+  return new URL(`/src/assets/helloimg/${name}.png`, import.meta.url).href
+}
 
 let getTimeState = () => {
     // 获取当前时间

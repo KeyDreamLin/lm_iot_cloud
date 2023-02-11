@@ -4,9 +4,9 @@ server:
 spring:
   redis:
     host: 127.0.0.1
-    port: 2655
+    port: 6379
     database: 7
-    password: wenhao
+    password:
     # 连接池最大连接数（使用负值表示没有限制）
     max-active: -1
     # 连接池最大阻塞等待时间（使用负值表示没有限制）
@@ -53,18 +53,18 @@ spring:
     mysql:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://127.0.0.1:3306/lm_cloud_admin?serverTimezone=GMT%2B8&useSSL=true
-      username: lmsql
-      password: wenhao@lll
+      username: root
+      password: wenhao
       type: com.alibaba.druid.pool.DruidDataSource #简单引入druid
     tdengine:
-      #      driver-class-name: com.taosdata.jdbc.rs.RestfulDriver
-      #      url: jdbc:TAOS-RS://43.139.116.64:6041/lm_cloud_data
-      #      username: root
-      #      password: taosdata
-      driver-class-name: com.taosdata.jdbc.TSDBDriver
-      url: jdbc:TAOS://127.0.0.1:6030/lm_cloud_data
+      driver-class-name: com.taosdata.jdbc.rs.RestfulDriver
+      url: jdbc:TAOS-RS://127.0.0.1:6041/lm_cloud_data
       username: root
       password: taosdata
+#      driver-class-name: com.taosdata.jdbc.TSDBDriver
+#      url: jdbc:TAOS://127.0.0.1:6030/lm_cloud_data
+#      username: root
+#      password: taosdata
 
 # netsh interface portproxy add v4tov4 listenport=8859 listenaddress= 192.168.0.149 connectaddress= 192.168.0.149  connectport=3333
 # netsh interface portproxy reset
@@ -74,3 +74,5 @@ netty:
     host: 0.0.0.0
     port: 8859
 
+logging:
+  config: classpath:log4j2-spring.xml

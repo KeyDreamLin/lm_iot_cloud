@@ -45,7 +45,6 @@ public class TcpServer implements ITcpServer {
     public void start() {
         RedisDeviceUtils.delAll();
         log.info("初始化 TCP server ...");
-        log.debug("swwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwddddd");
         bossGroup = new NioEventLoopGroup();
         workerGroup = new NioEventLoopGroup();
         this.tcpServer();

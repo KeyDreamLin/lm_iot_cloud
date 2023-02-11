@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+<!--Configuration后面的status，这个用于设置log4j2自身内部的信息输出，可以不设置，当设置成trace时，你会看到log4j2内部各种详细输出-->
+<!--monitorInterval：Log4j能够自动检测修改配置 文件和重新配置本身，设置间隔秒数-->
+<configuration  status="warn"  monitorInterval="500">
+
+    <!--这里相当于配置变量，后面在 <Appenders>  标签引入 用${}-->
+    <Properties>
+        <Property name="LOG_HOME">logs</Property>
+        <!-- 控制台默认输出格式,"%d":表示打印的时间 "%5level":日志级别,
+        %thread 表示打印日志的线程 "%c":表示类 "%L":表示行号 "%msg" 表示打印的信息  %n 换行  %throwable 表示错误信息
+        %style 和{bright,green} 结合表示展示颜色   %highlight
+        所以影响日志输出的性能 -->
+        <!--<Property name="PATTERN">[%style{%d{yyyy-MM-dd HH:mm:ss:SSS}}] |-%-5level [%thread] %c [%L] -| %msg%n</Property>-->
+        <Property name="CONSOLE">[%style{%d{yyyy-MM-dd HH:mm:ss:SSS}}{bright,green}] | [%highlight{%5level}] [%thread] [%style{%c}{bright,yellow}] [%style{%L}{bright,blue}] -| %highlight{%msg}%n%style{%throwable}{red}</Property>
+<!--        <Property name="CONSOLE">[%style{%d{yyyy-MM-dd HH:mm:ss:SSS}}{bright,green}] | [%highlight{%5level}] [%thread] [%style{%c}{bright,yellow}] [%style{%L}{bright,blue}] -| %highlight{%msg}%n%style{%throwable}{red}</Property>-->
+        <Property name="FILE">%date{yyy-MM-dd HH:mm:ss.SSS} %level [%file:%line] : %msg%n</Property>
+    </Properties>
+
+
+    <Appenders>
+        <!--生成文件的文件名，当天生成日志 log.log ，保存其他天日志为log-%d{yyyy-MM-dd}.log-->
+        <RollingFile name="file" fileName="${LOG_HOME}/log.log" filePattern="${LOG_HOME}/log-%d{yyyy-MM-dd}.log">
+            <!--${FILE} 引入<Property> 标签的文件格式-->
+            <PatternLayout pattern="${FILE}"/>
+            <Policies>
+                <!--基于时间的触发策略。该策略主要是完成周期性的log文件封存工作。有两个参数：
+               interval，integer型，指定两次封存动作之间的时间间隔,modulate，boolean型，说明是否对封存时间进行调制。-->
+                <!--设置每天打包日志一次-->
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"></TimeBasedTriggeringPolicy>
+            </Policies>
+
+            <DefaultRolloverStrategy>
+                <!--要访问的目录的最大级别数。值为0表示仅访问起始文件,2表示能访问一下两级目录-->
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="*/*.log">
+                        <!--删除超过十天文件-->
+                        <IfLastModified age="10d"/>
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+
+
+        <!--添加一个控制台追加器，添加之后在AppenderRef 中引用，就会生效-->
+        <Console name="CONSOLE" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${CONSOLE}"/>
+        </Console>
+
+    </Appenders>
+
+    <Loggers>
+
+
+        <!-- 生产环境下，将此级别配置为适合的级别，以免日志文件太多或影响程序性能 -->
+        <!--这里指代生效的日志级别和 输出的内容，这里代表生效的是 debug ，
+        文件和控制台都会输出，如果是在环境留下file就可以了，file和CONSOLE 来自于 <Appenders> 配置的标签 -->
+        <Root level="info">
+            <AppenderRef ref="file"/>
+            <AppenderRef ref="CONSOLE"/>
+        </Root>
+
+    </Loggers>
+</configuration >
+
